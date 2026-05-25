@@ -1,0 +1,26 @@
+[
+  {
+    "name": "UX Collective",
+    "category": "UX",
+    "url": "https://uxdesign.cc/",
+    "feedUrl": "https://uxdesign.cc/feed"
+  },
+  {
+    "name": "Nielsen Norman Group",
+    "category": "Research",
+    "url": "https://www.nngroup.com/",
+    "feedUrl": "https://www.nngroup.com/feed/rss/"
+  },
+  {
+    "name": "Sidebar",
+    "category": "Design links",
+    "url": "https://sidebar.io/",
+    "feedUrl": "https://sidebar.io/feed.xml"
+  },
+  {
+    "name": "Smashing Magazine",
+    "category": "Product Design",
+    "url": "https://www.smashingmagazine.com/category/uxdesign/",
+    "feedUrl": "https://www.smashingmagazine.com/feed/"
+  }
+]

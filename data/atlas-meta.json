@@ -1,0 +1,106 @@
+{
+  "total_bookmarks": 5233,
+  "unique_domains": 2463,
+  "duplicate_clusters": 1386,
+  "duplicated_bookmarks": 2856,
+  "year_span": [
+    2011,
+    2026
+  ],
+  "statuses": {
+    "active": 4445,
+    "outdated": 100,
+    "evergreen": 57,
+    "cold_storage": 225,
+    "rediscover": 37,
+    "low_relevance": 369
+  },
+  "top_categories": [
+    {
+      "tag": "Utilities",
+      "count": 2562
+    },
+    {
+      "tag": "Build Tools & Development",
+      "count": 580
+    },
+    {
+      "tag": "Portfolios & Artists",
+      "count": 565
+    },
+    {
+      "tag": "Design Resources",
+      "count": 531
+    },
+    {
+      "tag": "Product, UX & AI",
+      "count": 440
+    },
+    {
+      "tag": "Reading & Humanities",
+      "count": 155
+    },
+    {
+      "tag": "Visual Reference Platforms",
+      "count": 114
+    },
+    {
+      "tag": "Career & Language",
+      "count": 95
+    },
+    {
+      "tag": "Utilities & Misc",
+      "count": 81
+    },
+    {
+      "tag": "Creative Coding & Graphics",
+      "count": 67
+    },
+    {
+      "tag": "Art & Institutions",
+      "count": 43
+    }
+  ],
+  "top_worldviews": [
+    {
+      "tag": "Human × AI coexistence",
+      "count": 615
+    },
+    {
+      "tag": "Creative autonomy",
+      "count": 122
+    },
+    {
+      "tag": "Future parenting",
+      "count": 91
+    },
+    {
+      "tag": "Collective intelligence",
+      "count": 59
+    },
+    {
+      "tag": "Calm technology",
+      "count": 53
+    },
+    {
+      "tag": "Emotional computing",
+      "count": 47
+    },
+    {
+      "tag": "Decentralized creativity",
+      "count": 37
+    },
+    {
+      "tag": "Slowness & calm",
+      "count": 33
+    },
+    {
+      "tag": "Systemic thinking",
+      "count": 23
+    },
+    {
+      "tag": "Ambient intelligence",
+      "count": 18
+    }
+  ]
+}
