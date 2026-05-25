@@ -162,3 +162,5 @@ This keeps the first version editable and easy to tune before introducing LLM su
 - enrich cards with screenshot thumbnails
 - add dead-link detection and domain health checks
 - generate weekly signal reports from tracked feeds and newly added bookmarks
+ÝõERL_Ô
+@Éhº¾¨Ùgmò
