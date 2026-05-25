@@ -163,4 +163,4 @@ This keeps the first version editable and easy to tune before introducing LLM su
 - add dead-link detection and domain health checks
 - generate weekly signal reports from tracked feeds and newly added bookmarks
 İõERL_Ô
-@Éhº¾¨Ùgmò„DL¯”Ÿ/Ìë¯¯–:Ã»+ìšyƒ
+@Éhº¾¨Ùgmò„DL¯”Ÿ/Ìë¯¯–:Ã»+ìšyƒÒ<²Ø‹0¦P/ÉKwI”Õşó@äç]
