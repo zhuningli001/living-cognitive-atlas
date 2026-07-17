@@ -2,6 +2,10 @@
 
 A local Next.js dashboard that transforms a Chrome bookmarks export into a living cognitive atlas.
 
+## Product vision
+
+Most bookmarks are easy to save and hard to reuse. This project turns a long-running, messy bookmark archive into a private cognitive map: a way to rediscover old references, understand recurring interests, separate public resources from private clutter, and turn saved links into creative direction, research signals, and reusable knowledge assets.
+
 ## What it does
 
 - Parses a Chrome bookmarks HTML export into structured `JSON` and `CSV`
