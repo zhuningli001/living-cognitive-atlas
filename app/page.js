@@ -59,7 +59,7 @@ export default async function HomePage() {
                 <div key={`${path.category}-${path.resourceType}-${path.action}`} className="flex items-center gap-3 text-sm text-ink/65">
                   <Link
                     href={`/search?category=${encodeURIComponent(path.category)}`}
-                    className="rounded-full bg-pine/10 px-3 py-1 text-pine transition hover:bg-pine/15"
+                    className="max-w-28 rounded-xl bg-pine/10 px-3 py-1.5 leading-snug text-pine transition hover:bg-pine/15"
                   >
                     {path.category}
                   </Link>

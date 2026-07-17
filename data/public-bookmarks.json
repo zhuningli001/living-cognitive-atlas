@@ -550,7 +550,7 @@
     "domain": "itsnicethat.com",
     "year": 2018,
     "possible_favicon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAChklEQVQ4jZWTT2hUdxDHv9/5vc1zwzaIGMXd91KqexLBW9CDUJAIQioeLBQ8iVIovYr21mPPKZ5EBQtJL14sOSgRlCAU0npSDMJezP65KCushHV332++PSzbrrl1TsPM9zsMzGeIPZFl2aKZX4uRS5JqAECyHYI23O1Oq9XamtbbJKnXD8zleXWV1LrEHQAXAewHUDfDWowsSK3neXW1Xj8wN/FxYh4M0g3AWmnav9JodHsTQZ4feQpgFrATEk+T+hnwLE0HS41Gt8exqLoKcF+z2b4EQNVqdWFmZqY3HA6HIbBHhpOAf1MUvtbpdJp5XnsA6FOz2bmcZFm2CGgpTft1AAIAM96LcbQVQngU4/AjiZIZfnH3uwCUpv0rg0G5kWXZIhcWqrclvpO47e6bZnacjLtmeC+FC5J/3Wx2zh87dvjQcBjOAkwBQNKXZqiFSmXuV1KrJNbMBJLfAjwKsOLOMyS2er2Pmx8+7O5WKl88N9Nhyb6ScF/iDZNUc+fb8dRw9fOj6jSpPz+v2QszPQshvJFUS/5rxK47ZkMIADgjaZ7EfJLs+2sPKgfdkUjRAMBItkmeANAlw8PxJpgFEAHE0aj/OMuq62Ovl0lUSOwHkJNsJ2PCVJeSnwC9lHjUzEskWhI2JTtF2u8AkCTh5phMwAzLpDYSd7tDat0srLgPNsnk1s5OZ2Vq5ScT6GLEQTOcd8c5M2y72/IUSChLdhPQHyReA7YSY/x7NBpZuVw6JeE6wHmzZNm9uDUBaQ/KbCdJ8UNRlC4D+A7AcYkR0Csz/BYjHpjh9jTKBgCNRreXpoMlAP2iKL0EMOuO72PUIXc/IuFHCfNm2Ab0aWL+95mm4/++8z+QhkrNFomICwAAAABJRU5ErkJggg==",
-    "primary_category": "Utilities",
+    "primary_category": "Utilities & Misc",
     "resource_type_tags": [
       "Tool"
     ],
@@ -574,7 +574,7 @@
     ],
     "value_status": "evergreen",
     "representative_tags": [
-      "Utilities",
+      "Utilities & Misc",
       "Tool",
       "Try",
       "Slowness & calm"
@@ -720,7 +720,7 @@
     "domain": "youtube.com",
     "year": 2017,
     "possible_favicon": "https://www.google.com/s2/favicons?domain=youtube.com&sz=64",
-    "primary_category": "Utilities",
+    "primary_category": "Utilities & Misc",
     "resource_type_tags": [
       "Reference"
     ],
@@ -743,7 +743,7 @@
     ],
     "value_status": "rediscover",
     "representative_tags": [
-      "Utilities",
+      "Utilities & Misc",
       "Reference",
       "Watch",
       "Calm technology"
@@ -1119,7 +1119,7 @@
     "domain": "futureartecosystems.org",
     "year": 2021,
     "possible_favicon": "https://www.google.com/s2/favicons?domain=futureartecosystems.org&sz=64",
-    "primary_category": "Utilities",
+    "primary_category": "Utilities & Misc",
     "resource_type_tags": [
       "Reference"
     ],
@@ -1140,7 +1140,7 @@
     ],
     "value_status": "evergreen",
     "representative_tags": [
-      "Utilities",
+      "Utilities & Misc",
       "Reference",
       "Archive",
       "Future parenting"
@@ -1423,7 +1423,7 @@
     "domain": "criticalmaking.nl",
     "year": 2018,
     "possible_favicon": "https://www.google.com/s2/favicons?domain=criticalmaking.nl&sz=64",
-    "primary_category": "Utilities",
+    "primary_category": "Utilities & Misc",
     "resource_type_tags": [
       "Reference"
     ],
@@ -1444,7 +1444,7 @@
     ],
     "value_status": "evergreen",
     "representative_tags": [
-      "Utilities",
+      "Utilities & Misc",
       "Reference",
       "Archive",
       "Calm technology"
@@ -1829,7 +1829,7 @@
     "domain": "theydrawandcook.com",
     "year": 2017,
     "possible_favicon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABw0lEQVQ4jdWSsWuTYRCHn7v3S01TKDpIJanafJFK0U0U/AeUDkpS0FGECg6Ku7g4uTl0s1B0KQqfJdWOLq4d2qXQpaWl2NokEFTUtDRf3/ccTKqT2MHBBw7uB8fdcA/8/yTgkhs4A+2UGGgC7vc5AwWk00snHx7rLOkS1ceK45gWg3BcsAKwDJTUWLJW6+mJd40WQL0cP0TDe6luzG9XTo84cRNebEZBzgfskxqXxdukYCuCqGE91pebWR09c+TD9ZN55/QJaLw1WhgUiaZDkJeyszsrAMvn6Dl2tjSVr67dapSLVzwykn+zPlEfK02at7emPotoWUJ4hbpraiwNzK4/A4gScAPxUJwafQZaQ3NOzAFYCA2UouBiCSwGdeNiSHanmdgFMsQEvQk+OLIq5ASCire9fWpblXgY1Uug3zNOrhoMO6QI0rva/PpNFknlNT4C8KoFhRJAEOnvz7o7u8E3zaePnEb32+30dn5uc6FWKSUidnTwVPx8eyhMa9CMAvgQPlqwFwB4NiJhfn+v/aD3i66Z8Tk/t7nwGDRAlbR110RWxPSewcVD/fxPHJhlIPbTzK51B8Z1TU34Ze7fHvh3/ADzKbpoCeGIdgAAAABJRU5ErkJggg==",
-    "primary_category": "Utilities",
+    "primary_category": "Utilities & Misc",
     "resource_type_tags": [
       "Reference"
     ],
@@ -1847,7 +1847,7 @@
     ],
     "value_status": "active",
     "representative_tags": [
-      "Utilities",
+      "Utilities & Misc",
       "Reference",
       "Archive",
       "Brutalist"
@@ -2613,7 +2613,7 @@
     "domain": "cargocollective.com",
     "year": 2017,
     "possible_favicon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAUUlEQVQ4ja2SywkAIAxDg4v2li26uxcRlKoJ2Gte/0FEQI4BZ6ZCL9gzpwAuOUepFB7NN1lab0LiMQCAJMlSamqNbyN5S3tn9R7nWcMzn2vvDpRyKgO5nr7zAAAAAElFTkSuQmCC",
-    "primary_category": "Utilities",
+    "primary_category": "Utilities & Misc",
     "resource_type_tags": [
       "Community"
     ],
@@ -2631,7 +2631,7 @@
     ],
     "value_status": "active",
     "representative_tags": [
-      "Utilities",
+      "Utilities & Misc",
       "Community",
       "Archive",
       "Collective intelligence"
@@ -2703,7 +2703,7 @@
     "domain": "cargocollective.com",
     "year": 2017,
     "possible_favicon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABuUlEQVR4nKRTTSgEYRh+ds0MYf0dKC25cHMQN/biJ1HaPRBHJbW2vbhuUiQXtS5CSe1FEgdSpHWTGzm4rQt21fr/y2Zn1q7vfTNj7K6DvPU177zP87x/34yELJYSli1uEZYes5pfVFVdILFUVIZshzDimDWSuWrv6Bg2l+dha3GitGcYsdNDxvLrm/G4vcRJXEMet6C69W6semUS7+zto2buACk1jtzaBqSSH3zYFzHCiENcvROLXp2yFzR14D10DMVeB2u+Ddr1JXcgV1QjGXuFGgkhr64Rb0dBJF4eeCeSLq7w+lHSNYiwzwX75Doskoz71RkWF7X2I5XQEBnvg31iDU+7AWMnxhJJzN2IlkmccQMiRpiZ+2OJd6IaWeL26tu/CUMTR/0axYxlJJDLq5DuU4LfsIwExW0D/HwOrhg+JdB3kI5F/R4Y10hGi+FZrTm8sHSjGGFmLvMZ/Mc1cgeapi2KLwxa9AJV01vIKSxBpS8Am8PJh3yKEUYc5gqNMYKiKCMbs1Po7mzHudcBi5KL+NkJt0yHfREjjDjEJY0xgm70ecqy7KZxshm1TZV1cUYCY2F/+J0/AQAA//8tIobJAAAABklEQVQDAMR48YD1sHgLAAAAAElFTkSuQmCC",
-    "primary_category": "Utilities",
+    "primary_category": "Utilities & Misc",
     "resource_type_tags": [
       "Community"
     ],
@@ -2721,7 +2721,7 @@
     ],
     "value_status": "active",
     "representative_tags": [
-      "Utilities",
+      "Utilities & Misc",
       "Community",
       "Archive",
       "Collective intelligence"
@@ -2763,7 +2763,7 @@
     "domain": "emelieostergren.se",
     "year": 2017,
     "possible_favicon": "https://www.google.com/s2/favicons?domain=emelieostergren.se&sz=64",
-    "primary_category": "Utilities",
+    "primary_category": "Utilities & Misc",
     "resource_type_tags": [
       "Reference"
     ],
@@ -2781,7 +2781,7 @@
     ],
     "value_status": "active",
     "representative_tags": [
-      "Utilities",
+      "Utilities & Misc",
       "Reference",
       "Archive",
       "Brutalist"
@@ -2793,7 +2793,7 @@
     "domain": "cargocollective.com",
     "year": 2017,
     "possible_favicon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAdklEQVQ4jWNgoAMQYGBgCMAlyUSEAfMpsb2fgYHhPrmaExgYGP5DDSEZGDAwMLyHGmBAqmYBJM3voXySNJ+HasaGCQbofDyaz5PjGrK9wsAACTyYZpIDkoEBEn3/GSDRSRa4z0BmGmBggKT99eRqhhlAcqCRBQDqFSKfynwvcgAAAABJRU5ErkJggg==",
-    "primary_category": "Utilities",
+    "primary_category": "Utilities & Misc",
     "resource_type_tags": [
       "Community"
     ],
@@ -2811,7 +2811,7 @@
     ],
     "value_status": "active",
     "representative_tags": [
-      "Utilities",
+      "Utilities & Misc",
       "Community",
       "Archive",
       "Collective intelligence"
@@ -2883,7 +2883,7 @@
     "domain": "tudou.com",
     "year": 2017,
     "possible_favicon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAACuElEQVQ4jW2TTWyNaRiGr/c7nx6hzQgqztBzHHqqTYmE2IxY+NtpdfwsGpmISLBAG5p2i4UEieboxMRiJjYzxGYGM6n4T7ARzKp/OE7b0xLatNIerXO+730ei0/6g3vz5H2f976fvPeT2/AV2o7vKlge+2GrwWwxufEoIYPOKOxV9E56ZMa/iSMtuanvzdSDf+lQtfO+I4njLKFoIcwrCRpDfZAdBJEeiZTVubvPX/t6MLa5+qgcK7FyoVYl/UxVRCcgopJ+rvLbbpXGuLXJnxumkf2W7dWyf5YvfzWq+p5+CwkE/bzK5SaVg4W+/+vObQCm7XhlQcVo9gULymKmoRWc0KSyKqCoCqgAGtw118D79t5UbkWZszxUtJXhTIydp0As+uB39L+z6MgAqj4qHmQH4GYSHvyB+mOw4yQM9UfjkWyVa3xvC/OXYuKr0Uv18OwqeGPw+E848TiYeLYahrpRJwSpp+jeJGb+Mow3vtk1wz1Rlq4DY6CmCdZWQXw1vHuF5rLBnn45AyWVKAof3oL9hImUY3qeRl1kykb/b4XOu2AtWvETiA/qo4vLQfKBD4VzQLwJm1ydV9Jr3rQFzb526GtHh/snyV8qaifMNKEwvO1E5y7KOOqGbzP4Gk09gfL1sHE/REqnkVW+mGnzYPOYTAcMptBZc2+bl4dLw8sK8l0Ul8Y4egNVD8QLCBPVgnqoWEzBbEIXDsBgVyaVW5lwEi2vcrJoVR0v7lsuN4Ga4DtiQe0UsodxZxL6pxlS90SWrKlLtLRO5sKe2dgg+4yV0xtUuh6qPz6gfjaj3shr9Ue71XbcUjm3QeWQsbZ5U+P3w3SxtsZJP0rysT9KcRx+rAAHGOiEbDfMjvRKZF29u+fK398VAHh5vjQcJ1ZlZGizGc9EcUGLohl159xJj4WvJ460TovzZy3AoHTp4VXuAAAAAElFTkSuQmCC",
-    "primary_category": "Utilities",
+    "primary_category": "Utilities & Misc",
     "resource_type_tags": [
       "Reference"
     ],
@@ -2902,7 +2902,7 @@
     ],
     "value_status": "active",
     "representative_tags": [
-      "Utilities",
+      "Utilities & Misc",
       "Reference",
       "Watch",
       "Cinematic"
@@ -3005,7 +3005,7 @@
     "domain": "dia.org.au",
     "year": 2017,
     "possible_favicon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAC60lEQVQ4jXWTTWxUZRiFn++7d3o7vUNnsHMvc9PSaWlSwFoc22lMgWi7UVsxBgUX2PCzckEwgEjYlQAhlCAmbgERQsS9xoUatQQTYIAgEBfUn6Sizsj0Z6b3Tu/8tJ8LHWtLPMm7ek/enHPyHjHwwku/+b5vshQC1LwCAQLx2LpQ8Ghta/OEE7XU0qWma0xPTuGWiliRCIZRy9zc3CKO57rEW1ch7RUrcnWmSZ1psqy+Hk3TeJhOk+ju5uyZs6x5soNSqUSVUx0zFCJqWTkJIKUE4MHPP6EQjJwYYfuuXaxZu5bGpiY8133MQhU6QLFYJBAIsHP7DrqSSXzf58C+fby+ZQvhcBiEwHVddF0nGAyi1IJrCeD7s9QYtRwfOUljYxMHD75L3nNpb28nk8nglYp0J5NELYvx8XGEEAjxd7BazLYPSSlr87kcH314juZ4C2/v3ctENkvB84haFtveHKK5tZWtW98gFDK5MjqKGQzSYFlFnu54arot3qI62lcrHRSgNq7foI4dOaYuXLioUjdvqQP731EaqETnOvXt6BX1yuAmZegB1f9c37Ssevnz0SNe3fwah4cPE4/HGRt7QOKZLiYnJzl1+j2am1Zy595dPv/0M14cHKBYKS9kUA3y2d5eZnI5Muk/+OH+fb768gs6O9exafBlfnn4K4am83x/P3du30b7JwO9esAwDCayWa5fu8bNGyn8+Qob+/q4eP4824aG6OntpSuR4N7d7/nk8mWs5U8sViCEQEqJOzODP18BwHEcvrt6lf179uDl8nx86RJHh4eJhMNour5YgVcoYJoh3tq9mx/HxiiXyyR7erh1I0V2IssH75/GMAxijoMQ4t/n0mK2fahUKtVqukYmnQYElUoFKSWjX39DKnWd+tAywpEIdeZC58rlMlHLLoq2eIsC0HWd6akp8vk8UkoUIADLtgnU1DC/pEwFz2NlvAXdtqzfC7OzJkDMcYg5zv/+/X8hhKChocH7C9e1DhUFgJpaAAAAAElFTkSuQmCC",
-    "primary_category": "Utilities",
+    "primary_category": "Utilities & Misc",
     "resource_type_tags": [
       "Reference"
     ],
@@ -3023,7 +3023,7 @@
     ],
     "value_status": "active",
     "representative_tags": [
-      "Utilities",
+      "Utilities & Misc",
       "Reference",
       "Archive",
       "Ambient intelligence"
@@ -3094,7 +3094,7 @@
     "domain": "risd.edu",
     "year": 2017,
     "possible_favicon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAn0lEQVQ4jd2QsQ0DIQxFv7KJF2AFFmEOxmAH5B1YgQ28ANJ1rhCNqxScHJIm/bnz5+FnAJ5RMUYARHSGP+1XqeoYw8w2pKoARERESikO9N4/FwD03nPO3qrqNntiZgBeO2LmEMJ1Xa6ttbbWzsXmnHsiVNXMROSct52ttdOZUroJZt5GPyaiGKOjROTATYwxzjeIiJm5Ya3FzP/++6n1BqvgfvzjnKVxAAAAAElFTkSuQmCC",
-    "primary_category": "Utilities",
+    "primary_category": "Utilities & Misc",
     "resource_type_tags": [
       "Reference"
     ],
@@ -3112,7 +3112,7 @@
     ],
     "value_status": "active",
     "representative_tags": [
-      "Utilities",
+      "Utilities & Misc",
       "Reference",
       "Archive",
       "Future parenting"
@@ -3124,7 +3124,7 @@
     "domain": "hku.nl",
     "year": 2017,
     "possible_favicon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAACL0lEQVQ4jYWTO2gVQRSGv7ObaPDVGIgQ787kbqeNjYIJiIiFiOALH4WNNqKIFlaCQuwEsbDSIl2wMKCkUgsL8Vn5KhSbvdnZGBDEQkXR5O78VoabeIN/d4b/wfkPY3RBM/OjhvZgliH9FrwVuj1VVeOLudY55JmfwDjUzXQeYqKoyiN/x6Qj9cJ/xbV2Yxxurne7/zGgPXsL9GLpZI0XH8P9IpRGys4FBr7h9yntPVSEMCzxuEP0BfgOgFk2nyWN5c5dAkgGBgZWJom2SfVT59zwnOoTSK06sr+oQn8RyjV1rHcJvRty7gxAVVXvJUsBrNnwxzE84oMSrUWyaPYyhPB88Ra+4felFj8XVfUsd26HYvyeWKKNkmaxuAXoM7PhdrtddauhnC4na2k9QBHCIyPNewSDJp5jfDVxGWPlzMzMx24GTeeumdjebDRadZL0RsW6B9GwlA2S7a2NkyGEV0vcITXRK+wJlh5M4SjGKwPInReA0N1WCAe7iK2Z+VGIj8GuSPG85tKq/FSWPQCKnLKEG4Yd8IN+UzlTvgHIs2yEhJFY22pMK8D6WiFszjP/QMvVAk4nAK3p8qbQPYC0h9dN5+4A1NKq2I6PzNTfCuG8wVU36LYWVbmrbjMO2IK/MJT564lxtvNN6FOMdsoS9U+FMJY7r1/tucbfopNO8lRVnitCaZIezi+PrSuny0nDLgJ8+/lj9bJlMV2i6IUYyrLDQ1l2DCBv+KMe37eY8wcKTQSycyaKlAAAAABJRU5ErkJggg==",
-    "primary_category": "Utilities",
+    "primary_category": "Utilities & Misc",
     "resource_type_tags": [
       "Reference"
     ],
@@ -3142,7 +3142,7 @@
     ],
     "value_status": "active",
     "representative_tags": [
-      "Utilities",
+      "Utilities & Misc",
       "Reference",
       "Archive",
       "Future parenting"
@@ -3516,7 +3516,7 @@
     "domain": "douban.com",
     "year": 2017,
     "possible_favicon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAABdklEQVQ4jY2SzStEYRTGf+fOVT42LpGimEbUbIgaxUJqlB222FAW/gBmZ6sspywmCzsbC+zELBATSpF8jY+Jku/ZyWbuHIs7d2Zo0pzVezrPc57zvOdIZ7jv+OmE4qKzvl0IWUWi3QhZwcUhLSKCi0OELBO4fIvPbs6hgKrqn4Yi4jwuX+Io7kiKv7YVRVWzCKeBk168XiMgmE6huymwP7Xxz+A9CwOxx6McwU7bwN1nYnBp5A90fXzZV+21bRvNU1AU+Pj6PH++whByQ/HxlfRVe7PeMgQHYpVV+uta8Ui+glVemQXkCKZhAi01zefTBwU9mB6P29pdXNDXuzW5Cvjnu0pLSgX5Tn1fTB8C/ZHh6M02hmC4CkD0dieRfPBWNd6836ewkYxsIvkQjW9njRk5VWHlbB2YCIwhYDARGAVWTtec1HURssL7kWJOI7wXYcYygd1ErLaiBtW0asFNGyLA7l0MRTLnnQYFVeTXn5JHRaSjoe0H6tDN37FrGLoAAAAASUVORK5CYII=",
-    "primary_category": "Utilities",
+    "primary_category": "Utilities & Misc",
     "resource_type_tags": [
       "Reference"
     ],
@@ -3534,7 +3534,7 @@
     ],
     "value_status": "active",
     "representative_tags": [
-      "Utilities",
+      "Utilities & Misc",
       "Reference",
       "Archive",
       "Brutalist"
@@ -3699,7 +3699,7 @@
     "domain": "labs.rs",
     "year": 2017,
     "possible_favicon": "https://www.google.com/s2/favicons?domain=labs.rs&sz=64",
-    "primary_category": "Utilities",
+    "primary_category": "Utilities & Misc",
     "resource_type_tags": [
       "Tool"
     ],
@@ -3721,7 +3721,7 @@
     ],
     "value_status": "rediscover",
     "representative_tags": [
-      "Utilities",
+      "Utilities & Misc",
       "Tool",
       "Try",
       "Slowness & calm"
@@ -4067,7 +4067,7 @@
     "domain": "machinelearning.veravandeseyp.com",
     "year": 2020,
     "possible_favicon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAK0lEQVQ4jeWQsQ0AAAiDWv//GW9gM5GdJrRAFEoAxs0nL4XGPNv2YMNBQbNt2wwShqJ4SAAAAABJRU5ErkJggg==",
-    "primary_category": "Utilities",
+    "primary_category": "Utilities & Misc",
     "resource_type_tags": [
       "Tool",
       "Tutorial"
@@ -4088,7 +4088,7 @@
     ],
     "value_status": "active",
     "representative_tags": [
-      "Utilities",
+      "Utilities & Misc",
       "Tool",
       "Tutorial",
       "Learn"
@@ -4395,7 +4395,7 @@
     "domain": "doyoudo.com",
     "year": 2018,
     "possible_favicon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAACzUlEQVQ4jXWSf2jUZRzHX5/nuZ3HzN1s2U3zV+4k+8OSMVh/LHOc4G9L3CkogYVChBTUP2nG3TKoPyIVYvYDEfEPwRvzZ1Q6bJQ0QuY20WMZI2Fzzc3WXTu5W7vv8+mPu02c+v73ed6v9/P5vB/hcVIE+dq3oeHg/mX1I2/6S8eDAzfL2hNNoffvpn/reKxv0oxKw47Fh1uSAb3wF94Pt8m33hH9qCk0MKts+eLiTTGPsAvAokXVkci2wbeCT+XGR1OQy2By93SsbuPw7PrNt3cDRKOYhwCqgJwsWf1636cv172k2XS52BIQg3gexvqdF3o2txAgehIeBMQxImhN3Tu71m+dXzM2Rj7npawBEUGtgVzGZwd6AzcBElumAmIoREJrt+u+cFXY9Q9fNj5bOPIc6n8C2/1zMN16bMFXKJJI4CYB8TgGUdZs7dq3dtOSyqGRXi+vWWOkMFaJHzf6t9/81Pz052ku9dKIADoBMLEYGgyGq9dtm7EzGKzwBtOd1mdEiq14gVJs+3cVv7eerz+oihDHwcQIioqovPZG5rMVK5cF+u90OmOciKg6B9NKoa9nulw4XvkhNGVECk1NAAyC1tQ+tyWy2Yv8m72VH8396fOZyaLzxojvlzMVP167drWFOAYK6QAmrgBqaldl94ar70oq06VGBFVwDg1Mx15vL8+dO/LMHlWB+IO127ZGFBqZUbrgVmrYhqcFM3NnhnBeHrGCG/+vxJ49PKep40r3URFMW9v99Pv1F55F7Quvvv3tNx+4AyeqtKUHvTiE90Vz+T1Y/nzxh8pUrwGIxVSBOe++9+Lenbt2SOfpFTd6OnxDeNb8M+jPQ7gfLa57qqLRqAVoaFi9X12HXr70ZQoqXzl0aubInkOzs6s2Lv2YKPYh48QOkskkAFUL581yebem+dSvB7q6rxx7smz+kr4/AonvW5KfkHxEclH/A8N2HS3hzJJ+AAAAAElFTkSuQmCC",
-    "primary_category": "Utilities",
+    "primary_category": "Utilities & Misc",
     "resource_type_tags": [
       "Tool",
       "Tutorial"
@@ -4415,7 +4415,7 @@
     ],
     "value_status": "active",
     "representative_tags": [
-      "Utilities",
+      "Utilities & Misc",
       "Tool",
       "Tutorial",
       "Learn"
@@ -4883,7 +4883,7 @@
     "domain": "slowcooker-beef.cooktopcove.com",
     "year": 2017,
     "possible_favicon": "https://www.google.com/s2/favicons?domain=slowcooker-beef.cooktopcove.com&sz=64",
-    "primary_category": "Utilities",
+    "primary_category": "Utilities & Misc",
     "resource_type_tags": [
       "Tutorial"
     ],
@@ -4905,7 +4905,7 @@
     ],
     "value_status": "active",
     "representative_tags": [
-      "Utilities",
+      "Utilities & Misc",
       "Tutorial",
       "Learn",
       "Watch"
@@ -5006,7 +5006,7 @@
     "domain": "blog.sina.com.cn",
     "year": 2017,
     "possible_favicon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAACOklEQVQ4jQXBW2jOcRzH8ff39/s/px7McpjDMNHIabQLkUM0PC4YLlhy6UIuJYXNMZQoV26IC7kgF05jyuHCShSFotQKJcrqeWZje/b8f7+P14tyeZ8iUU6DKEFr0CCK6AkCtSGhYUIbgpcrcZVKBUMSgiz0ggC4D8AzeAN59AISNAHncAgzI8IoJOgtMrSTNEcqdAhtxwQFktnw7fduiTjiNIw2EyGuQgOkT1AOOWpYwAXvg/kaOLphCHIoC6sB6KXWiN9k96rciyTIEV0ITiGBhFtwFXXhNqKAQcySGXTdxG22Dv28PGOgddGyiQ2TR8rl2T2PExrgMVYi3sW9JYCl9FjcqrlO68To/vK7rVOXbVjfPKultTBmTKIyQATaSaGEDUV9Zl5kjxFExg219ly7uXjajqXF8dO7u52VUB0RfEI7PLvG6wv8wfAZkUIqK9ZYcePOw9yRw9lKhT51hNPIrAs4hhcm3F5gF8l56IRO4yIsXwv95l3dQJ2rcVx2+hT+JOEj/CBeMtpuk77HxoFE6qwoc3cVXO7g8NlznDqB7yJ0MqXE9aec+CquiPk30TssB3jVShb7G2e62+XRMzXcURHhAQsn0L6FzjkUm2A38Aj/FzxUKy3N1SUtbqN3ByD+M4lkEisWUFdPxXABah42QQGq0QqFjo6ZDQ1JoxgPFDFPmsc1YUZ9DnBkA/Rj9RDM8pl8PiZJ8sH4BDwnjqUpJTPCq14+p1Tzog/4RnwEkvq+PBjx33/9B1mnBi90FwnWAAAAAElFTkSuQmCC",
-    "primary_category": "Utilities",
+    "primary_category": "Utilities & Misc",
     "resource_type_tags": [
       "Reference"
     ],
@@ -5022,7 +5022,7 @@
     ],
     "value_status": "active",
     "representative_tags": [
-      "Utilities",
+      "Utilities & Misc",
       "Reference",
       "Read"
     ]
@@ -5033,7 +5033,7 @@
     "domain": "10.10.40.1",
     "year": 2017,
     "possible_favicon": "https://www.google.com/s2/favicons?domain=10.10.40.1&sz=64",
-    "primary_category": "Utilities",
+    "primary_category": "Utilities & Misc",
     "resource_type_tags": [
       "Reference"
     ],
@@ -5049,7 +5049,7 @@
     ],
     "value_status": "active",
     "representative_tags": [
-      "Utilities",
+      "Utilities & Misc",
       "Reference",
       "Archive"
     ]
@@ -5060,7 +5060,7 @@
     "domain": "10.10.40.1",
     "year": 2017,
     "possible_favicon": "https://www.google.com/s2/favicons?domain=10.10.40.1&sz=64",
-    "primary_category": "Utilities",
+    "primary_category": "Utilities & Misc",
     "resource_type_tags": [
       "Reference"
     ],
@@ -5076,7 +5076,7 @@
     ],
     "value_status": "active",
     "representative_tags": [
-      "Utilities",
+      "Utilities & Misc",
       "Reference",
       "Archive"
     ]
@@ -5087,7 +5087,7 @@
     "domain": "2121designsight.jp",
     "year": 2017,
     "possible_favicon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAACC0lEQVQ4jZWTwUsbQRTGfzu72Q2bCNK0moCVQmgqLkrRHnuwF6FEqOBB9GCxvRZ6zN+Qm5VeW+nFngoWDIVe6qHHKlIJWCUXFRJtA4JxyW52Z3qwsepGaL/TwMz33u97w9O4orffjke+7DWf7tb9h9VT1Q+QSWh7d1Pm10f98XfPHnRvXHyvtQ/lctl8VblV/FRxX7gtZcR0MMTZdSAVrRDsmBY8ztqvX2Z/FhzH8c8LlMtls7iT+vDxhzuRMAW6RkeFCk59yZN79mohV59yHMcXAMu1nuLKtjvRZV1vBtA16LIEK9vuxHKtpwigfd5p3H9e+rUeSoQurjdfIpGgC+Sb/M1RUaq48w1fdjQ3A0UzUFESAQ1filLFnTfWa96Y2YE7kIqRjAXA90PvfKBtmbrGes0bE/vHYV/sSoFmoBjqtSjNZCjNZBjqtSIkMV1j/zjs+8fU18u43a0f7NaDGxdjxA2NrUOP/PsqAFuHHnHjMmUrVNxJGQdiNG2t+WF0UIbQ2Kh6bFSj+QH8UDGattZEPmsvJU0hQxnFixtapDOcfWPSFDKftZfEeC65OTecWGz4kihHVApo+JK54cTieC65KQBm00eFyQF79cSTdEjzt7OCE08yOWCvzqaPCgACwHEcv5CrT00PJhd0jcBtKVpSof50bEmF21LoGsH0YHKhvQdwYRvb+t91/g0xG+LPNCpEUgAAAABJRU5ErkJggg==",
-    "primary_category": "Utilities",
+    "primary_category": "Utilities & Misc",
     "resource_type_tags": [
       "Reference"
     ],
@@ -5103,7 +5103,7 @@
     ],
     "value_status": "active",
     "representative_tags": [
-      "Utilities",
+      "Utilities & Misc",
       "Reference",
       "Archive"
     ]
@@ -5114,7 +5114,7 @@
     "domain": "icograda.org",
     "year": 2017,
     "possible_favicon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAA4ElEQVQ4je2RzU3DQBCF3xsjn90JLgHJP+ekA1JBSAWkg1CCS8jZaysuATpICZH2avlxYdGCiOVwztx2Zr83b/QIAM65g5m94Iaapumtqqod/wPHIuz7XqEh6SjpYw4i+UhyFd4PETyUZblesrnruhPJJwCw243/rLtAlALJ3Dm3B4BxHJskSbI4rrhI5t8CkhqSzwAyM3sFgDRNzwAOALK57ZKO5r3fSRp+zZbAg/d+w9Bo2zY3s+2Xm/BpLenyB3yp6/odABgPnHP7cAaATVEUzZwL4HoKi+BrAothAPgEXThaQ59VnrQAAAAASUVORK5CYII=",
-    "primary_category": "Utilities",
+    "primary_category": "Utilities & Misc",
     "resource_type_tags": [
       "Reference"
     ],
@@ -5130,7 +5130,7 @@
     ],
     "value_status": "active",
     "representative_tags": [
-      "Utilities",
+      "Utilities & Misc",
       "Reference",
       "Archive"
     ]
@@ -5168,7 +5168,7 @@
     "domain": "amazon.cn",
     "year": 2017,
     "possible_favicon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABy0lEQVQ4jY2TP2hTURjFf09zM1UbcGmID9xEFEyyCTo1b6uLxuCS1e4Fg4tuIlhczMMti0NwadOho9DNf7wpCCYdDEL7njWgiU87NOBxeGmavryKB+5wv8t3vnPuuRdJaUnPJO3o/7Ez7klbkp4AD5jC9vY2jUaDz70elmVxc2mJarVKAlaRFExTe56n08YoFVu1Wi1JSYCkwXTl3vKyUsao5DjqdDqT/XnbTiIYWJIGwPyhpiAI8H2f4XDIzzCk2WzSarUAGB0cxC0MZxR0u13li8UZCyljEhXMENypVJQyRvliUb7vq+66/yQ4Fdd0KLdcLpPNZmm325OzMAxnc4gryBcKk4klxzmWSN11T7Dw259UPM9TzraVMkY521bddVWuVLToOAq/B/rTeSl9WInWJIXNy/NcX4fMxaTHcoSt2zB3AdIZ+PQI7mqcwu5r6RXS+xUp9OMyj/BrV+qtST860tq52Dv40oJ3t6JJmRuw4IA5CwIsC/a2YG8Drq1H9f4buPpwaEkKgAUA+h58fAzfNqJGxv0Ac5eg8BxyJRiN0zBnvlqSngL3j3kddKH/FkbDiCFzBXKLSbeyiqLv/ELS/snmZ7A/7kn/BXFbL8ajtAhKAAAAAElFTkSuQmCC",
-    "primary_category": "Utilities",
+    "primary_category": "Utilities & Misc",
     "resource_type_tags": [
       "Reference"
     ],
@@ -5184,7 +5184,7 @@
     ],
     "value_status": "active",
     "representative_tags": [
-      "Utilities",
+      "Utilities & Misc",
       "Reference",
       "Archive"
     ]
@@ -5195,7 +5195,7 @@
     "domain": "hiiibrand.com",
     "year": 2017,
     "possible_favicon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABFklEQVQ4je3Sv0tCURTA8a8/KCmjHEQIDMmm5nJIyL3FtabW/gHneIP/grw1F4MmG1qfvqFFISF4g5gUielkvMJBkdOSt0dPer69M917uOdzz+Fe8BHnty+Sv+mKMxf0A1w9jqi2bS7NN4X8CZiWLo1ORX7nt1ZD3reZli6FclwK5bhCHgZjMZ4/XCAA054hdgmxS4gTMS39p6DYEootcY4Qni9m/ZoLPd6/CHh1qoBIRguM7/Iik3egTqNTkebTNQAH6VMO984WYmHnZu2kqg6NPl/pDu8BSCey3h1Me4bMx4hkNM/WXcCsX2PS1JatU+HrI/0Di0O9QnAjRWg7972rE4sm2U0cARCLJgHI7awDkNpcUcAXLftk05nnEyUAAAAASUVORK5CYII=",
-    "primary_category": "Utilities",
+    "primary_category": "Utilities & Misc",
     "resource_type_tags": [
       "Reference"
     ],
@@ -5211,7 +5211,7 @@
     ],
     "value_status": "active",
     "representative_tags": [
-      "Utilities",
+      "Utilities & Misc",
       "Reference",
       "Archive"
     ]
@@ -5222,7 +5222,7 @@
     "domain": "bbdoasia.com",
     "year": 2017,
     "possible_favicon": "https://www.google.com/s2/favicons?domain=bbdoasia.com&sz=64",
-    "primary_category": "Utilities",
+    "primary_category": "Utilities & Misc",
     "resource_type_tags": [
       "Reference"
     ],
@@ -5238,7 +5238,7 @@
     ],
     "value_status": "active",
     "representative_tags": [
-      "Utilities",
+      "Utilities & Misc",
       "Reference",
       "Archive"
     ]
@@ -5249,7 +5249,7 @@
     "domain": "caaarch.com",
     "year": 2017,
     "possible_favicon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAA5UlEQVR4nNSRvw5EQBDGD4uQSGhUItGIV/AA4k8holLpPYNHUVJIVAoST6LRqEV5CkFucqs5uUZ39xWzk/32NzuziwiCeNwR+bipnwZgekVRWJbFOUmeFkVRXwBBENq2TdO0aRpd1+M4LooCW13Xua57BaIoyvM8SRLf94dhsG2bpmmO42RZnuc5CIIrAD0cxwHJtm2SJC3LUte153lhGGZZJooiwzD4JMJLWZZVVZmmaRhG3/fjODqOgxCCSSBqmmZZFnSLS58/DZ6qqtM0wc66rlB133e4ECLP88+3PoDbz/q/wAsAAP//ZAkdsAAAAAZJREFUAwDxakwuTeJZnAAAAABJRU5ErkJggg==",
-    "primary_category": "Utilities",
+    "primary_category": "Utilities & Misc",
     "resource_type_tags": [
       "Reference"
     ],
@@ -5265,7 +5265,7 @@
     ],
     "value_status": "active",
     "representative_tags": [
-      "Utilities",
+      "Utilities & Misc",
       "Reference",
       "Archive"
     ]
@@ -5357,7 +5357,7 @@
     "domain": "wangyuefei.com",
     "year": 2017,
     "possible_favicon": "https://www.google.com/s2/favicons?domain=wangyuefei.com&sz=64",
-    "primary_category": "Utilities",
+    "primary_category": "Utilities & Misc",
     "resource_type_tags": [
       "Reference"
     ],
@@ -5373,7 +5373,7 @@
     ],
     "value_status": "active",
     "representative_tags": [
-      "Utilities",
+      "Utilities & Misc",
       "Reference",
       "Archive"
     ]
@@ -5438,7 +5438,7 @@
     "domain": "landor.com",
     "year": 2017,
     "possible_favicon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAABHklEQVQ4jcVSsUoDQRB9s7usKSKiHnraaJXSWrDRRis7OwvBT0ht6SfY2vsFYmEnxEoEsbAQbIySSAKacHK77I7FJXcrdxo7p1h2Znnz3s4b4jsUIQAPEECAR2WI/JZa0e5qY+l9qDo9zUy/AiRuH/TmYXz/qE/O5g6OllIrJzAYg9cOrMXHgN56YJ4kCQDR6KRqOSXAX+JfAMzwP5gAQJVLe9uD9bWkNuWLbgxwCcCM1NDx6fxy7AVw3qpndSm5ud9vrJrMe5X3iGZ5d8ulRrZfpAyUKsXWFmOmcJc8CxCenvXVjc6NE4J3NpI4cpmqb38Q5EGYmXYXrfrl9ehJK26smHjBwZUYxqxIPkW3L8YZFiNX01whKcQg3I5gSl+e62eiPc/BgQAAAABJRU5ErkJggg==",
-    "primary_category": "Utilities",
+    "primary_category": "Utilities & Misc",
     "resource_type_tags": [
       "Reference"
     ],
@@ -5454,7 +5454,7 @@
     ],
     "value_status": "active",
     "representative_tags": [
-      "Utilities",
+      "Utilities & Misc",
       "Reference",
       "Archive"
     ]
@@ -5465,7 +5465,7 @@
     "domain": "starting2000.com",
     "year": 2017,
     "possible_favicon": "https://www.google.com/s2/favicons?domain=starting2000.com&sz=64",
-    "primary_category": "Utilities",
+    "primary_category": "Utilities & Misc",
     "resource_type_tags": [
       "Reference"
     ],
@@ -5481,7 +5481,7 @@
     ],
     "value_status": "active",
     "representative_tags": [
-      "Utilities",
+      "Utilities & Misc",
       "Reference",
       "Archive"
     ]
@@ -5519,7 +5519,7 @@
     "domain": "bbdo.com",
     "year": 2017,
     "possible_favicon": "https://www.google.com/s2/favicons?domain=bbdo.com&sz=64",
-    "primary_category": "Utilities",
+    "primary_category": "Utilities & Misc",
     "resource_type_tags": [
       "Reference"
     ],
@@ -5535,7 +5535,7 @@
     ],
     "value_status": "active",
     "representative_tags": [
-      "Utilities",
+      "Utilities & Misc",
       "Reference",
       "Archive"
     ]
@@ -5546,7 +5546,7 @@
     "domain": "jwt.co.uk",
     "year": 2017,
     "possible_favicon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAACeklEQVQ4jW2SXUiTYRzFz/O8z97pZrPpxqZoWoqUqaWphabVCIVuEukmS+gTErrr4zYCiSKIgpI+SIkwaIhFEUgfJhnLj5y7EBPTzLJ0LJ06tznfve+/i8BSOrfnHA4HfoyIsEqhHzT9DWqUxdtgzgT4v6ZYEZ34EGpr+TIS8qrGKHgCC6VZyeIo5dtqliNseUHtvO1x9j617G5NKRg0xIExRJQTvuGqsVeOQsTWXoCI/1tQex68a+w6m1/nttmghqEBYGAESUZYudfbXJM3bTh6BRAcAGZHPzs7LuUec9ssXAkiKmVLkVLdAjQBRYGeThYffvsRWp8Tfw4priftUu7r5FSuLGok7ltfPhYXby3Wt9vvbpVCUIEYqXVDhe/Ne9ASB9TZoe899jyQqmm6q+buopHnD7v33hk9EOzw3bA2Awyq0mjNHPMJ+Ec51OBcQBs3mEFRMFYuXG3jO035qTvWh16ICvPE0C59AMSgl2dgoNkpDi5xBllTAYAowmPiaOFXRP9TthhD81IsBTQBEIgkInCJgxnNCbqswBS4ACNnsKKyqCtjoIM8wweTnrnX7nUvGcGQEg7bpQBLTOMATAU5JZN9UBlj0ZuBzOv681sqw449X10bq2t9+8AUiNhDE570NBlrUhkRYck/eflMva6qYdN2pgRJ0wEAYyDiXNGEnDEdeNR/rehcLUsv5wAgm+1Hjp/2ttR96iYWA1mC0CCp0EEThhKvr6GvoaA6h6WXr0CDxjsnm5ra59e5kgqHTPYIE+nhmWLvgCPsya4ulspOrWYJAJQZtatlrn/Q749GNZiMsGQl68r2I3Hzf+BbIXUepEKYAGmV8xsfHhvoi3Xe5wAAAABJRU5ErkJggg==",
-    "primary_category": "Utilities",
+    "primary_category": "Utilities & Misc",
     "resource_type_tags": [
       "Reference"
     ],
@@ -5562,7 +5562,7 @@
     ],
     "value_status": "active",
     "representative_tags": [
-      "Utilities",
+      "Utilities & Misc",
       "Reference",
       "Archive"
     ]
@@ -5603,7 +5603,7 @@
     "domain": "caaaad.com",
     "year": 2017,
     "possible_favicon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAuUlEQVQ4jWOcdomBJMBEmnIGBhYI5a+0X4rbAZeiZ18PHH1W+ObHBWJtkOJ28FPaz84sQIKT2JkF9EQKEE7aeM8Rl9n+SvthbHvCNjz7egBNhAVuo5VkvyJfAMSheAALRLWf0n4RDgP8SiGAiYGBQV0wgUjVUBsU+fzh/P1PEm+8X4CsIlP3P7oNyODTrweEbXj29SA8muGBiAswMTAwXHoz4effD/jVoWj4+ffD6juGmEGOFTCSmrwBrbgyz7o6MlUAAAAASUVORK5CYII=",
-    "primary_category": "Utilities",
+    "primary_category": "Utilities & Misc",
     "resource_type_tags": [
       "Reference"
     ],
@@ -5619,7 +5619,7 @@
     ],
     "value_status": "active",
     "representative_tags": [
-      "Utilities",
+      "Utilities & Misc",
       "Reference",
       "Archive"
     ]

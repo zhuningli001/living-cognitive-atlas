@@ -58,12 +58,14 @@ npm run dev
 ```
 
 4. Review:
+
 - `Home` for representative tags and repeated-save clusters
 - `Signals` for tracked UX sources
 - `Cold Storage` for cleanup candidates
 - `Settings` to switch language or export a curated library
 
 5. Download a shareable library:
+
 - `http://localhost:3000/api/export?type=curated&format=json`
 - `http://localhost:3000/api/export?type=curated&format=csv`
 
@@ -75,7 +77,7 @@ Recommended platform:
 
 ### Important privacy note
 
-If you deploy this project as-is, your bookmark data becomes part of the deployed app build.
+If you deploy this project with the full archive, your bookmark data becomes part of the deployed app build.
 
 Use one of these modes:
 
@@ -83,6 +85,8 @@ Use one of these modes:
   Deploy with the full dataset if the project stays private.
 - Public deployment:
   Set `NEXT_PUBLIC_DATA_MODE=public` so the site uses `data/public-bookmarks.json` instead of the full archive.
+
+The app also falls back to `data/public-bookmarks.json` if `data/bookmarks.json` is not present. This keeps public deployments from failing when the private archive is intentionally omitted.
 
 ### Vercel deploy steps
 
@@ -118,10 +122,11 @@ instead of:
 
 - `data/bookmarks.json`
 
-This repository is now prepared around that public-safe path by default:
+This repository is prepared around that public-safe path by default:
 
 - `data/bookmarks.json` and `data/bookmarks.csv` are ignored by Git
 - `data/public-bookmarks.json` and `data/public-bookmarks.csv` are the intended deploy artifacts
+- if the private archive is missing, the app automatically falls back to public data
 
 ### Before you push
 
@@ -162,5 +167,3 @@ This keeps the first version editable and easy to tune before introducing LLM su
 - enrich cards with screenshot thumbnails
 - add dead-link detection and domain health checks
 - generate weekly signal reports from tracked feeds and newly added bookmarks
-›ıERL_‘
-@…h∫æ®ŸgmÚÑDLØÅîü/ÃÎØØñ:√ûª+ÏöyÉ“<≤ÿã0¶P/…KwIî’˛Û@‰Á]÷ú7IV‡ÁÄ	jP"È@Á≥˚I÷k8…
