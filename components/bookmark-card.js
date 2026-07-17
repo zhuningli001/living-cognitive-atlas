@@ -2,6 +2,24 @@ function getPreviewImage(url) {
   return `https://s.wordpress.com/mshots/v1/${encodeURIComponent(url)}?w=1200`;
 }
 
+export function PreviewFrame({ url, title, ratio = "aspect-[16/10]" }) {
+  return (
+    <div className={`relative ${ratio} overflow-hidden rounded-[1.15rem] border border-black/5 bg-[#e6e4df]`}>
+      <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 text-ink/35">
+        <span className="flex h-12 w-10 items-center justify-center rounded-sm bg-[#f2b705] text-xs font-semibold text-white shadow-sm">
+          404
+        </span>
+      </div>
+      <img
+        src={getPreviewImage(url)}
+        alt={title}
+        className="absolute inset-0 h-full w-full bg-[#e6e4df] object-cover object-top"
+        loading="lazy"
+      />
+    </div>
+  );
+}
+
 function asArray(value) {
   if (Array.isArray(value)) return value;
   return value ? [value] : [];
@@ -15,13 +33,8 @@ export function BookmarkCard({ bookmark, showPreview = false }) {
   return (
     <article className="frost-panel flex h-full flex-col rounded-atlas border border-black/5 p-5 shadow-atlas transition hover:-translate-y-0.5 hover:shadow-lg">
       {showPreview ? (
-        <div className="mb-5 overflow-hidden rounded-[1.25rem] border border-black/5 bg-paper/70">
-          <img
-            src={getPreviewImage(bookmark.url)}
-            alt={bookmark.title}
-            className="aspect-[16/10] w-full object-cover object-top"
-            loading="lazy"
-          />
+        <div className="mb-5">
+          <PreviewFrame url={bookmark.url} title={bookmark.title} />
         </div>
       ) : null}
       <div className="flex items-start justify-between gap-4">
