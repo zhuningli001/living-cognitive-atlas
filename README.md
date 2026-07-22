@@ -1,10 +1,46 @@
-# Ningli-Bookmark-living cognitive atlas
+# Living Cognitive Atlas
 
-A local Next.js dashboard that transforms a Chrome bookmarks export into a living cognitive atlas.
+A local-first bookmark intelligence prototype that turns saved Chrome links into a personal cognitive atlas.
+
+The current MVP has two connected surfaces:
+
+- **Next.js local report app** for full profile, taxonomy, search, review, and rule-learning workflows.
+- **Chrome Memory Mirror extension** for a compact side-panel dashboard that reads Chrome bookmarks locally and hands a snapshot to the report page.
 
 ## Product vision
 
 Most bookmarks are easy to save and hard to reuse. This project turns a long-running, messy bookmark archive into a private cognitive map: a way to rediscover old references, understand recurring interests, separate public resources from private clutter, and turn saved links into creative direction, research signals, and reusable knowledge assets.
+
+## Current MVP status
+
+This repository contains a working local MVP:
+
+- Chrome extension side panel reads bookmarks with the `bookmarks` permission.
+- Bookmark analysis runs locally in the extension.
+- Snapshots are stored in `chrome.storage.local`.
+- The full report page imports extension snapshots through a local handoff flow.
+- The report page supports feedback, rule suggestions, approved rules, and local taxonomy overrides.
+- The first-run state is intentionally empty until a user scans or imports data.
+- English and Chinese UI copy are supported for the MVP surfaces.
+
+This is **not yet** a public Chrome Web Store package. See `docs/public-extension-release-plan.md` for the changes needed before general installation.
+
+## Product architecture
+
+The project now separates two layers:
+
+- Information management layer: taxonomy, canonical topics, source importance, confidence, review status, and long-term insight.
+- User usage layer: homepage dashboard, smart collections, search, review, atlas, evolution, and future Chrome extension side-panel flows.
+
+See:
+
+- `docs/information-architecture.md`
+- `docs/chrome-extension-product-plan.md`
+- `docs/chrome-extension-mvp-flow.md`
+- `docs/mvp-product-plan.md`
+- `docs/public-extension-release-plan.md`
+- `docs/privacy-policy-draft.md`
+- `docs/taxonomy-v2.md`
 
 ## What it does
 
@@ -13,6 +49,8 @@ Most bookmarks are easy to save and hard to reuse. This project turns a long-run
 - Surfaces the archive in a simplified local dashboard with atlas, search, evolution, signals, settings, and cold storage views
 - Supports bilingual interface switching (`中文 / English`) in local settings
 - Exports curated or full bookmark libraries as downloadable `JSON` and `CSV`
+- Provides a read-only Chrome extension side panel for live bookmark scanning
+- Supports local feedback and rule-learning artifacts from imported extension snapshots
 
 ## Local setup
 
@@ -25,10 +63,10 @@ npm install
 2. Regenerate bookmark data from a new Chrome export:
 
 ```bash
-npm run parse-bookmarks -- "/Users/a123/Downloads/my bookmarks_5_15.html"
+npm run parse-bookmarks -- "/path/to/chrome-bookmarks.html"
 ```
 
-If you omit the path, the parser defaults to `/Users/a123/Downloads/my bookmarks_5_15.html`.
+The parser requires an explicit local file path. It writes private full-archive files to ignored paths and public-safe files to tracked public data paths.
 
 3. Start the dashboard:
 
@@ -37,6 +75,37 @@ npm run dev
 ```
 
 4. Open `http://localhost:3000`
+
+For the extension handoff MVP, run the report app on port `3002`:
+
+```bash
+npm run dev -- -p 3002
+```
+
+Then open:
+
+```text
+http://127.0.0.1:3002/profile/import
+```
+
+## Chrome extension local test
+
+1. Open `chrome://extensions`.
+2. Enable `Developer mode`.
+3. Click `Load unpacked`.
+4. Select the local `extension/` folder from this repository.
+5. Open the `Chrome Memory Mirror` side panel.
+6. Click `Scan bookmarks`.
+7. Click `Open full report`.
+8. On `/profile/import`, click `Import latest snapshot`.
+
+The extension MVP requests only:
+
+- `bookmarks`
+- `storage`
+- `sidePanel`
+
+It does not request browsing history, all-site access, bookmark write actions, or network upload permissions.
 
 ## Generated data
 
@@ -167,6 +236,8 @@ This keeps the first version editable and easy to tune before introducing LLM su
 
 ## Next upgrades
 
+- package the report as an extension page so public users do not need a local Next.js server
+- add production extension icons, options page, privacy policy, and Chrome Web Store metadata
 - swap rule-only tagging with AI-assisted summaries and semantic embeddings
 - enrich cards with screenshot thumbnails
 - add dead-link detection and domain health checks

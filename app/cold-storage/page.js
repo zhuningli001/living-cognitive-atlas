@@ -36,7 +36,9 @@ export default async function ColdStoragePage() {
               <div className="flex items-start justify-between gap-4">
                 <div>
                   <p className="text-xs uppercase tracking-[0.18em] text-rust/55">{cluster.domain}</p>
-                  <h4 className="mt-2 font-serif text-2xl leading-tight text-ink">{cluster.title}</h4>
+                  <a href={cluster.url} target="_blank" rel="noreferrer" className="mt-2 block">
+                    <h4 className="font-serif text-2xl leading-tight text-ink transition hover:text-rust">{cluster.title}</h4>
+                  </a>
                 </div>
                 <span className="rounded-full border border-black/5 px-3 py-1 text-xs uppercase tracking-[0.2em] text-ink/55">
                   {cluster.duplicateCount} saves
@@ -60,14 +62,6 @@ export default async function ColdStoragePage() {
                   </span>
                 ))}
               </div>
-              <a
-                href={cluster.url}
-                target="_blank"
-                rel="noreferrer"
-                className="mt-5 inline-block text-sm text-rust underline decoration-rust/30 underline-offset-4"
-              >
-                Open recurring reference
-              </a>
             </article>
           ))}
         </div>

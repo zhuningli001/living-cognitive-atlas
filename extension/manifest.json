@@ -1,0 +1,27 @@
+{
+  "manifest_version": 3,
+  "name": "Chrome Memory Mirror",
+  "version": "0.1.0",
+  "description": "Local-first bookmark profile side panel.",
+  "minimum_chrome_version": "114",
+  "permissions": ["bookmarks", "storage", "sidePanel"],
+  "action": {
+    "default_title": "Open Memory Mirror"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "side_panel": {
+    "default_path": "sidepanel.html"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "http://127.0.0.1/*",
+        "http://localhost/*"
+      ],
+      "js": ["report-handoff.js"],
+      "run_at": "document_idle"
+    }
+  ]
+}

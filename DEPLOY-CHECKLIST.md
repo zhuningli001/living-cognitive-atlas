@@ -8,20 +8,19 @@ This checklist assumes you want the **public curated** deployment mode.
 NEXT_PUBLIC_DATA_MODE=public npm run build
 ```
 
-## 2. Create a GitHub repository
+## 2. Push to GitHub
 
-Create a new empty repository on GitHub, then connect this project:
+This repository is expected to be pushed through the existing `origin` remote.
 
 ```bash
-git init
-git add .
-git commit -m "Initial public curated dashboard"
-git branch -M main
-git remote add origin <YOUR_GITHUB_REPO_URL>
-git push -u origin main
+git status --short
+git checkout -b codex/mvp-chrome-memory-mirror
+git add <reviewed-files>
+git commit -m "Add Chrome Memory Mirror MVP"
+git push -u origin codex/mvp-chrome-memory-mirror
 ```
 
-If this folder is already a Git repo, skip `git init` and only add the remote if needed.
+Do not commit `data/bookmarks.json` or `data/bookmarks.csv`.
 
 ## 3. Import to Vercel
 
@@ -65,3 +64,4 @@ Open these pages in production and confirm they load:
 
 - `data/bookmarks.json` and `data/bookmarks.csv` are ignored by Git.
 - The public deployment mode is already validated locally.
+- The Chrome extension MVP is currently a local unpacked extension. See `docs/public-extension-release-plan.md` before preparing a public Chrome Web Store build.

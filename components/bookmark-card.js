@@ -1,3 +1,5 @@
+import { BookmarkShell } from "@/components/bookmark-shell";
+
 function getPreviewImage(url) {
   return `https://s.wordpress.com/mshots/v1/${encodeURIComponent(url)}?w=1200`;
 }
@@ -25,66 +27,70 @@ function asArray(value) {
   return value ? [value] : [];
 }
 
-export function BookmarkCard({ bookmark, showPreview = false }) {
+export function BookmarkCard({ bookmark, showPreview = false, showReason = false, reasonLabel = "Why recommended" }) {
   const worldviewTags = asArray(bookmark.worldview_tags);
   const aestheticTags = asArray(bookmark.aesthetic_tags);
   const status = bookmark.value_status ?? "active";
 
   return (
-    <article className="frost-panel flex h-full flex-col rounded-atlas border border-black/5 p-5 shadow-atlas transition hover:-translate-y-0.5 hover:shadow-lg">
-      {showPreview ? (
-        <div className="mb-5">
-          <PreviewFrame url={bookmark.url} title={bookmark.title} />
-        </div>
-      ) : null}
-      <div className="flex items-start justify-between gap-4">
-        <div>
-          <p className="text-xs uppercase tracking-[0.22em] text-rust/60">{bookmark.year ?? "Unknown year"}</p>
-          <h3 className="mt-2 font-serif text-xl leading-tight text-ink">{bookmark.title}</h3>
-        </div>
-        {bookmark.possible_favicon ? (
-          <img
-            src={bookmark.possible_favicon}
-            alt=""
-            className="h-8 w-8 rounded-full border border-black/5 bg-white object-cover"
-          />
+    <BookmarkShell bookmarkId={bookmark.id}>
+      <article className="frost-panel flex h-full flex-col rounded-atlas border border-black/5 p-5 shadow-atlas transition hover:-translate-y-0.5 hover:shadow-lg">
+        {showPreview ? (
+          <a href={bookmark.url} target="_blank" rel="noreferrer" className="mb-5 block">
+            <PreviewFrame url={bookmark.url} title={bookmark.title} />
+          </a>
         ) : null}
-      </div>
-      <p className="mt-3 text-sm leading-6 text-ink/70">{bookmark.folder_path || "Unfiled"}</p>
-      <div className="mt-4 flex flex-wrap gap-2">
-        {worldviewTags.slice(0, 2).map((tag) => (
-          <span key={tag} className="rounded-full bg-pine/10 px-3 py-1 text-xs text-pine">
-            {tag}
+        <div className="flex items-start justify-between gap-4 pr-9">
+          <div>
+            <p className="text-xs uppercase tracking-[0.22em] text-rust/60">{bookmark.year ?? "Unknown year"}</p>
+            <a href={bookmark.url} target="_blank" rel="noreferrer" className="group/title mt-2 block">
+              <h3 className="font-serif text-xl leading-tight text-ink transition group-hover/title:text-rust">{bookmark.title}</h3>
+            </a>
+          </div>
+          {bookmark.possible_favicon ? (
+            <img
+              src={bookmark.possible_favicon}
+              alt=""
+              className="h-8 w-8 rounded-full border border-black/5 bg-white object-cover"
+            />
+          ) : null}
+        </div>
+        <p className="mt-3 text-sm leading-6 text-ink/70">{bookmark.folder_path || "Unfiled"}</p>
+        <div className="mt-4 flex flex-wrap gap-2">
+          {worldviewTags.slice(0, 2).map((tag) => (
+            <span key={tag} className="rounded-full bg-pine/10 px-3 py-1 text-xs text-pine">
+              {tag}
+            </span>
+          ))}
+          {aestheticTags.slice(0, 1).map((tag) => (
+            <span key={tag} className="rounded-full bg-rust/10 px-3 py-1 text-xs text-rust">
+              {tag}
+            </span>
+          ))}
+        </div>
+        <div className="mt-5 flex items-center justify-between gap-3 text-sm text-ink/60">
+          <a href={bookmark.url} target="_blank" rel="noreferrer" className="underline decoration-transparent underline-offset-4 transition hover:text-rust hover:decoration-rust/25">
+            {bookmark.domain}
+          </a>
+          <span className="rounded-full border border-black/5 px-2 py-0.5 text-[10px] uppercase tracking-[0.14em] text-ink/48">
+            {status.replace("_", " ")}
           </span>
-        ))}
-        {aestheticTags.slice(0, 1).map((tag) => (
-          <span key={tag} className="rounded-full bg-rust/10 px-3 py-1 text-xs text-rust">
-            {tag}
-          </span>
-        ))}
-      </div>
-      <div className="mt-5 flex items-center justify-between gap-3 text-sm text-ink/60">
-        <span>{bookmark.domain}</span>
-        <span className="rounded-full border border-black/5 px-3 py-1 uppercase tracking-[0.18em]">
-          {status.replace("_", " ")}
-        </span>
-      </div>
-      {bookmark.duplicate_count > 1 ? (
-        <p className="mt-3 text-xs uppercase tracking-[0.18em] text-ink/45">
-          Saved {bookmark.duplicate_count} times
-          {bookmark.first_saved_year && bookmark.last_saved_year
-            ? ` · ${bookmark.first_saved_year} to ${bookmark.last_saved_year}`
-            : ""}
-        </p>
-      ) : null}
-      <a
-        href={bookmark.url}
-        target="_blank"
-        rel="noreferrer"
-        className="mt-5 text-sm text-rust underline decoration-rust/30 underline-offset-4"
-      >
-        Open source
-      </a>
-    </article>
+        </div>
+        {showReason && bookmark.usefulness_reason ? (
+          <div className="mt-4 rounded-2xl border border-pine/10 bg-sage/10 p-3">
+            <p className="text-[10px] uppercase tracking-[0.16em] text-pine/65">{reasonLabel}</p>
+            <p className="mt-1 text-xs leading-5 text-ink/58">{bookmark.usefulness_reason}</p>
+          </div>
+        ) : null}
+        {bookmark.duplicate_count > 1 ? (
+          <p className="mt-3 text-xs uppercase tracking-[0.18em] text-ink/45">
+            Saved {bookmark.duplicate_count} times
+            {bookmark.first_saved_year && bookmark.last_saved_year
+              ? ` · ${bookmark.first_saved_year} to ${bookmark.last_saved_year}`
+              : ""}
+          </p>
+        ) : null}
+      </article>
+    </BookmarkShell>
   );
 }

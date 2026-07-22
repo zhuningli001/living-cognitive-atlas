@@ -1,0 +1,4 @@
+interface:
+  display_name: "Smart Collections Design"
+  short_description: "Design user-facing collections from deeper taxonomy"
+  default_prompt: "Use $smart-collections-design to turn my taxonomy into practical collection entry points."

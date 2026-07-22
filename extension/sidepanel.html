@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Chrome Memory Mirror</title>
+    <link rel="stylesheet" href="sidepanel.css">
+  </head>
+  <body>
+    <main class="panel-shell">
+      <header class="panel-header">
+        <p class="eyebrow">Memory Mirror</p>
+        <h1 id="profileTitle">Your Bookmark</h1>
+        <p id="statusText" class="status">Read-only, local-first. No network calls.</p>
+        <section id="flowCard" class="flow-card" aria-label="Setup progress">
+          <div class="flow-card-header">
+            <span id="flowEyebrow">Local setup</span>
+            <strong id="flowTitle">Start with a read-only scan</strong>
+          </div>
+          <ol class="flow-steps">
+            <li id="flowStepScan" data-state="active">
+              <span>1</span>
+              <div>
+                <strong id="flowStepScanTitle">Scan</strong>
+                <p id="flowStepScanBody">Read bookmark titles, URLs, folders, and dates.</p>
+              </div>
+            </li>
+            <li id="flowStepReport" data-state="idle">
+              <span>2</span>
+              <div>
+                <strong id="flowStepReportTitle">Report</strong>
+                <p id="flowStepReportBody">Open the local report page when ready.</p>
+              </div>
+            </li>
+            <li id="flowStepImport" data-state="idle">
+              <span>3</span>
+              <div>
+                <strong id="flowStepImportTitle">Import</strong>
+                <p id="flowStepImportBody">Accept the latest snapshot in the report.</p>
+              </div>
+            </li>
+          </ol>
+        </section>
+        <form id="ownerForm" class="owner-form">
+          <label for="ownerNameInput">Display name</label>
+          <div>
+            <input id="ownerNameInput" name="ownerName" type="text" autocomplete="name" maxlength="32" placeholder="NEO">
+            <button type="submit">Save</button>
+          </div>
+        </form>
+        <div class="language-setting">
+          <label for="languageSelect">Language</label>
+          <select id="languageSelect" name="language">
+            <option value="en">English</option>
+            <option value="zh">中文</option>
+          </select>
+        </div>
+        <form id="reportUrlForm" class="report-url-form">
+          <label for="reportUrlInput">Full report URL</label>
+          <div>
+            <input id="reportUrlInput" name="reportUrl" type="url" inputmode="url" autocomplete="url" placeholder="http://127.0.0.1:3002/profile/import">
+            <button type="submit">Save</button>
+          </div>
+        </form>
+        <div class="button-row">
+          <button id="scanButton" class="primary-button" type="button">Scan bookmarks</button>
+          <button id="exportButton" class="secondary-button" type="button" disabled>Export snapshot</button>
+          <button id="openReportButton" class="report-button" type="button" disabled>Open full report</button>
+        </div>
+      </header>
+
+      <section class="privacy-note" aria-label="Local data">
+        <div>
+          <span id="localDataLabel">Local data</span>
+          <p id="localDataText">No bookmark snapshot stored yet.</p>
+        </div>
+        <button id="clearDataButton" type="button" disabled>Clear data</button>
+      </section>
+
+      <section class="summary-block" aria-labelledby="headline">
+        <p class="section-label">Profile</p>
+        <h2 id="headline">Waiting for first scan</h2>
+        <p id="summaryText" class="muted">Open the side panel and scan Chrome bookmarks to build a compact personal dashboard.</p>
+      </section>
+
+      <section class="metric-row analysis-only" aria-label="Scan metrics" hidden>
+        <div>
+          <span id="bookmarkCount">0</span>
+          <p>Bookmarks</p>
+        </div>
+        <div>
+          <span id="domainCount">0</span>
+          <p>Domains</p>
+        </div>
+        <div>
+          <span id="topicCount">0</span>
+          <p>Signals</p>
+        </div>
+        <div>
+          <span id="reviewCount">0</span>
+          <p>Review</p>
+        </div>
+      </section>
+
+      <section class="source-note analysis-only" aria-label="Source balance" hidden>
+        <span id="sourceBalanceLevel">Source balance</span>
+        <p id="sourceBalanceText">Scan bookmarks to check whether the profile is source-skewed.</p>
+      </section>
+
+      <section class="panel-section analysis-only" hidden>
+        <div class="section-heading">
+          <p id="currentAttentionLabel" class="section-label">Current attention</p>
+          <time id="updatedAt" datetime="">Not scanned</time>
+        </div>
+        <div id="topicList" class="pill-list"></div>
+      </section>
+
+      <section class="panel-section analysis-only" hidden>
+        <p id="developmentLineLabel" class="section-label">Development line</p>
+        <ol id="phaseList" class="timeline"></ol>
+      </section>
+
+      <section class="panel-section analysis-only" hidden>
+        <p id="dominantDimensionsLabel" class="section-label">Dominant dimensions</p>
+        <div id="dimensionList" class="dimension-list"></div>
+      </section>
+
+      <section class="panel-section analysis-only" hidden>
+        <p id="smartReturnPathsLabel" class="section-label">Smart return paths</p>
+        <div id="collectionList" class="collection-list"></div>
+      </section>
+
+      <section class="panel-section analysis-only" hidden>
+        <p id="reviewQueueLabel" class="section-label">Review queue</p>
+        <ul id="reviewList" class="review-list"></ul>
+      </section>
+    </main>
+    <script type="module" src="sidepanel.js"></script>
+  </body>
+</html>

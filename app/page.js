@@ -1,261 +1,171 @@
 import Link from "next/link";
-import { BookmarkCard, PreviewFrame } from "@/components/bookmark-card";
-import { StatCard } from "@/components/stat-card";
+import { AttentionMap } from "@/components/attention-map";
+import { BookmarkCard } from "@/components/bookmark-card";
+import { CollectionIllustration } from "@/components/collection-illustration";
 import { getDashboardData } from "@/lib/data";
 import { getCopy } from "@/lib/i18n";
 
 export default async function HomePage() {
   const { copy } = await getCopy("home");
   const data = getDashboardData();
+  const monitorCollection = data.smartCollections.find((collection) => collection.slug === "sources-to-monitor");
+  const toolsCollection = data.smartCollections.find((collection) => collection.slug === "tools-plugins");
+  const visibleCollections = data.smartCollections.filter((collection) => collection.slug !== "review-cleanup").slice(0, 6);
 
   return (
-    <div className="space-y-10">
-      <section className="grid gap-6 lg:grid-cols-[1.4fr_0.9fr]">
-        <div className="rounded-[2rem] border border-black/5 bg-white/70 p-6 shadow-atlas">
-          <div className="space-y-6">
-            <div className="max-w-3xl">
-              <p className="text-xs uppercase tracking-[0.28em] text-rust/70">{copy.heroEyebrow}</p>
-              <h2 className="mt-3 font-serif text-3xl leading-[1.08] text-balance text-ink md:text-5xl">
-                {copy.heroTitle}
-              </h2>
-              <p className="mt-5 max-w-2xl text-base leading-8 text-ink/72">
-                {copy.heroBody}
-              </p>
-            </div>
-
-            <div className="rounded-atlas border border-black/5 bg-paper/80 p-5">
-              <div className="grid gap-5 lg:grid-cols-[0.85fr_1.15fr]">
-                <div>
-                  <p className="text-xs uppercase tracking-[0.22em] text-rust/60">{copy.quickActions}</p>
-                  <h3 className="mt-2 font-serif text-2xl text-ink">{copy.workflowTitle}</h3>
-                </div>
-                <div className="grid gap-3 md:grid-cols-3">
-                  {copy.workflowItems.map((item) => (
-                    <div key={item} className="flex gap-3 text-sm leading-6 text-ink/68">
-                      <span className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-pine" />
-                      <span>{item}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-              <div className="mt-5 flex flex-wrap gap-3">
-                <a href="/search" className="rounded-full bg-pine px-4 py-2 text-sm text-white">
-                  {copy.openSearch}
-                </a>
-                <a href="/signals" className="rounded-full border border-black/5 bg-white/80 px-4 py-2 text-sm text-ink/70">
-                  {copy.openSignals}
-                </a>
-                <a href="/settings" className="rounded-full border border-black/5 bg-white/80 px-4 py-2 text-sm text-ink/70">
-                  {copy.openSettings}
-                </a>
-                <a href="/api/export?type=curated&format=json" className="rounded-full border border-black/5 bg-white/80 px-4 py-2 text-sm text-ink/70">
-                  {copy.openExport}
-                </a>
-              </div>
-            </div>
+    <div className="space-y-8">
+      <section className="grid gap-5 lg:grid-cols-[0.88fr_1.12fr]">
+        <div className="relative overflow-hidden rounded-[2rem] border border-black/5 bg-white/75 p-7 shadow-atlas">
+          <div className="absolute -right-12 -top-16 h-48 w-48 rounded-full bg-sage/15 blur-2xl" />
+          <p className="relative text-xs uppercase tracking-[0.28em] text-rust/70">{copy.heroEyebrow}</p>
+          <h2 className="relative mt-3 font-serif text-4xl leading-[1.02] text-balance text-ink md:text-6xl">
+            {copy.heroTitle}
+          </h2>
+          <p className="relative mt-5 max-w-2xl text-base leading-8 text-ink/70">
+            {copy.heroBody}
+          </p>
+          <div className="relative mt-7 flex flex-wrap gap-3">
+            <Link href="/search" className="rounded-full bg-pine px-5 py-3 text-sm text-white shadow-atlas transition hover:bg-pine/90">
+              {copy.searchAction}
+            </Link>
+            <Link href="/signals" className="rounded-full border border-black/5 bg-paper/80 px-5 py-3 text-sm text-ink/70 transition hover:bg-white">
+              {copy.signalsAction}
+            </Link>
           </div>
         </div>
-        <div className="atlas-grid rounded-[2rem] border border-black/5 bg-white/60 p-6 shadow-atlas">
-          <p className="text-xs uppercase tracking-[0.24em] text-rust/70">{copy.connectionEyebrow}</p>
-          <div className="mt-4 rounded-atlas border border-black/5 bg-paper/80 p-4">
-            <div className="mt-5 space-y-3">
-              {data.categoryPaths.map((path) => (
-                <div key={`${path.category}-${path.resourceType}-${path.action}`} className="flex items-center gap-3 text-sm text-ink/65">
-                  <Link
-                    href={`/search?category=${encodeURIComponent(path.category)}`}
-                    className="max-w-28 rounded-xl bg-pine/10 px-3 py-1.5 leading-snug text-pine transition hover:bg-pine/15"
-                  >
-                    {path.category}
-                  </Link>
-                  <span className="text-ink/35">→</span>
-                  <Link
-                    href={`/search?resourceType=${encodeURIComponent(path.resourceType)}`}
-                    className="rounded-full bg-rust/10 px-3 py-1 text-rust transition hover:bg-rust/15"
-                  >
-                    {path.resourceType}
-                  </Link>
-                  <span className="text-ink/35">→</span>
-                  <Link
-                    href={`/search?action=${encodeURIComponent(path.action)}`}
-                    className="rounded-full border border-black/5 px-3 py-1 text-ink/60 transition hover:bg-white"
-                  >
-                    {path.action}
-                  </Link>
-                  <Link
-                    href={`/search?category=${encodeURIComponent(path.category)}&resourceType=${encodeURIComponent(path.resourceType)}&action=${encodeURIComponent(path.action)}`}
-                    className="ml-auto text-xs text-ink/45 underline decoration-black/15 underline-offset-4"
-                  >
-                    {path.count} links
-                  </Link>
-                </div>
+
+        <div className="rounded-[2rem] border border-black/5 bg-[#efe9dc]/85 p-5 text-ink shadow-atlas">
+          <p className="text-xs uppercase tracking-[0.24em] text-rust/55">{copy.focusStripEyebrow}</p>
+          <div className="mt-5 grid gap-3 sm:grid-cols-3">
+            <SignalTile label={copy.stats.bookmarks} value={data.totals.total} />
+            <SignalTile label={copy.metrics.tools} value={toolsCollection?.count ?? 0} />
+            <SignalTile label={copy.metrics.monitor} value={monitorCollection?.count ?? 0} />
+          </div>
+          <div className="mt-5 rounded-[1.35rem] border border-black/5 bg-white/55 p-4">
+            <p className="text-xs uppercase tracking-[0.2em] text-rust/45">{copy.todaysReturnEyebrow}</p>
+            <h3 className="mt-2 font-serif text-2xl text-ink">{copy.todaysReturnTitle}</h3>
+            <p className="mt-2 text-sm leading-6 text-ink/58">{copy.todaysReturnBody}</p>
+            <div className="mt-4 space-y-3">
+              {data.rediscovery.slice(0, 3).map((bookmark) => (
+                <a
+                  key={bookmark.id}
+                  href={bookmark.url}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="block rounded-2xl border border-black/5 bg-paper/70 p-3 transition hover:bg-white"
+                >
+                  <p className="line-clamp-2 text-sm leading-5 text-ink/76">{bookmark.title}</p>
+                  <p className="mt-1 text-xs text-ink/42">{bookmark.domain}</p>
+                  <p className="mt-2 line-clamp-2 text-xs leading-5 text-pine/70">
+                    {copy.whyNow} · {getRediscoveryReason(bookmark, copy)}
+                  </p>
+                </a>
               ))}
             </div>
           </div>
         </div>
       </section>
 
-      <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-        <StatCard label={copy.stats.bookmarks} value={data.totals.total.toLocaleString()} detail="Parsed from the exported Chrome archive." />
-        <StatCard label={copy.stats.domains} value={data.totals.uniqueDomains.toLocaleString()} detail="The breadth of your long-term input surface." />
-        <StatCard label={copy.stats.worldview} value={data.totals.worldviewClusters} detail="A first-pass semantic layer generated from rules." />
-        <StatCard label={copy.stats.duplicates} value={data.totals.duplicateClusters} detail="Links repeatedly saved across time or folders." />
-      </section>
+      <AttentionMap maps={data.attentionMaps} copy={copy} />
 
-      <section className="grid gap-6 lg:grid-cols-[1fr_1fr]">
-        <div className="rounded-[2rem] border border-black/5 bg-white/70 p-6 shadow-atlas">
-          <p className="text-xs uppercase tracking-[0.24em] text-rust/60">{copy.categoryEyebrow}</p>
-          <h3 className="mt-2 font-serif text-3xl text-ink">{copy.categoryTitle}</h3>
-          <div className="mt-6 space-y-4">
-            {data.featuredCategories.map((category) => (
-              <article key={category.label} className="rounded-atlas border border-black/5 bg-paper/80 p-4">
-                <div className="flex items-center justify-between gap-4">
-                  <Link href={`/search?category=${encodeURIComponent(category.label)}`} className="font-serif text-2xl text-ink">
-                    {category.label}
-                  </Link>
-                  <span className="text-sm text-ink/50">{category.count}</span>
-                </div>
-                <div className="mt-3 flex flex-wrap gap-2">
-                  {category.resourceTypes.map((tag) => (
-                    <Link key={tag} href={`/search?category=${encodeURIComponent(category.label)}&resourceType=${encodeURIComponent(tag)}`} className="rounded-full bg-pine/10 px-3 py-1 text-xs text-pine">
-                      {tag}
-                    </Link>
-                  ))}
-                  {category.actions.map((tag) => (
-                    <Link key={tag} href={`/search?category=${encodeURIComponent(category.label)}&action=${encodeURIComponent(tag)}`} className="rounded-full border border-black/5 px-3 py-1 text-xs text-ink/60">
-                      {tag}
-                    </Link>
-                  ))}
-                </div>
-              </article>
-            ))}
+      <section className="py-4">
+        <div className="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
+          <div>
+            <p className="text-xs uppercase tracking-[0.24em] text-rust/60">{copy.smartCollectionsEyebrow}</p>
+            <h3 className="mt-2 font-serif text-3xl text-ink">{copy.smartCollectionsTitle}</h3>
           </div>
+          <p className="max-w-xl text-sm leading-7 text-ink/62">{copy.smartCollectionsBody}</p>
         </div>
-
-        <div className="rounded-[2rem] border border-black/5 bg-white/70 p-6 shadow-atlas">
-          <p className="text-xs uppercase tracking-[0.24em] text-rust/60">{copy.curatedEyebrow}</p>
-          <h3 className="mt-2 font-serif text-3xl text-ink">{copy.curatedTitle}</h3>
-          <div className="mt-6 flex flex-wrap gap-3">
-            {data.representativeTags.map((entry) => (
-              <Link
-                key={entry.label}
-                href={`/search?tag=${encodeURIComponent(entry.label)}`}
-                className="rounded-full border border-black/5 bg-paper/80 px-4 py-2 text-sm text-ink/70 transition hover:-translate-y-0.5 hover:border-pine/20 hover:bg-white hover:text-pine"
-              >
-                {entry.label} · {entry.count}
-              </Link>
-            ))}
-          </div>
-        </div>
-
-        <div className="rounded-[2rem] border border-black/5 bg-white/70 p-6 shadow-atlas">
-          <p className="text-xs uppercase tracking-[0.24em] text-rust/60">{copy.exportsEyebrow}</p>
-          <h3 className="mt-2 font-serif text-3xl text-ink">{copy.exportsTitle}</h3>
-          <div className="mt-6 flex flex-wrap gap-3">
-            <a href="/api/export?type=curated&format=json" className="rounded-full bg-pine px-4 py-3 text-sm text-white">
-              {copy.exportCurated}
-            </a>
-            <a href="/api/export?type=curated&format=csv" className="rounded-full border border-black/5 bg-paper/80 px-4 py-3 text-sm text-ink/70">
-              {copy.exportCsv}
-            </a>
-            <a href="/api/export?type=all&format=json" className="rounded-full border border-black/5 bg-paper/80 px-4 py-3 text-sm text-ink/70">
-              {copy.exportAll}
-            </a>
-          </div>
+        <div className="mt-6 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+          {visibleCollections.map((collection) => (
+            <Link
+              key={collection.slug}
+              href={collection.href}
+              className="group relative overflow-hidden rounded-[1.35rem] border border-black/5 bg-paper/70 p-3.5 transition hover:-translate-y-0.5 hover:border-pine/20 hover:bg-white hover:shadow-atlas"
+            >
+              <div className="flex items-center gap-3">
+                <CollectionIllustration slug={collection.slug} />
+                <div className="min-w-0">
+                  <p className="text-[10px] uppercase tracking-[0.18em] text-rust/55">{collection.shortLabel}</p>
+                  <h4 className="mt-1 truncate font-serif text-xl leading-tight text-ink">{collection.label}</h4>
+                </div>
+              </div>
+              <div className="relative mt-3 flex items-center justify-between gap-3">
+                <p className="text-xs leading-5 text-ink/52">{collection.count} links</p>
+                <div className="flex min-w-0 flex-wrap justify-end gap-1.5">
+                  {collection.subgroups.filter((group) => group.count > 0).slice(0, 2).map((group) => (
+                    <span key={group.label} className="rounded-full bg-white/70 px-2 py-0.5 text-[10px] text-ink/45">
+                      {group.label}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </Link>
+          ))}
         </div>
       </section>
 
-      <section className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
+      <section className="grid gap-5 lg:grid-cols-[0.9fr_1.1fr]">
+        <div className="rounded-[2rem] border border-black/5 bg-white/70 p-6 shadow-atlas">
+          <p className="text-xs uppercase tracking-[0.24em] text-rust/60">{copy.deeperEyebrow}</p>
+          <h3 className="mt-2 font-serif text-3xl text-ink">{copy.deeperTitle}</h3>
+          <div className="mt-6 grid gap-3 sm:grid-cols-2">
+            <DeepLink href="/atlas" title={copy.atlasLink} body={copy.atlasBody} />
+            <DeepLink href="/evolution" title={copy.evolutionLink} body={copy.evolutionBody} />
+            <DeepLink href="/settings#optimization" title={copy.optimizeLink} body={copy.optimizeBody} />
+            <DeepLink href="/api/export?type=curated&format=json" title={copy.exportCurated} body={copy.exportBody} />
+          </div>
+        </div>
+
         <div className="rounded-[2rem] border border-black/5 bg-white/70 p-6 shadow-atlas">
           <div className="flex items-end justify-between gap-4">
             <div>
-              <p className="text-xs uppercase tracking-[0.24em] text-rust/60">Timeline 2011-2026</p>
-              <h3 className="mt-2 font-serif text-3xl text-ink">Evolution by year</h3>
+              <p className="text-xs uppercase tracking-[0.24em] text-rust/60">{copy.rediscoveryEyebrow}</p>
+              <h3 className="mt-2 font-serif text-3xl text-ink">{copy.rediscoveryTitle}</h3>
             </div>
-            <p className="text-sm text-ink/60">Bookmark volume as a proxy for active curiosity cycles.</p>
+            <Link href="/search?status=rediscover" className="text-sm text-rust underline decoration-rust/25 underline-offset-4">
+              {copy.openCollection}
+            </Link>
           </div>
-          <div className="mt-8 grid grid-cols-2 gap-3 md:grid-cols-4 xl:grid-cols-8">
-            {data.timeline.map((point) => (
-              <div key={point.year} className="rounded-atlas bg-paper/80 p-4">
-                <div className="timeline-line h-24 rounded-full" style={{ opacity: 0.35 + point.count / 120 }} />
-                <p className="mt-3 text-xs uppercase tracking-[0.16em] text-ink/45">{point.year}</p>
-                <p className="font-serif text-2xl text-ink">{point.count}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <div className="rounded-[2rem] border border-black/5 bg-white/70 p-6 shadow-atlas">
-          <p className="text-xs uppercase tracking-[0.24em] text-rust/60">Primary Categories</p>
-          <div className="mt-5 space-y-4">
-            {data.worldviewCounts.slice(0, 6).map((entry) => (
-              <div key={entry.label}>
-                <div className="flex items-center justify-between text-sm text-ink/65">
-                  <Link href={`/search?category=${encodeURIComponent(entry.label)}`} className="hover:text-pine">
-                    {entry.label}
-                  </Link>
-                  <span>{entry.count}</span>
-                </div>
-                <div className="mt-2 h-2 rounded-full bg-black/5">
-                  <div className="h-full rounded-full bg-pine" style={{ width: `${Math.min((entry.count / data.totals.total) * 300, 100)}%` }} />
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="grid gap-6 lg:grid-cols-[1fr_1fr]">
-        <div className="rounded-[2rem] border border-black/5 bg-white/70 p-6 shadow-atlas">
-          <div className="flex items-end justify-between gap-4">
-            <div>
-              <p className="text-xs uppercase tracking-[0.24em] text-rust/60">Rediscovery</p>
-              <h3 className="mt-2 font-serif text-3xl text-ink">Older links worth returning to</h3>
-            </div>
-          </div>
-          <div className="mt-6 grid gap-4 md:grid-cols-2">
-            {data.rediscovery.slice(0, 4).map((bookmark) => (
-              <BookmarkCard key={bookmark.id} bookmark={bookmark} showPreview />
-            ))}
-          </div>
-        </div>
-
-        <div className="rounded-[2rem] border border-black/5 bg-white/70 p-6 shadow-atlas">
-          <p className="text-xs uppercase tracking-[0.24em] text-rust/60">Moodboard</p>
-          <h3 className="mt-2 font-serif text-3xl text-ink">{copy.moodboardTitle}</h3>
-          <p className="mt-3 max-w-xl text-sm leading-7 text-ink/62">{copy.moodboardBody}</p>
-          <div className="mt-6 space-y-4">
-            {data.visualDirections.map((direction) => (
-              <div key={direction.label} className="rounded-atlas border border-black/5 bg-paper/80 p-4">
-                <div className="flex items-center justify-between gap-4">
-                  <Link
-                    href={`/search?tag=${encodeURIComponent(direction.label)}`}
-                    className="font-serif text-2xl text-ink underline decoration-black/10 underline-offset-4"
-                  >
-                    {direction.label}
-                  </Link>
-                  <span className="text-xs uppercase tracking-[0.18em] text-ink/42">{direction.count} saved references</span>
-                </div>
-                <div className="mt-4 grid gap-3 sm:grid-cols-3">
-                  {direction.bookmarks.map((bookmark) => (
-                    <a
-                      key={bookmark.id}
-                      href={bookmark.url}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="overflow-hidden rounded-[1.1rem] border border-black/5 bg-white/80 transition hover:-translate-y-0.5 hover:border-rust/20"
-                    >
-                      <PreviewFrame url={bookmark.url} title={bookmark.title} ratio="aspect-[4/3]" />
-                      <div className="p-3">
-                        <p className="min-h-[3rem] text-sm leading-6 text-ink">{bookmark.title}</p>
-                      </div>
-                    </a>
-                  ))}
-                </div>
-              </div>
+          <div className="mt-6 grid gap-4 md:grid-cols-3">
+            {data.rediscovery.slice(0, 3).map((bookmark) => (
+              <BookmarkCard key={bookmark.id} bookmark={bookmark} showPreview showReason reasonLabel={copy.whyRecommended} />
             ))}
           </div>
         </div>
       </section>
     </div>
   );
+}
+
+function SignalTile({ label, value }) {
+  return (
+    <div className="rounded-[1.2rem] border border-black/5 bg-white/45 p-4">
+      <p className="text-[11px] uppercase tracking-[0.18em] text-ink/42">{label}</p>
+      <p className="mt-2 font-serif text-3xl text-ink">{Number(value).toLocaleString()}</p>
+    </div>
+  );
+}
+
+function DeepLink({ href, title, body }) {
+  return (
+    <Link href={href} className="rounded-atlas border border-black/5 bg-paper/80 p-4 transition hover:-translate-y-0.5 hover:bg-white hover:shadow-atlas">
+      <h4 className="font-serif text-2xl text-ink">{title}</h4>
+      <p className="mt-2 text-sm leading-6 text-ink/58">{body}</p>
+    </Link>
+  );
+}
+
+function getRediscoveryReason(bookmark, copy) {
+  const topics = Array.isArray(bookmark.canonical_topics) ? bookmark.canonical_topics : [];
+
+  if (topics.length) {
+    return `${copy.reasonTopicPrefix} ${topics.slice(0, 2).join(" / ")}.`;
+  }
+
+  if (bookmark.usefulness_reason) {
+    return bookmark.usefulness_reason;
+  }
+
+  return copy.reasonFallback;
 }

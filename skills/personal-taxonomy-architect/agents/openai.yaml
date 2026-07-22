@@ -1,0 +1,4 @@
+interface:
+  display_name: "Personal Taxonomy Architect"
+  short_description: "Turn messy personal archives into reusable taxonomy"
+  default_prompt: "Use $personal-taxonomy-architect to design a taxonomy for my saved links, notes, or research archive."

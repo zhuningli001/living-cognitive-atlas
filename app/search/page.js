@@ -12,9 +12,12 @@ export default async function SearchPage({ searchParams }) {
     category: params?.category ?? "all",
     resourceType: params?.resourceType ?? "all",
     action: params?.action ?? "all",
-    tag: params?.tag ?? "all"
+    tag: params?.tag ?? "all",
+    collection: params?.collection ?? "all",
+    group: params?.group ?? "all"
   };
   const options = getSearchOptions();
+  const selectedCollection = options.smartCollections.find((collection) => collection.slug === filters.collection);
   const results = searchBookmarks(filters);
 
   return (
@@ -38,6 +41,19 @@ export default async function SearchPage({ searchParams }) {
           <Select label={copy.resourceType} name="resourceType" value={filters.resourceType} options={["all", ...options.resourceTypes]} />
           <Select label={copy.action} name="action" value={filters.action} options={["all", ...options.actionTags]} />
           <Select label={copy.tag} name="tag" value={filters.tag} options={["all", ...options.tags]} />
+          <Select
+            label={copy.collection}
+            name="collection"
+            value={filters.collection}
+            options={["all", ...options.smartCollections.map((collection) => collection.slug)]}
+            labels={Object.fromEntries(options.smartCollections.map((collection) => [collection.slug, collection.label]))}
+          />
+          <Select
+            label={copy.group}
+            name="group"
+            value={filters.group}
+            options={["all", ...(selectedCollection?.groups ?? [])]}
+          />
           <div className="flex items-end gap-3">
             <button
               type="submit"
@@ -69,7 +85,7 @@ export default async function SearchPage({ searchParams }) {
   );
 }
 
-function Select({ label, name, value, options }) {
+function Select({ label, name, value, options, labels = {} }) {
   return (
     <label className="space-y-2">
       <span className="text-xs uppercase tracking-[0.18em] text-ink/50">{label}</span>
@@ -80,7 +96,7 @@ function Select({ label, name, value, options }) {
       >
         {options.map((option) => (
           <option key={option} value={option}>
-            {option === "all" ? label : option}
+            {option === "all" ? label : labels[option] ?? option}
           </option>
         ))}
       </select>

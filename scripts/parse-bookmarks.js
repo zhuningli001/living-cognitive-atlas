@@ -1,6 +1,7 @@
 import fs from "fs";
 import path from "path";
 import {
+  applyKnownBookmarkCorrections,
   applyTaxonomy,
   decodeHtml,
   extractDomain,
@@ -8,15 +9,18 @@ import {
 } from "../lib/taxonomy.js";
 
 const rootDir = path.resolve(process.cwd());
-const inputPath = process.argv[2]
-  ? path.resolve(process.argv[2])
-  : "/Users/a123/Downloads/my bookmarks_5_15.html";
+const inputPath = process.argv[2] ? path.resolve(process.argv[2]) : null;
 
 const outputJsonPath = path.join(rootDir, "data", "bookmarks.json");
 const outputCsvPath = path.join(rootDir, "data", "bookmarks.csv");
 const outputMetaPath = path.join(rootDir, "data", "atlas-meta.json");
 const outputPublicJsonPath = path.join(rootDir, "data", "public-bookmarks.json");
 const outputPublicCsvPath = path.join(rootDir, "data", "public-bookmarks.csv");
+
+if (!inputPath) {
+  console.error("Usage: npm run parse-bookmarks -- /path/to/chrome-bookmarks.html");
+  process.exit(1);
+}
 
 function readFile(filePath) {
   return fs.readFileSync(filePath, "utf8");
@@ -185,6 +189,7 @@ function toCsv(bookmarks) {
     "primary_category",
     "resource_type_tags",
     "action_tags",
+    "canonical_topics",
     "content_type",
     "worldview_tags",
     "human_state_tags",
@@ -193,7 +198,12 @@ function toCsv(bookmarks) {
     "aesthetic_tags",
     "medium_tags",
     "region_tags",
-    "value_status"
+    "value_status",
+    "save_intent",
+    "usefulness_reason",
+    "source_importance",
+    "classification_confidence",
+    "classification_reasons"
   ];
 
   const rows = bookmarks.map((bookmark) =>
@@ -217,6 +227,7 @@ function getCurationScore(bookmark) {
     bookmark.primary_category,
     ...(bookmark.resource_type_tags ?? []),
     ...(bookmark.action_tags ?? []),
+    ...(bookmark.canonical_topics ?? []),
     ...bookmark.worldview_tags,
     ...bookmark.aesthetic_tags
   ].filter(Boolean).length;
@@ -260,10 +271,15 @@ function getPublicBookmarks(bookmarks, limit = 180) {
       primary_category: bookmark.primary_category,
       resource_type_tags: bookmark.resource_type_tags,
       action_tags: bookmark.action_tags,
+      canonical_topics: bookmark.canonical_topics,
       worldview_tags: bookmark.worldview_tags,
       aesthetic_tags: bookmark.aesthetic_tags,
       medium_tags: bookmark.medium_tags,
       value_status: bookmark.value_status,
+      save_intent: bookmark.save_intent,
+      usefulness_reason: bookmark.usefulness_reason,
+      source_importance: bookmark.source_importance,
+      classification_confidence: bookmark.classification_confidence,
       representative_tags: bookmark.representative_tags
     });
     if (curated.length >= limit) break;
@@ -274,7 +290,7 @@ function getPublicBookmarks(bookmarks, limit = 180) {
 
 function main() {
   const html = readFile(inputPath);
-  const parsed = parseBookmarks(html);
+  const parsed = parseBookmarks(html).map(applyKnownBookmarkCorrections);
   const duplicateGroups = parsed.reduce((acc, item) => {
     const group = acc[item.normalized_url] ?? [];
     group.push(item);

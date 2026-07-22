@@ -27,6 +27,10 @@ body {
     radial-gradient(circle at 15% 18%, rgba(142, 95, 77, 0.08), transparent 22%);
 }
 
+body[data-surface="import-report"] {
+  background: #f8f4ec;
+}
+
 a {
   color: inherit;
   text-decoration: none;

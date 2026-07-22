@@ -1,0 +1,4 @@
+interface:
+  display_name: "Information Asset Audit"
+  short_description: "Audit personal archives for quality and growth signals"
+  default_prompt: "Use $information-asset-audit to evaluate the health of my bookmark, note, or source archive."

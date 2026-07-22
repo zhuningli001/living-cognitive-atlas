@@ -7,9 +7,11 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
+    "audit-taxonomy": "node scripts/audit-taxonomy.js",
     "parse-bookmarks": "node scripts/parse-bookmarks.js"
   },
   "dependencies": {
+    "motion": "^12.42.2",
     "next": "^15.3.2",
     "react": "^19.1.0",
     "react-dom": "^19.1.0"
