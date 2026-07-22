@@ -1,6 +1,5 @@
 import { buildProfileSnapshot, flattenBookmarkTree } from "./bookmark-profile-engine.js";
 
-const defaultReportUrl = "http://127.0.0.1:3002/profile/import#extension-handoff";
 const defaultOwnerName = "Your";
 const defaultLanguage = "en";
 const scanButton = document.querySelector("#scanButton");
@@ -9,8 +8,6 @@ const openReportButton = document.querySelector("#openReportButton");
 const ownerForm = document.querySelector("#ownerForm");
 const ownerNameInput = document.querySelector("#ownerNameInput");
 const languageSelect = document.querySelector("#languageSelect");
-const reportUrlForm = document.querySelector("#reportUrlForm");
-const reportUrlInput = document.querySelector("#reportUrlInput");
 const clearDataButton = document.querySelector("#clearDataButton");
 const statusText = document.querySelector("#statusText");
 const flowSteps = {
@@ -27,18 +24,17 @@ const copy = {
     displayName: "Display name",
     save: "Save",
     language: "Language",
-    reportUrl: "Full report URL",
     flowEyebrow: "Local setup",
     flowTitleEmpty: "Start with a read-only scan",
     flowTitleReady: "Snapshot ready for the report",
-    flowTitleOpened: "Finish in the local report",
-    flowTitleImported: "Report imported",
+    flowTitleOpened: "Report opened",
+    flowTitleImported: "Report opened",
     flowScanTitle: "Scan",
     flowScanBody: "Read bookmark titles, URLs, folders, and dates.",
     flowReportTitle: "Report",
-    flowReportBody: "Open the local report page when ready.",
-    flowImportTitle: "Import",
-    flowImportBody: "Accept the latest snapshot in the report.",
+    flowReportBody: "Open the full extension report when ready.",
+    flowImportTitle: "Review",
+    flowImportBody: "Use the report without leaving local storage.",
     scan: "Scan bookmarks",
     scanning: "Scanning...",
     export: "Export snapshot",
@@ -81,15 +77,14 @@ const copy = {
     exportFirst: "Scan bookmarks before exporting.",
     exportStarted: "Snapshot export started. Keep the file local if it contains private bookmarks.",
     scanBeforeReport: "Scan bookmarks first, then open the full report.",
-    reportOpened: "Full report opened. Click Import latest snapshot there.",
-    reportImported: "Latest snapshot was imported in the report.",
+    reportOpened: "Full extension report opened.",
+    reportImported: "Full extension report opened.",
     clearData: "Clear data",
     localData: "Local data",
     noLocalData: "No bookmark snapshot stored yet.",
     storedLocalData: (count, domains) => `${count} bookmarks and ${domains} domains stored locally.`,
     clearedData: "Extension snapshot cleared. Name and language settings were kept.",
-    reportUrlSaved: "Saved full report URL.",
-    invalidReportUrl: "Use a local report URL like http://127.0.0.1:3002/profile/import."
+    reportStorageUnavailable: "Could not open the extension report in this context."
   },
   zh: {
     titleFallback: "你的书签",
@@ -98,18 +93,17 @@ const copy = {
     displayName: "显示名",
     save: "保存",
     language: "语言",
-    reportUrl: "完整报告 URL",
     flowEyebrow: "本地设置",
     flowTitleEmpty: "先进行只读扫描",
     flowTitleReady: "快照已准备好进入报告",
-    flowTitleOpened: "在本地报告页完成导入",
-    flowTitleImported: "报告已导入",
+    flowTitleOpened: "报告已打开",
+    flowTitleImported: "报告已打开",
     flowScanTitle: "扫描",
     flowScanBody: "读取书签标题、URL、文件夹和保存日期。",
     flowReportTitle: "报告",
-    flowReportBody: "准备好后打开本地报告页。",
-    flowImportTitle: "导入",
-    flowImportBody: "在报告页接受最新快照。",
+    flowReportBody: "准备好后打开扩展内完整报告。",
+    flowImportTitle: "查看",
+    flowImportBody: "不离开本地存储即可使用报告。",
     scan: "扫描书签",
     scanning: "扫描中...",
     export: "导出快照",
@@ -152,22 +146,20 @@ const copy = {
     exportFirst: "请先扫描书签再导出。",
     exportStarted: "快照导出已开始。文件包含私人书签时请保存在本地。",
     scanBeforeReport: "请先扫描书签，再打开完整报告。",
-    reportOpened: "完整报告已打开，请在那里点击导入最新快照。",
-    reportImported: "最新快照已在报告页导入。",
+    reportOpened: "扩展内完整报告已打开。",
+    reportImported: "扩展内完整报告已打开。",
     clearData: "清除数据",
     localData: "本地数据",
     noLocalData: "还没有保存书签快照。",
     storedLocalData: (count, domains) => `本地已保存 ${count} 个书签、${domains} 个来源。`,
     clearedData: "扩展快照已清除。显示名和语言设置已保留。",
-    reportUrlSaved: "已保存完整报告 URL。",
-    invalidReportUrl: "请使用本地报告 URL，例如 http://127.0.0.1:3002/profile/import。"
+    reportStorageUnavailable: "当前环境无法打开扩展报告。"
   }
 };
 
 let currentSnapshot = null;
 let currentLanguage = defaultLanguage;
 let currentOwnerName = "";
-let currentReportUrl = defaultReportUrl;
 let currentFlowStage = "empty";
 let currentReportHandoffState = null;
 
@@ -176,17 +168,15 @@ exportButton.addEventListener("click", exportSnapshot);
 openReportButton.addEventListener("click", openFullReport);
 ownerForm.addEventListener("submit", saveOwnerName);
 languageSelect.addEventListener("change", saveLanguage);
-reportUrlForm.addEventListener("submit", saveReportUrl);
 clearDataButton.addEventListener("click", clearExtensionData);
 chrome.storage.onChanged.addListener(handleStorageChange);
 loadCachedSnapshot();
 
 async function loadCachedSnapshot() {
   try {
-    const cached = await chrome.storage.local.get(["profileSnapshot", "ownerName", "preferredLanguage", "reportUrl", "reportHandoffState"]);
+    const cached = await chrome.storage.local.get(["profileSnapshot", "ownerName", "preferredLanguage", "reportHandoffState"]);
     setLanguage(cached.preferredLanguage || defaultLanguage);
     setOwnerName(cached.ownerName || defaultOwnerName);
-    setReportUrl(cached.reportUrl || defaultReportUrl);
     currentReportHandoffState = cached.reportHandoffState || null;
     applyStaticCopy();
 
@@ -219,23 +209,6 @@ async function saveOwnerName(event) {
     setStatus(t("savedName", ownerName));
   } catch {
     setStatus(t("saveNameFailed"));
-  }
-}
-
-async function saveReportUrl(event) {
-  event.preventDefault();
-  const nextUrl = normalizeReportUrl(reportUrlInput.value);
-  if (!nextUrl) {
-    setStatus(t("invalidReportUrl"));
-    return;
-  }
-
-  try {
-    await chrome.storage.local.set({ reportUrl: nextUrl });
-    setReportUrl(nextUrl);
-    setStatus(t("reportUrlSaved"));
-  } catch {
-    setStatus(t("storageUnavailable"));
   }
 }
 
@@ -316,14 +289,11 @@ async function openFullReport() {
 
   try {
     await markReportOpened();
-    await chrome.tabs.create({ url: currentReportUrl });
-    setFlowStage("reportOpened");
+    await chrome.tabs.create({ url: chrome.runtime.getURL("report.html") });
+    setFlowStage("imported");
     setStatus(t("reportOpened"));
   } catch {
-    await markReportOpened();
-    window.open(currentReportUrl, "_blank", "noopener");
-    setFlowStage("reportOpened");
-    setStatus(t("reportOpened"));
+    setStatus(t("reportStorageUnavailable"));
   }
 }
 
@@ -346,6 +316,25 @@ async function clearExtensionData() {
 
 function handleStorageChange(changes, areaName) {
   if (areaName !== "local") return;
+  if (changes.profileSnapshot) {
+    currentSnapshot = changes.profileSnapshot.newValue || null;
+    if (!currentSnapshot) {
+      currentReportHandoffState = null;
+      setExportReady(false);
+      setReportReady(false);
+      setFlowStage("empty");
+      setAnalysisVisible(false);
+      resetSnapshotUi();
+      updateLocalDataStatus();
+      return;
+    }
+
+    renderSnapshot(currentSnapshot);
+    setExportReady(true);
+    setReportReady(true);
+    updateLocalDataStatus();
+  }
+
   if (changes.reportHandoffState) {
     currentReportHandoffState = changes.reportHandoffState.newValue || null;
     if (currentSnapshot) {
@@ -359,9 +348,9 @@ async function markReportOpened() {
   if (!currentSnapshot) return;
 
   currentReportHandoffState = {
-    status: "report_opened",
+    status: "imported",
     snapshotGeneratedAt: currentSnapshot.generatedAt,
-    updatedAt: new Date().toISOString()
+    importedAt: new Date().toISOString()
   };
 
   try {
@@ -546,29 +535,6 @@ function setLanguage(language) {
   languageSelect.value = currentLanguage;
 }
 
-function setReportUrl(reportUrl) {
-  currentReportUrl = normalizeReportUrl(reportUrl) || defaultReportUrl;
-  reportUrlInput.value = currentReportUrl.replace("#extension-handoff", "");
-}
-
-function normalizeReportUrl(value) {
-  try {
-    const url = new URL(value || defaultReportUrl);
-    if (!isSupportedLocalReportUrl(url)) return null;
-    if (url.pathname !== "/profile/import") return null;
-
-    url.search = "";
-    url.hash = "extension-handoff";
-    return url.toString();
-  } catch {
-    return null;
-  }
-}
-
-function isSupportedLocalReportUrl(url) {
-  return url.protocol === "http:" && ["127.0.0.1", "localhost"].includes(url.hostname);
-}
-
 function resetSnapshotUi() {
   setText("#headline", t("waiting"));
   setText("#summaryText", t("waitingSummary"));
@@ -601,8 +567,6 @@ function applyStaticCopy() {
   setText('label[for="ownerNameInput"]', t("displayName"));
   setText("#ownerForm button", t("save"));
   setText('label[for="languageSelect"]', t("language"));
-  setText('label[for="reportUrlInput"]', t("reportUrl"));
-  setText("#reportUrlForm button", t("save"));
   setText("#flowEyebrow", t("flowEyebrow"));
   setText("#flowStepScanTitle", t("flowScanTitle"));
   setText("#flowStepScanBody", t("flowScanBody"));

@@ -5,7 +5,7 @@ A local-first bookmark intelligence prototype that turns saved Chrome links into
 The current MVP has two connected surfaces:
 
 - **Next.js local report app** for full profile, taxonomy, search, review, and rule-learning workflows.
-- **Chrome Memory Mirror extension** for a compact side-panel dashboard that reads Chrome bookmarks locally and hands a snapshot to the report page.
+- **Chrome Memory Mirror extension** for a compact side-panel dashboard and built-in full report page that read Chrome bookmarks locally.
 
 ## Product vision
 
@@ -18,12 +18,12 @@ This repository contains a working local MVP:
 - Chrome extension side panel reads bookmarks with the `bookmarks` permission.
 - Bookmark analysis runs locally in the extension.
 - Snapshots are stored in `chrome.storage.local`.
-- The full report page imports extension snapshots through a local handoff flow.
+- The extension includes a full report page, so the core extension flow does not require a local web server.
 - The report page supports feedback, rule suggestions, approved rules, and local taxonomy overrides.
 - The first-run state is intentionally empty until a user scans or imports data.
 - English and Chinese UI copy are supported for the MVP surfaces.
 
-This is **not yet** a public Chrome Web Store package. See `docs/public-extension-release-plan.md` for the changes needed before general installation.
+This is **not yet** a Chrome Web Store package. See `docs/public-extension-release-plan.md` for the remaining release gates before general installation.
 
 ## Product architecture
 
@@ -76,18 +76,6 @@ npm run dev
 
 4. Open `http://localhost:3000`
 
-For the extension handoff MVP, run the report app on port `3002`:
-
-```bash
-npm run dev -- -p 3002
-```
-
-Then open:
-
-```text
-http://127.0.0.1:3002/profile/import
-```
-
 ## Chrome extension local test
 
 1. Open `chrome://extensions`.
@@ -97,7 +85,7 @@ http://127.0.0.1:3002/profile/import
 5. Open the `Chrome Memory Mirror` side panel.
 6. Click `Scan bookmarks`.
 7. Click `Open full report`.
-8. On `/profile/import`, click `Import latest snapshot`.
+8. Confirm the extension opens its built-in `report.html` page.
 
 The extension MVP requests only:
 
@@ -236,7 +224,6 @@ This keeps the first version editable and easy to tune before introducing LLM su
 
 ## Next upgrades
 
-- package the report as an extension page so public users do not need a local Next.js server
 - add production extension icons, options page, privacy policy, and Chrome Web Store metadata
 - swap rule-only tagging with AI-assisted summaries and semantic embeddings
 - enrich cards with screenshot thumbnails

@@ -13,15 +13,5 @@
   },
   "side_panel": {
     "default_path": "sidepanel.html"
-  },
-  "content_scripts": [
-    {
-      "matches": [
-        "http://127.0.0.1/*",
-        "http://localhost/*"
-      ],
-      "js": ["report-handoff.js"],
-      "run_at": "document_idle"
-    }
-  ]
+  }
 }

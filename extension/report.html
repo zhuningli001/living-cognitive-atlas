@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Chrome Memory Mirror Report</title>
+    <link rel="stylesheet" href="report.css">
+  </head>
+  <body>
+    <main class="report-shell">
+      <header class="report-hero">
+        <div>
+          <p id="reportEyebrow" class="eyebrow">Memory Mirror Report</p>
+          <h1 id="reportTitle">Connect a bookmark snapshot</h1>
+          <p id="reportSummary">Scan bookmarks in the side panel first. This report reads only local extension storage.</p>
+        </div>
+        <div class="hero-actions">
+          <button id="exportButton" type="button" disabled>Export snapshot</button>
+          <button id="clearButton" type="button" disabled>Clear data</button>
+        </div>
+      </header>
+
+      <section id="emptyState" class="empty-state">
+        <p class="eyebrow">No local profile yet</p>
+        <h2>Open the side panel and scan bookmarks</h2>
+        <p>After scanning, this page becomes a full local report. No server is required.</p>
+      </section>
+
+      <section id="metrics" class="metric-grid report-only" hidden>
+        <article>
+          <span id="bookmarkCount">0</span>
+          <p id="bookmarkLabel">Bookmarks</p>
+        </article>
+        <article>
+          <span id="domainCount">0</span>
+          <p id="domainLabel">Domains</p>
+        </article>
+        <article>
+          <span id="signalCount">0</span>
+          <p id="signalLabel">Signals</p>
+        </article>
+        <article>
+          <span id="reviewCount">0</span>
+          <p id="reviewLabel">Review</p>
+        </article>
+      </section>
+
+      <section id="sourceBalance" class="source-card report-only" hidden>
+        <span id="sourceBalanceLevel">Source balance</span>
+        <p id="sourceBalanceText">No source pattern yet.</p>
+      </section>
+
+      <section class="report-grid report-only" hidden>
+        <article class="report-card">
+          <p id="topicsEyebrow" class="eyebrow">Current attention</p>
+          <h2 id="topicsTitle">What the archive keeps returning to</h2>
+          <div id="topicList" class="pill-list"></div>
+        </article>
+        <article class="report-card">
+          <p id="dimensionsEyebrow" class="eyebrow">Dominant dimensions</p>
+          <h2 id="dimensionsTitle">Profile mix</h2>
+          <div id="dimensionList" class="bar-list"></div>
+        </article>
+      </section>
+
+      <section class="report-grid report-only" hidden>
+        <article class="report-card">
+          <p id="lineEyebrow" class="eyebrow">Development line</p>
+          <h2 id="lineTitle">Growth through saved attention</h2>
+          <ol id="phaseList" class="timeline"></ol>
+        </article>
+        <article class="report-card">
+          <p id="collectionsEyebrow" class="eyebrow">Smart return paths</p>
+          <h2 id="collectionsTitle">Useful doors back in</h2>
+          <div id="collectionList" class="collection-grid"></div>
+        </article>
+      </section>
+
+      <section class="report-card report-only" hidden>
+        <p id="reviewEyebrow" class="eyebrow">Review queue</p>
+        <h2 id="reviewTitle">Items that need human confirmation</h2>
+        <ul id="reviewList" class="review-list"></ul>
+      </section>
+
+      <section class="report-card report-only" hidden>
+        <p id="recordsEyebrow" class="eyebrow">Evidence sample</p>
+        <h2 id="recordsTitle">Recent normalized records</h2>
+        <div id="recordList" class="record-list"></div>
+      </section>
+    </main>
+    <script type="module" src="report.js"></script>
+  </body>
+</html>

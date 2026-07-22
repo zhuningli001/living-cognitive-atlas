@@ -9,6 +9,7 @@ User grants bookmark access
   -> extension reads Chrome bookmarks
   -> local analyzer builds a personal profile snapshot
   -> side panel shows a compact dashboard
+  -> built-in extension report shows the full local profile
   -> user identifies what feels accurate, missing, or over-general
 ```
 
@@ -53,7 +54,9 @@ This avoids implying that the system has already inferred a person before the us
 - `extension/sidepanel.html`: Compact side-panel interface.
 - `extension/sidepanel.css`: Brand-aligned side-panel styling.
 - `extension/sidepanel.js`: Chrome API connection, local storage, snapshot export, and rendering.
-- `extension/report-handoff.js`: Local report-page bridge for one-click importing the latest extension snapshot.
+- `extension/report.html`: Full extension-local report page.
+- `extension/report.css`: Full report styling.
+- `extension/report.js`: Full report rendering from `chrome.storage.local`.
 
 ## Local installation
 
@@ -64,10 +67,9 @@ This avoids implying that the system has already inferred a person before the us
 5. Pin or open `Chrome Memory Mirror`.
 6. Open the side panel and click `Scan bookmarks`.
 7. Optional: set a display name such as `NEO`.
-8. Optional: set the full report URL if the local app is running on a different port, for example `http://127.0.0.1:3002/profile/import`.
-9. Click `Open full report`.
-10. Click `Import latest snapshot` on `/profile/import`.
-11. Use `Export snapshot` only as a manual fallback or portable archive.
+8. Click `Open full report`.
+9. Confirm the built-in extension report opens.
+10. Use `Export snapshot` only as a manual fallback or portable archive.
 
 ## First-use flow
 
@@ -86,9 +88,8 @@ This avoids implying that the system has already inferred a person before the us
 7. Snapshot is saved in `chrome.storage.local`.
 8. User can explicitly export the snapshot as local JSON.
 9. User can open the full report page from the side panel.
-10. The local report bridge offers one-click import of the latest extension snapshot.
-11. The web import page validates the snapshot and reruns the imported records through the web taxonomy/profile adapter.
-12. Panel renders:
+10. The full report page reads the latest local snapshot directly from `chrome.storage.local`.
+11. Panel renders:
    - profile headline
    - bookmark/domain/signal/review counts
    - source balance
@@ -118,36 +119,28 @@ The JSON contains:
 
 Because `records` includes private URLs and folder names, export must stay explicit and user-initiated.
 
-## Web report import
+## Extension-local report
 
-`/profile/import` does not upload the JSON file. It parses the file in the browser, stores the latest valid snapshot in `localStorage`, and builds a report model from `records`.
+The public-facing extension flow no longer depends on a localhost report page.
 
-The imported report currently recalculates:
+`extension/report.html` reads `profileSnapshot` from `chrome.storage.local` and renders:
 
-- taxonomy categories
-- resource type tags
-- action tags
-- canonical topics
 - profile headline and dimensions
 - source balance and domain concentration
-- weighted interests
-- development stages
+- top attention signals
+- development line
 - smart return paths
 - review priority items
+- evidence sample
+- local export and clear controls
 
-This creates a bridge from real Chrome bookmarks to the same profile concepts used by the main web prototype.
+This makes the first public-style prototype usable without running the Next.js app.
 
-## Extension handoff
+## Web report import
 
-MVP 1.1 uses a local content-script handoff for `http://127.0.0.1/profile/import` and `http://localhost/profile/import`.
+`/profile/import` remains in the Next.js app as a local research surface for manually importing exported snapshot JSON and testing deeper feedback/rule-learning flows.
 
-When the user clicks `Open full report`, the extension opens the local report page with an extension handoff hash. The report handoff script reads the latest `profileSnapshot` from `chrome.storage.local` and posts it to the report page. The page then shows `Import latest snapshot`, so the user can explicitly accept the local handoff.
-
-This avoids putting private bookmark data into the URL and avoids server upload. Manual JSON import remains available as a fallback.
-
-Chrome extension match patterns do not include a port in the host. The manifest therefore uses `http://127.0.0.1/*` and `http://localhost/*`, while the configurable report URL can still point to a specific local port such as `3002`.
-
-The report page requests the latest extension snapshot after load. The content script also pushes updates when the stored snapshot or language setting changes. This makes the handoff less brittle than a one-time fire-and-forget post.
+Manual JSON import does not upload the file. It parses in the browser and stores the latest valid snapshot in `localStorage`.
 
 ## Local data controls
 
@@ -160,18 +153,6 @@ The side panel includes a `Local data` status and `Clear data` action.
 - full report URL
 
 After clearing, the side panel returns to the clean first-run state and analysis modules are hidden until the next scan.
-
-## Full report URL
-
-The extension stores a local full report URL in `chrome.storage.local` as `reportUrl`.
-
-Accepted MVP URLs must:
-
-- use `http`
-- use `127.0.0.1` or `localhost`
-- point to `/profile/import`
-
-The extension normalizes the URL by removing query parameters and adding `#extension-handoff`. This keeps the report handoff local and explicit.
 
 ## Display name
 
@@ -190,7 +171,7 @@ MVP 1.1 includes:
 
 The selected language is stored in `chrome.storage.local` as `preferredLanguage`. It changes the side-panel interface copy, button labels, status messages, empty states, source-balance copy, and display-name title format.
 
-The extension handoff also passes `preferredLanguage` to `/profile/import`. The report page stores it in localStorage and applies it to page-level system text: import state, buttons, status messages, metrics, section titles, empty states, feedback controls, rule approval controls, and taxonomy override controls.
+The built-in extension report reads `preferredLanguage` from `chrome.storage.local` and applies it to report labels, empty states, metrics, source balance, dimensions, development stages, collections, and review reasons.
 
 MVP 1.1 also localizes the most visible system-generated analysis labels:
 
@@ -305,7 +286,6 @@ Stabilize the real Chrome extension experience before adding more profile comple
 
 P0 test checklist:
 
-- Run `npm run dev -- -p 3002`.
 - Open `chrome://extensions`.
 - Reload the unpacked `Chrome Memory Mirror` extension.
 - Open the extension side panel.
@@ -316,20 +296,16 @@ P0 test checklist:
 - Confirm metrics, source balance, current attention, development line, dimensions, smart return paths, and review queue appear.
 - Confirm setup tracker moves to `Report`.
 - Click `Open full report`.
-- Confirm `/profile/import#extension-handoff` opens on the configured local URL.
-- Confirm the report page shows `Latest extension snapshot is ready`.
-- Click `Import latest snapshot`.
-- Confirm the full report renders from the extension snapshot.
-- Confirm the extension side-panel setup tracker moves the `Import` step to done.
+- Confirm the built-in extension `report.html` opens.
+- Confirm the full report renders from the extension snapshot without localhost.
+- Confirm the extension side-panel setup tracker moves the `Review` step to done.
 - Confirm the handoff card changes to an imported state and does not keep asking for the same snapshot.
 - Switch language in the extension and report page.
 - Confirm system copy and visible taxonomy labels switch language.
 - Click `Clear data` in the extension.
 - Confirm the side panel returns to clean first-run state.
-- Click `Clear local snapshot` on the report page.
-- Confirm the report page returns to clean no-data state while manual JSON import remains available.
-- Click `Reset report data` if feedback, approved rules, or applied overrides need to be cleared together.
-- Confirm the report page removes local snapshot, feedback, approved rules, and applied overrides from the current browser.
+- Click `Clear data` on the extension report page.
+- Confirm the report page returns to clean no-data state.
 
 ### Feedback
 
@@ -338,13 +314,13 @@ Use the checklist with real Chrome bookmarks. Record friction in terms of where 
 - permission trust
 - scan completion
 - report handoff
-- import confirmation
+- report opening
 - language mismatch
 - local data clearing
 
 ### Summary
 
-The P0 loop is valid if a new user can install the extension, scan bookmarks, open the report, import the latest snapshot, and clear local data without needing manual JSON export.
+The P0 loop is valid if a new user can install the extension, scan bookmarks, open the built-in report, and clear local data without needing a local server or manual JSON export.
 
 ### Modify
 
@@ -352,7 +328,7 @@ Prioritize only the gaps that block trust:
 
 - unclear first-use state
 - unclear privacy boundary
-- broken extension-to-report handoff
+- broken extension report opening
 - stale local data
 - language mismatch
 - noisy or misleading setup steps

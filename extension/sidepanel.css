@@ -52,28 +52,24 @@ button {
 }
 
 .owner-form,
-.language-setting,
-.report-url-form {
+.language-setting {
   display: grid;
   gap: 6px;
 }
 
 .owner-form label,
-.language-setting label,
-.report-url-form label {
+.language-setting label {
   color: var(--muted);
   font-size: 11px;
 }
 
-.owner-form div,
-.report-url-form div {
+.owner-form div {
   display: grid;
   grid-template-columns: 1fr auto;
   gap: 8px;
 }
 
-.owner-form input,
-.report-url-form input {
+.owner-form input {
   min-width: 0;
   height: 38px;
   border: 1px solid var(--line);
@@ -97,8 +93,7 @@ button {
   font-size: 13px;
 }
 
-.owner-form button,
-.report-url-form button {
+.owner-form button {
   height: 38px;
   border: 1px solid rgba(63, 90, 75, 0.2);
   border-radius: 999px;

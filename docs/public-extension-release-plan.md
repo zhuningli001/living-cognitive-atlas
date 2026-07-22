@@ -2,9 +2,9 @@
 
 ## Current state
 
-Chrome Memory Mirror is currently a local MVP. It works as an unpacked Chrome extension paired with a local Next.js report page at `/profile/import`.
+Chrome Memory Mirror is currently a local unpacked-extension MVP. It includes a side panel and a built-in extension report page.
 
-This is enough for product validation, but not enough for a general public download because ordinary users should not need to run a local web server.
+This is enough for product validation and no longer requires ordinary users to run a local web server for the core scan-to-report flow.
 
 ## Recommended public architecture
 
@@ -18,11 +18,16 @@ Chrome bookmarks permission
   -> exportable local data package
 ```
 
-Required changes:
+Completed in the public-style prototype:
 
-- Move the report surface from `/profile/import` into an extension page such as `report.html`.
-- Remove the local `Full report URL` dependency for public builds.
-- Remove localhost content-script handoff from the public manifest.
+- The report surface exists as `extension/report.html`.
+- The side panel opens the extension report with `chrome.runtime.getURL("report.html")`.
+- The local `Full report URL` setting is removed from the side panel.
+- The manifest no longer declares localhost content-script matches.
+
+Remaining productization work:
+
+- Move deeper feedback/rule-learning controls from `/profile/import` into extension pages.
 - Keep all snapshot, feedback, rule, and override data in `chrome.storage.local`.
 - Keep manual JSON export/import as a portability fallback.
 
@@ -37,7 +42,7 @@ Before a public installable build:
 - Add support/help URL.
 - Add Chrome Web Store description and screenshots.
 - Add versioned release notes.
-- Add a production manifest without localhost-only development content scripts.
+- Add a production manifest review checklist.
 - Verify no private bookmark data, local paths, or user-specific datasets are bundled.
 
 ## Permissions

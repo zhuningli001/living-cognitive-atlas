@@ -235,9 +235,9 @@ Current prototype:
 - `lib/taxonomy-overrides.js` compiles approved rules into exportable `taxonomy-overrides/v1` config.
 - `/profile/import` can explicitly apply selected taxonomy overrides to the current browser-local report recalculation, and can undo that applied state without rewriting source taxonomy or bookmark data.
 - The side panel starts clean with no analysis visible until a real scan creates `profileSnapshot`.
-- The side panel supports local display name, English/Chinese UI language, configurable local report URL, and explicit clearing of stored snapshot data.
-- `extension/report-handoff.js` uses a request/response local content-script bridge so `/profile/import` can ask the extension for the latest snapshot after the report page is ready.
-- `extension/manifest.json` uses portless local match patterns for Chrome compatibility: `http://127.0.0.1/*` and `http://localhost/*`.
+- The side panel supports local display name, English/Chinese UI language, built-in full report opening, and explicit clearing of stored snapshot data.
+- `extension/report.html` renders a full extension-local report from `chrome.storage.local`, removing the need for a localhost report handoff in the public-style MVP.
+- `extension/manifest.json` does not request localhost content-script matches for the public-style MVP.
 - `/panel` previews the compact side-panel dashboard.
 - `/profile` remains the full profile report.
 
@@ -260,6 +260,7 @@ Not in MVP:
 8. Review feedback to local rule suggestions.
 9. User-approved taxonomy overrides with explicit local report apply.
 10. Local handoff polish: automatic report opening, one-click latest snapshot import, clean first-run state, local data clearing, and bilingual interface coverage.
+11. Extension-only report page so the core scan-to-report flow can run without a local Next.js server.
 
 ## Validation checklist
 

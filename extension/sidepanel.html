@@ -29,14 +29,14 @@
               <span>2</span>
               <div>
                 <strong id="flowStepReportTitle">Report</strong>
-                <p id="flowStepReportBody">Open the local report page when ready.</p>
+                <p id="flowStepReportBody">Open the full extension report when ready.</p>
               </div>
             </li>
             <li id="flowStepImport" data-state="idle">
               <span>3</span>
               <div>
-                <strong id="flowStepImportTitle">Import</strong>
-                <p id="flowStepImportBody">Accept the latest snapshot in the report.</p>
+                <strong id="flowStepImportTitle">Review</strong>
+                <p id="flowStepImportBody">Use the report without leaving local storage.</p>
               </div>
             </li>
           </ol>
@@ -55,13 +55,6 @@
             <option value="zh">中文</option>
           </select>
         </div>
-        <form id="reportUrlForm" class="report-url-form">
-          <label for="reportUrlInput">Full report URL</label>
-          <div>
-            <input id="reportUrlInput" name="reportUrl" type="url" inputmode="url" autocomplete="url" placeholder="http://127.0.0.1:3002/profile/import">
-            <button type="submit">Save</button>
-          </div>
-        </form>
         <div class="button-row">
           <button id="scanButton" class="primary-button" type="button">Scan bookmarks</button>
           <button id="exportButton" class="secondary-button" type="button" disabled>Export snapshot</button>
