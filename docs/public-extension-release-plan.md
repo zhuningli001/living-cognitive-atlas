@@ -24,6 +24,7 @@ Completed in the public-style prototype:
 - The side panel opens the extension report with `chrome.runtime.getURL("report.html")`.
 - The local `Full report URL` setting is removed from the side panel.
 - `extension/options.html` provides display name, language, privacy notes, export, and data reset.
+- `extension/report.html` collects minimal topic, dimension, and collection feedback into `chrome.storage.local` as `profileFeedback`.
 - The manifest no longer declares localhost content-script matches.
 
 Remaining productization work:
@@ -71,7 +72,6 @@ Can a new user trust the extension, understand the portrait, correct obvious mis
 
 P0:
 
-- Move minimal feedback controls into `extension/report.html`.
 - Add rule approval inside extension pages.
 - Make first-run, no-data, scan-success, scan-error, and clear-data states explicit.
 - Verify every user-visible extension string supports English and Chinese.

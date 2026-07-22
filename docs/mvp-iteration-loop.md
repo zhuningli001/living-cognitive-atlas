@@ -66,6 +66,12 @@ Do not build yet:
 
 ## Execution plan
 
+Current progress:
+
+- Step 1 is implemented as `extension/options.html`.
+- Step 2 is implemented as minimal report feedback stored in `chrome.storage.local` under `profileFeedback`.
+- Step 3 is the next P0 loop.
+
 ### Step 1: Stabilize settings
 
 Build an `options.html` page for:

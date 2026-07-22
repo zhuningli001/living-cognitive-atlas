@@ -94,7 +94,9 @@ This avoids implying that the system has already inferred a person before the us
 10. The full report page reads the latest local snapshot directly from `chrome.storage.local`.
 11. User can open settings from the side panel or report page.
 12. Settings page manages display name, language, privacy notes, snapshot export, and local data reset.
-13. Panel renders:
+13. Report page lets the user mark topics, dimensions, and return paths as accurate, wrong, too broad, useful, or not useful.
+14. Feedback is stored locally as `profileFeedback`.
+15. Panel renders:
    - profile headline
    - bookmark/domain/signal/review counts
    - source balance
@@ -123,6 +125,28 @@ The JSON contains:
 - `records`: normalized bookmarks with URL, domain, folder path, year, topics, and resource type
 
 Because `records` includes private URLs and folder names, export must stay explicit and user-initiated.
+
+## Feedback schema
+
+MVP 1.2 stores lightweight report feedback in `chrome.storage.local` as `profileFeedback`.
+
+The JSON contains:
+
+- `schemaVersion`: `profile-feedback/v1`
+- `updatedAt`: latest feedback update timestamp
+- `items`: feedback entries keyed by `targetType:label`
+
+Each feedback item contains:
+
+- `targetId`
+- `targetType`: `topic`, `dimension`, or `collection`
+- `label`: original analysis label
+- `value`: user feedback action
+- `snapshotGeneratedAt`: snapshot timestamp the feedback was made against
+- `createdAt`
+- `updatedAt`
+
+This does not change bookmarks or taxonomy rules yet. It is the evidence layer for the next rule-approval step.
 
 ## Extension-local report
 

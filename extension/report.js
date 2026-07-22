@@ -34,6 +34,15 @@ const copy = {
     reviewTitle: "Items that need human confirmation",
     recordsEyebrow: "Evidence sample",
     recordsTitle: "Recent normalized records",
+    feedbackEyebrow: "Human feedback",
+    feedbackTitle: "Teach the mirror with small corrections",
+    feedbackEmpty: "No feedback yet. Mark what feels accurate, wrong, too broad, useful, or not useful.",
+    feedbackCount: (count) => `${count} local corrections saved.`,
+    feedbackAccurate: "Accurate",
+    feedbackWrong: "Wrong",
+    feedbackBroad: "Too broad",
+    feedbackUseful: "Useful",
+    feedbackNotUseful: "Not useful",
     linkUnit: "links",
     noSignals: "No signals yet.",
     noReview: "No obvious review candidates.",
@@ -75,6 +84,15 @@ const copy = {
     reviewTitle: "需要人工确认的内容",
     recordsEyebrow: "证据样本",
     recordsTitle: "最近标准化记录",
+    feedbackEyebrow: "人工反馈",
+    feedbackTitle: "用很小的修正教会这面镜子",
+    feedbackEmpty: "还没有反馈。你可以标记准确、错误、太宽泛、有用或没用。",
+    feedbackCount: (count) => `已保存 ${count} 条本地修正。`,
+    feedbackAccurate: "准确",
+    feedbackWrong: "错误",
+    feedbackBroad: "太宽泛",
+    feedbackUseful: "有用",
+    feedbackNotUseful: "没用",
     linkUnit: "条链接",
     noSignals: "还没有信号。",
     noReview: "暂无明显待确认项目。",
@@ -93,22 +111,27 @@ const nodes = {
   exportButton: document.querySelector("#exportButton"),
   clearButton: document.querySelector("#clearButton"),
   sourceLevel: document.querySelector("#sourceBalanceLevel"),
-  sourceText: document.querySelector("#sourceBalanceText")
+  sourceText: document.querySelector("#sourceBalanceText"),
+  feedbackSummary: document.querySelector("#feedbackSummary"),
+  feedbackCount: document.querySelector("#feedbackCount")
 };
 
 let currentSnapshot = null;
 let currentLanguage = defaultLanguage;
+let currentFeedback = createEmptyFeedback();
 
 nodes.settingsButton.addEventListener("click", openSettings);
 nodes.exportButton.addEventListener("click", exportSnapshot);
 nodes.clearButton.addEventListener("click", clearData);
+document.addEventListener("click", handleFeedbackClick);
 chrome.storage.onChanged.addListener(handleStorageChange);
 loadReport();
 
 async function loadReport() {
   try {
-    const cached = await chrome.storage.local.get(["profileSnapshot", "preferredLanguage"]);
+    const cached = await chrome.storage.local.get(["profileSnapshot", "preferredLanguage", "profileFeedback"]);
     currentLanguage = getSupportedLanguage(cached.preferredLanguage);
+    currentFeedback = normalizeFeedback(cached.profileFeedback);
     applyStaticCopy();
 
     if (!cached.profileSnapshot) {
@@ -146,6 +169,7 @@ function renderSnapshot(snapshot) {
   setText("#reviewCount", formatNumber(snapshot.metrics.review));
 
   renderSourceBalance(snapshot.sourceBalance);
+  renderFeedbackStatus();
   renderTopics(snapshot.topics);
   renderDimensions(snapshot.dimensions);
   renderPhases(snapshot.phases);
@@ -182,10 +206,14 @@ function renderTopics(topics) {
   }
 
   for (const topic of topics) {
-    const pill = document.createElement("span");
-    pill.className = "pill";
-    pill.textContent = `${localizeAnalysisLabel(topic.label)} - ${topic.count}`;
-    node.append(pill);
+    node.append(
+      createFeedbackItem({
+        type: "topic",
+        label: topic.label,
+        meta: `${topic.count} ${t("linkUnit")}`,
+        actions: ["accurate", "too_broad", "wrong"]
+      })
+    );
   }
 }
 
@@ -195,12 +223,14 @@ function renderDimensions(dimensions) {
   for (const dimension of dimensions) {
     const row = document.createElement("div");
     row.className = "bar-row";
+    const selected = getFeedbackValue(getFeedbackTargetId("dimension", dimension.label));
     row.innerHTML = `
       <div>
         <span>${escapeHtml(localizeAnalysisLabel(dimension.label))}</span>
         <strong>${dimension.share}%</strong>
       </div>
       <div class="bar-track"><span style="width: ${dimension.share}%"></span></div>
+      ${renderFeedbackButtons("dimension", dimension.label, ["accurate", "wrong"], selected)}
     `;
     node.append(row);
   }
@@ -227,13 +257,14 @@ function renderCollections(collections) {
   const node = document.querySelector("#collectionList");
   node.textContent = "";
   for (const collection of collections) {
-    const item = document.createElement("div");
-    item.className = "collection-item";
-    item.innerHTML = `
-      <strong>${escapeHtml(localizeAnalysisLabel(collection.label))}</strong>
-      <span>${collection.count} ${t("linkUnit")}</span>
-    `;
-    node.append(item);
+    node.append(
+      createFeedbackItem({
+        type: "collection",
+        label: collection.label,
+        meta: `${collection.count} ${t("linkUnit")}`,
+        actions: ["useful", "not_useful"]
+      })
+    );
   }
 }
 
@@ -283,6 +314,41 @@ function exportSnapshot() {
   URL.revokeObjectURL(url);
 }
 
+async function handleFeedbackClick(event) {
+  const button = event.target.closest("[data-feedback-action]");
+  if (!button || !currentSnapshot) return;
+
+  const { feedbackType, feedbackLabel, feedbackAction } = button.dataset;
+  const targetId = getFeedbackTargetId(feedbackType, feedbackLabel);
+  const existing = currentFeedback.items[targetId] || {};
+  const nextValue = existing.value === feedbackAction ? "" : feedbackAction;
+
+  currentFeedback = {
+    schemaVersion: "profile-feedback/v1",
+    updatedAt: new Date().toISOString(),
+    items: {
+      ...currentFeedback.items
+    }
+  };
+
+  if (nextValue) {
+    currentFeedback.items[targetId] = {
+      targetId,
+      targetType: feedbackType,
+      label: feedbackLabel,
+      value: nextValue,
+      snapshotGeneratedAt: currentSnapshot.generatedAt,
+      createdAt: existing.createdAt || new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    };
+  } else {
+    delete currentFeedback.items[targetId];
+  }
+
+  await chrome.storage.local.set({ profileFeedback: currentFeedback });
+  renderSnapshot(currentSnapshot);
+}
+
 async function openSettings() {
   try {
     if (chrome.runtime.openOptionsPage) {
@@ -297,7 +363,8 @@ async function openSettings() {
 }
 
 async function clearData() {
-  await chrome.storage.local.remove(["profileSnapshot", "reportHandoffState"]);
+  await chrome.storage.local.remove(["profileSnapshot", "reportHandoffState", "profileFeedback"]);
+  currentFeedback = createEmptyFeedback();
   renderEmpty();
 }
 
@@ -317,6 +384,12 @@ function handleStorageChange(changes, areaName) {
     } else {
       renderEmpty();
     }
+  }
+
+  if (changes.profileFeedback) {
+    currentFeedback = normalizeFeedback(changes.profileFeedback.newValue);
+    renderFeedbackStatus();
+    if (currentSnapshot) renderSnapshot(currentSnapshot);
   }
 }
 
@@ -343,13 +416,89 @@ function applyStaticCopy() {
   setText("#reviewTitle", t("reviewTitle"));
   setText("#recordsEyebrow", t("recordsEyebrow"));
   setText("#recordsTitle", t("recordsTitle"));
+  setText("#feedbackEyebrow", t("feedbackEyebrow"));
+  setText("#feedbackTitle", t("feedbackTitle"));
   document.querySelector("#emptyState .eyebrow").textContent = t("emptyEyebrow");
   document.querySelector("#emptyState h2").textContent = t("emptyHeading");
   document.querySelector("#emptyState p:last-child").textContent = t("emptyBody");
 }
 
-function t(key) {
-  return copy[currentLanguage]?.[key] ?? copy[defaultLanguage][key] ?? key;
+function createFeedbackItem({ type, label, meta, actions }) {
+  const selected = getFeedbackValue(getFeedbackTargetId(type, label));
+  const item = document.createElement("div");
+  item.className = "feedback-item";
+  item.innerHTML = `
+    <div>
+      <strong>${escapeHtml(localizeAnalysisLabel(label))}</strong>
+      <span>${escapeHtml(meta)}</span>
+    </div>
+    ${renderFeedbackButtons(type, label, actions, selected)}
+  `;
+  return item;
+}
+
+function renderFeedbackButtons(type, label, actions, selected) {
+  return `
+    <div class="feedback-actions" aria-label="${escapeAttribute(localizeAnalysisLabel(label))} feedback">
+      ${actions.map((action) => `
+        <button
+          type="button"
+          data-feedback-type="${escapeAttribute(type)}"
+          data-feedback-label="${escapeAttribute(label)}"
+          data-feedback-action="${escapeAttribute(action)}"
+          data-selected="${selected === action ? "true" : "false"}"
+        >${escapeHtml(getFeedbackActionLabel(action))}</button>
+      `).join("")}
+    </div>
+  `;
+}
+
+function renderFeedbackStatus() {
+  const count = Object.keys(currentFeedback.items).length;
+  nodes.feedbackCount.textContent = formatNumber(count);
+  nodes.feedbackSummary.textContent = count ? t("feedbackCount", count) : t("feedbackEmpty");
+}
+
+function getFeedbackTargetId(type, label) {
+  return `${type}:${label}`;
+}
+
+function getFeedbackValue(targetId) {
+  return currentFeedback.items[targetId]?.value || "";
+}
+
+function getFeedbackActionLabel(action) {
+  if (action === "accurate") return t("feedbackAccurate");
+  if (action === "wrong") return t("feedbackWrong");
+  if (action === "too_broad") return t("feedbackBroad");
+  if (action === "useful") return t("feedbackUseful");
+  if (action === "not_useful") return t("feedbackNotUseful");
+  return action;
+}
+
+function createEmptyFeedback() {
+  return {
+    schemaVersion: "profile-feedback/v1",
+    updatedAt: null,
+    items: {}
+  };
+}
+
+function normalizeFeedback(feedback) {
+  if (!feedback || typeof feedback !== "object" || !feedback.items || typeof feedback.items !== "object") {
+    return createEmptyFeedback();
+  }
+
+  return {
+    schemaVersion: feedback.schemaVersion || "profile-feedback/v1",
+    updatedAt: feedback.updatedAt || null,
+    items: feedback.items
+  };
+}
+
+function t(key, ...args) {
+  const value = copy[currentLanguage]?.[key] ?? copy[defaultLanguage][key] ?? key;
+  return typeof value === "function" ? value(...args) : value;
 }
 
 function getSupportedLanguage(language) {

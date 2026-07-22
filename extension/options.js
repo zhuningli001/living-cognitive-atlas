@@ -22,7 +22,7 @@ const copy = {
     noSnapshot: "No snapshot",
     noSnapshotDetail: "Scan bookmarks from the side panel first.",
     snapshotReady: "Snapshot ready",
-    snapshotDetail: (bookmarks, domains) => `${bookmarks} bookmarks and ${domains} domains stored locally.`,
+    snapshotDetail: (bookmarks, domains, feedback) => `${bookmarks} bookmarks, ${domains} domains, and ${feedback} feedback items stored locally.`,
     export: "Export private snapshot",
     clear: "Clear local profile data",
     privacyEyebrow: "Privacy boundary",
@@ -72,7 +72,7 @@ const copy = {
     noSnapshot: "没有快照",
     noSnapshotDetail: "请先从侧边栏扫描书签。",
     snapshotReady: "快照已准备",
-    snapshotDetail: (bookmarks, domains) => `本地已保存 ${bookmarks} 个书签、${domains} 个来源。`,
+    snapshotDetail: (bookmarks, domains, feedback) => `本地已保存 ${bookmarks} 个书签、${domains} 个来源、${feedback} 条反馈。`,
     export: "导出私有快照",
     clear: "清除本地画像数据",
     privacyEyebrow: "隐私边界",
@@ -118,6 +118,7 @@ const nodes = {
 
 let currentLanguage = defaultLanguage;
 let currentSnapshot = null;
+let currentFeedback = createEmptyFeedback();
 
 nodes.ownerForm.addEventListener("submit", saveOwnerName);
 nodes.languageSelect.addEventListener("change", saveLanguage);
@@ -128,9 +129,10 @@ loadOptions();
 
 async function loadOptions() {
   try {
-    const cached = await chrome.storage.local.get(["ownerName", "preferredLanguage", "profileSnapshot"]);
+    const cached = await chrome.storage.local.get(["ownerName", "preferredLanguage", "profileSnapshot", "profileFeedback"]);
     currentLanguage = getSupportedLanguage(cached.preferredLanguage);
     currentSnapshot = cached.profileSnapshot || null;
+    currentFeedback = normalizeFeedback(cached.profileFeedback);
     nodes.ownerNameInput.value = cleanOwnerName(cached.ownerName) === defaultOwnerName ? "" : cleanOwnerName(cached.ownerName);
     nodes.languageSelect.value = currentLanguage;
     applyCopy();
@@ -190,8 +192,9 @@ function exportSnapshot() {
 
 async function clearLocalProfileData() {
   try {
-    await chrome.storage.local.remove(["profileSnapshot", "reportHandoffState"]);
+    await chrome.storage.local.remove(["profileSnapshot", "reportHandoffState", "profileFeedback"]);
     currentSnapshot = null;
+    currentFeedback = createEmptyFeedback();
     renderSnapshotState();
     setStatus(t("cleared"));
   } catch {
@@ -204,6 +207,11 @@ function handleStorageChange(changes, areaName) {
 
   if (changes.profileSnapshot) {
     currentSnapshot = changes.profileSnapshot.newValue || null;
+    renderSnapshotState();
+  }
+
+  if (changes.profileFeedback) {
+    currentFeedback = normalizeFeedback(changes.profileFeedback.newValue);
     renderSnapshotState();
   }
 
@@ -229,7 +237,8 @@ function renderSnapshotState() {
     ? t(
         "snapshotDetail",
         formatNumber(currentSnapshot.metrics?.bookmarks),
-        formatNumber(currentSnapshot.metrics?.domains)
+        formatNumber(currentSnapshot.metrics?.domains),
+        formatNumber(Object.keys(currentFeedback.items).length)
       )
     : t("noSnapshotDetail");
 }
@@ -296,6 +305,26 @@ function getSupportedLanguage(language) {
 
 function cleanOwnerName(value) {
   return String(value || "").trim().replace(/\s+/g, " ").slice(0, 32);
+}
+
+function createEmptyFeedback() {
+  return {
+    schemaVersion: "profile-feedback/v1",
+    updatedAt: null,
+    items: {}
+  };
+}
+
+function normalizeFeedback(feedback) {
+  if (!feedback || typeof feedback !== "object" || !feedback.items || typeof feedback.items !== "object") {
+    return createEmptyFeedback();
+  }
+
+  return {
+    schemaVersion: feedback.schemaVersion || "profile-feedback/v1",
+    updatedAt: feedback.updatedAt || null,
+    items: feedback.items
+  };
 }
 
 function formatNumber(value) {
