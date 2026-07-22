@@ -38,6 +38,7 @@ See:
 - `docs/chrome-extension-product-plan.md`
 - `docs/chrome-extension-mvp-flow.md`
 - `docs/mvp-product-plan.md`
+- `docs/mvp-iteration-loop.md`
 - `docs/public-extension-release-plan.md`
 - `docs/privacy-policy-draft.md`
 - `docs/taxonomy-v2.md`
@@ -94,6 +95,33 @@ The extension MVP requests only:
 - `sidePanel`
 
 It does not request browsing history, all-site access, bookmark write actions, or network upload permissions.
+
+## User notes
+
+Chrome Memory Mirror is a local-first prototype. Before using it with a real bookmark archive, users should understand these boundaries:
+
+- The extension reads Chrome bookmarks only after the user installs it and clicks `Scan bookmarks`.
+- Analysis is stored locally in Chrome extension storage by default.
+- Exported snapshot files can contain private URLs, folder names, and inferred interests. Treat exported files as personal data.
+- `Clear data` removes the extension's stored profile snapshot, but it does not delete Chrome bookmarks.
+- The current taxonomy is an interpretable first-pass model, not a personality diagnosis.
+- The project is not yet a Chrome Web Store package; install it only as an unpacked local extension during MVP testing.
+
+For a fuller release checklist and privacy boundary, see `docs/public-extension-release-plan.md` and `docs/privacy-policy-draft.md`.
+
+## MVP iteration method
+
+This project should evolve through small product loops rather than broad redesigns.
+
+Each MVP cycle should define:
+
+1. Target user question: what uncertainty are we trying to reduce?
+2. Smallest product change: what can we ship without changing the whole system?
+3. Success signal: what behavior or result proves the change helped?
+4. Review notes: what confused the user, what felt valuable, and what should be removed?
+5. Next decision: keep, simplify, deepen, or discard.
+
+The working iteration playbook lives in `docs/mvp-iteration-loop.md`.
 
 ## Generated data
 
@@ -224,8 +252,8 @@ This keeps the first version editable and easy to tune before introducing LLM su
 
 ## Next upgrades
 
-- add production extension icons, options page, privacy policy, and Chrome Web Store metadata
-- swap rule-only tagging with AI-assisted summaries and semantic embeddings
-- enrich cards with screenshot thumbnails
-- add dead-link detection and domain health checks
-- generate weekly signal reports from tracked feeds and newly added bookmarks
+- add a production extension options page for name, language, data reset, export, and privacy review
+- move the deepest feedback and rule-approval flows into extension pages
+- improve the compact side-panel dashboard for narrow browser panels
+- add production extension icons, privacy policy URL, support URL, store screenshots, and release notes
+- improve taxonomy quality with user-approved rules before adding AI-assisted summaries or embeddings

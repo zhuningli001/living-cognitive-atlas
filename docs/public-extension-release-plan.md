@@ -31,6 +31,66 @@ Remaining productization work:
 - Keep all snapshot, feedback, rule, and override data in `chrome.storage.local`.
 - Keep manual JSON export/import as a portability fallback.
 
+## User-facing usage notes
+
+Public testers should see these notes before using the extension with a real bookmark archive:
+
+- The extension reads bookmarks only after installation permission and a user-triggered scan.
+- The extension does not delete, move, edit, or create Chrome bookmarks in the MVP.
+- The extension does not read browser history, page contents, passwords, cookies, or open tabs.
+- Profile results are inferred from bookmark titles, URLs, domains, and folder paths.
+- Profile results should be treated as a working information portrait, not a psychological diagnosis.
+- Exported snapshots can include private URLs and inferred interests, so users should store or share them carefully.
+- `Clear data` removes extension-local profile data, not the original Chrome bookmarks.
+
+## MVP 1.2 target
+
+MVP 1.2 should make the extension usable by first external testers without the local Next.js app.
+
+The target flow:
+
+```text
+Install unpacked extension
+  -> read privacy boundary
+  -> scan bookmarks
+  -> inspect compact side-panel profile
+  -> open extension report
+  -> give lightweight feedback
+  -> approve or reject suggested rules
+  -> export or clear local data
+```
+
+MVP 1.2 should answer this question:
+
+```text
+Can a new user trust the extension, understand the portrait, correct obvious mistakes, and see the system improve locally?
+```
+
+## MVP 1.2 optimization backlog
+
+P0:
+
+- Add `options.html` for display name, language, privacy notes, export, and data reset.
+- Move minimal feedback controls into `extension/report.html`.
+- Add rule approval inside extension pages.
+- Make first-run, no-data, scan-success, scan-error, and clear-data states explicit.
+- Verify every user-visible extension string supports English and Chinese.
+
+P1:
+
+- Improve compact side-panel information hierarchy for a browser-side panel width.
+- Add tester install notes and a manual QA checklist.
+- Add production icon assets and store screenshot plan.
+- Add stale snapshot warning when bookmarks have not been scanned recently.
+- Mark exported snapshot files as private in the file name and in UI copy.
+
+P2:
+
+- Add optional screenshot thumbnails or richer source previews.
+- Add dead-link and domain health checks.
+- Add AI-assisted summaries only after local privacy boundaries are clear.
+- Explore semantic search only after rule approval and feedback loops are stable.
+
 ## Public package checklist
 
 Before a public installable build:
@@ -85,6 +145,24 @@ A public beta is ready only when:
 - The extension can delete its own local data from the UI.
 - Privacy policy matches actual behavior.
 - Build artifacts do not include private data.
+
+## Iteration review
+
+Each public-MVP change should be reviewed with the loop in `docs/mvp-iteration-loop.md`.
+
+Before starting a change, define:
+
+- target user question
+- smallest shippable change
+- success signal
+- privacy risk
+
+After testing, decide:
+
+- Keep
+- Simplify
+- Deepen
+- Remove
 
 ## Later options
 
