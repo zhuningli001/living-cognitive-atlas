@@ -43,6 +43,10 @@ See:
 - `docs/privacy-policy-draft.md`
 - `docs/taxonomy-v2.md`
 
+There is also a product-facing playbook page in the local app:
+
+- `http://localhost:3000/playbook`
+
 ## What it does
 
 - Parses a Chrome bookmarks HTML export into structured `JSON` and `CSV`
@@ -122,6 +126,17 @@ Each MVP cycle should define:
 5. Next decision: keep, simplify, deepen, or discard.
 
 The working iteration playbook lives in `docs/mvp-iteration-loop.md`.
+
+## External testing channels
+
+Use different platforms for different validation stages:
+
+- GitHub: public README, Releases, Issues, Discussions, and project boards for builders and technical collaborators.
+- Chrome Web Store unlisted beta: real install flow testing through a private link after privacy copy, icons, and release notes are ready.
+- Tally or Google Forms: structured feedback from non-technical testers.
+- Notion public page: readable product story, tester handbook, changelog, and known limitations.
+- Discord, Slack, or Circle: a small recurring tester group that can share screenshots and weekly feedback.
+- Product Hunt, Reddit, or Hacker News: broader positioning validation only after the extension-only loop is stable.
 
 ## Generated data
 

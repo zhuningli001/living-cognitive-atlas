@@ -91,6 +91,37 @@ P2:
 - Add AI-assisted summaries only after local privacy boundaries are clear.
 - Explore semantic search only after rule approval and feedback loops are stable.
 
+## External testing channels
+
+Recommended sequence:
+
+1. GitHub branch or release
+   Use this for technical collaborators who can inspect source, load the unpacked extension, and file issues.
+
+2. Private tester form
+   Use Tally, Google Forms, or a similar form to collect structured feedback from non-technical testers.
+
+3. Notion or public product page
+   Use this as a readable tester handbook with install steps, privacy notes, known limitations, and changelog.
+
+4. Chrome Web Store unlisted beta
+   Use this only after icons, privacy policy URL, support URL, screenshots, and versioned release notes are ready.
+
+5. Small community cohort
+   Use Discord, Slack, Circle, or a private group to collect repeated feedback across several weekly cycles.
+
+6. Larger public launch
+   Use Product Hunt, Reddit, Hacker News, or design/product communities only after the extension-only loop is stable and reset/export/privacy behavior has been tested.
+
+Feedback should be collected around concrete questions:
+
+- Did install and scanning work?
+- Did the privacy boundary feel clear?
+- Did the compact side panel make sense in a real browser window?
+- Did the profile feel recognizable?
+- Which inference was wrong, too broad, or too confident?
+- Would the tester open the extension again later?
+
 ## Public package checklist
 
 Before a public installable build:
