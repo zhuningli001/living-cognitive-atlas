@@ -23,6 +23,7 @@ Completed in the public-style prototype:
 - The report surface exists as `extension/report.html`.
 - The side panel opens the extension report with `chrome.runtime.getURL("report.html")`.
 - The local `Full report URL` setting is removed from the side panel.
+- `extension/options.html` provides display name, language, privacy notes, export, and data reset.
 - The manifest no longer declares localhost content-script matches.
 
 Remaining productization work:
@@ -70,7 +71,6 @@ Can a new user trust the extension, understand the portrait, correct obvious mis
 
 P0:
 
-- Add `options.html` for display name, language, privacy notes, export, and data reset.
 - Move minimal feedback controls into `extension/report.html`.
 - Add rule approval inside extension pages.
 - Make first-run, no-data, scan-success, scan-error, and clear-data states explicit.
@@ -127,7 +127,6 @@ Feedback should be collected around concrete questions:
 Before a public installable build:
 
 - Add extension icons in Chrome Web Store sizes.
-- Add `options.html` for display name, language, data reset, and export settings.
 - Add a clear first-run permission screen before scanning bookmarks.
 - Add privacy policy URL.
 - Add support/help URL.

@@ -267,7 +267,6 @@ This keeps the first version editable and easy to tune before introducing LLM su
 
 ## Next upgrades
 
-- add a production extension options page for name, language, data reset, export, and privacy review
 - move the deepest feedback and rule-approval flows into extension pages
 - improve the compact side-panel dashboard for narrow browser panels
 - add production extension icons, privacy policy URL, support URL, store screenshots, and release notes

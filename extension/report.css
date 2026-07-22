@@ -120,7 +120,7 @@ h2 {
   cursor: pointer;
 }
 
-.hero-actions button:first-child {
+.hero-actions button:nth-child(2) {
   border-color: var(--pine);
   color: #fff;
   background: var(--pine);

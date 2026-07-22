@@ -57,6 +57,9 @@ This avoids implying that the system has already inferred a person before the us
 - `extension/report.html`: Full extension-local report page.
 - `extension/report.css`: Full report styling.
 - `extension/report.js`: Full report rendering from `chrome.storage.local`.
+- `extension/options.html`: Local settings, privacy notes, export, and data reset.
+- `extension/options.css`: Settings page styling.
+- `extension/options.js`: Settings storage, language sync, snapshot export, and reset actions.
 
 ## Local installation
 
@@ -66,7 +69,7 @@ This avoids implying that the system has already inferred a person before the us
 4. Select the local `extension/` folder from this repository.
 5. Pin or open `Chrome Memory Mirror`.
 6. Open the side panel and click `Scan bookmarks`.
-7. Optional: set a display name such as `NEO`.
+7. Optional: open `Settings` and set a display name such as `NEO`.
 8. Click `Open full report`.
 9. Confirm the built-in extension report opens.
 10. Use `Export snapshot` only as a manual fallback or portable archive.
@@ -89,7 +92,9 @@ This avoids implying that the system has already inferred a person before the us
 8. User can explicitly export the snapshot as local JSON.
 9. User can open the full report page from the side panel.
 10. The full report page reads the latest local snapshot directly from `chrome.storage.local`.
-11. Panel renders:
+11. User can open settings from the side panel or report page.
+12. Settings page manages display name, language, privacy notes, snapshot export, and local data reset.
+13. Panel renders:
    - profile headline
    - bookmark/domain/signal/review counts
    - source balance

@@ -5,9 +5,7 @@ const defaultLanguage = "en";
 const scanButton = document.querySelector("#scanButton");
 const exportButton = document.querySelector("#exportButton");
 const openReportButton = document.querySelector("#openReportButton");
-const ownerForm = document.querySelector("#ownerForm");
-const ownerNameInput = document.querySelector("#ownerNameInput");
-const languageSelect = document.querySelector("#languageSelect");
+const settingsButton = document.querySelector("#settingsButton");
 const clearDataButton = document.querySelector("#clearDataButton");
 const statusText = document.querySelector("#statusText");
 const flowSteps = {
@@ -21,9 +19,7 @@ const copy = {
     titleFallback: "Your Bookmark",
     title: (ownerName) => `${ownerName}'s Bookmark`,
     localBoundary: "Read-only, local-first. No network calls.",
-    displayName: "Display name",
-    save: "Save",
-    language: "Language",
+    settings: "Settings",
     flowEyebrow: "Local setup",
     flowTitleEmpty: "Start with a read-only scan",
     flowTitleReady: "Snapshot ready for the report",
@@ -67,10 +63,7 @@ const copy = {
     noReview: "No obvious review candidates.",
     loaded: "Loaded local snapshot. Scan again to refresh.",
     storageUnavailable: "Storage unavailable in this context.",
-    savedName: (ownerName) => `Saved display name: ${ownerName}.`,
-    savedLanguage: "Saved language setting.",
-    saveNameFailed: "Could not save display name in this context.",
-    saveLanguageFailed: "Could not save language in this context.",
+    optionsUnavailable: "Could not open settings in this context.",
     readingBookmarks: "Reading Chrome bookmarks...",
     scanComplete: "Scan complete. Snapshot saved locally.",
     readFailed: "Could not read bookmarks. Check extension permissions.",
@@ -90,9 +83,7 @@ const copy = {
     titleFallback: "你的书签",
     title: (ownerName) => `${ownerName} 的书签`,
     localBoundary: "只读、本地优先，不发送网络请求。",
-    displayName: "显示名",
-    save: "保存",
-    language: "语言",
+    settings: "设置",
     flowEyebrow: "本地设置",
     flowTitleEmpty: "先进行只读扫描",
     flowTitleReady: "快照已准备好进入报告",
@@ -136,10 +127,7 @@ const copy = {
     noReview: "暂无明显待确认项目。",
     loaded: "已载入本地快照。再次扫描可刷新。",
     storageUnavailable: "当前环境无法使用本地存储。",
-    savedName: (ownerName) => `已保存显示名：${ownerName}。`,
-    savedLanguage: "已保存语言设置。",
-    saveNameFailed: "当前环境无法保存显示名。",
-    saveLanguageFailed: "当前环境无法保存语言设置。",
+    optionsUnavailable: "当前环境无法打开设置。",
     readingBookmarks: "正在读取 Chrome 书签...",
     scanComplete: "扫描完成。快照已保存在本地。",
     readFailed: "无法读取书签，请检查扩展权限。",
@@ -166,8 +154,7 @@ let currentReportHandoffState = null;
 scanButton.addEventListener("click", scanBookmarks);
 exportButton.addEventListener("click", exportSnapshot);
 openReportButton.addEventListener("click", openFullReport);
-ownerForm.addEventListener("submit", saveOwnerName);
-languageSelect.addEventListener("change", saveLanguage);
+settingsButton.addEventListener("click", openSettings);
 clearDataButton.addEventListener("click", clearExtensionData);
 chrome.storage.onChanged.addListener(handleStorageChange);
 loadCachedSnapshot();
@@ -196,33 +183,6 @@ async function loadCachedSnapshot() {
     applyStaticCopy();
     updateLocalDataStatus();
     setStatus(t("storageUnavailable"));
-  }
-}
-
-async function saveOwnerName(event) {
-  event.preventDefault();
-  const ownerName = cleanOwnerName(ownerNameInput.value) || defaultOwnerName;
-
-  try {
-    await chrome.storage.local.set({ ownerName });
-    setOwnerName(ownerName);
-    setStatus(t("savedName", ownerName));
-  } catch {
-    setStatus(t("saveNameFailed"));
-  }
-}
-
-async function saveLanguage() {
-  const preferredLanguage = getSupportedLanguage(languageSelect.value);
-
-  try {
-    await chrome.storage.local.set({ preferredLanguage });
-    setLanguage(preferredLanguage);
-    applyStaticCopy();
-    if (currentSnapshot) renderSnapshot(currentSnapshot);
-    setStatus(t("savedLanguage"));
-  } catch {
-    setStatus(t("saveLanguageFailed"));
   }
 }
 
@@ -297,6 +257,19 @@ async function openFullReport() {
   }
 }
 
+async function openSettings() {
+  try {
+    if (chrome.runtime.openOptionsPage) {
+      await chrome.runtime.openOptionsPage();
+      return;
+    }
+
+    await chrome.tabs.create({ url: chrome.runtime.getURL("options.html") });
+  } catch {
+    setStatus(t("optionsUnavailable"));
+  }
+}
+
 async function clearExtensionData() {
   try {
     await chrome.storage.local.remove(["profileSnapshot", "reportHandoffState"]);
@@ -341,6 +314,16 @@ function handleStorageChange(changes, areaName) {
       setFlowStage(getSnapshotFlowStage(currentSnapshot));
       if (currentReportHandoffState?.status === "imported") setStatus(t("reportImported"));
     }
+  }
+
+  if (changes.ownerName) {
+    setOwnerName(changes.ownerName.newValue || defaultOwnerName);
+  }
+
+  if (changes.preferredLanguage) {
+    setLanguage(changes.preferredLanguage.newValue || defaultLanguage);
+    applyStaticCopy();
+    if (currentSnapshot) renderSnapshot(currentSnapshot);
   }
 }
 
@@ -532,7 +515,6 @@ function setText(selector, value) {
 
 function setLanguage(language) {
   currentLanguage = getSupportedLanguage(language);
-  languageSelect.value = currentLanguage;
 }
 
 function resetSnapshotUi() {
@@ -564,9 +546,7 @@ function updateLocalDataStatus() {
 function applyStaticCopy() {
   document.documentElement.lang = currentLanguage === "zh" ? "zh-CN" : "en";
   setText("#statusText", t("localBoundary"));
-  setText('label[for="ownerNameInput"]', t("displayName"));
-  setText("#ownerForm button", t("save"));
-  setText('label[for="languageSelect"]', t("language"));
+  setText("#settingsButton", t("settings"));
   setText("#flowEyebrow", t("flowEyebrow"));
   setText("#flowStepScanTitle", t("flowScanTitle"));
   setText("#flowStepScanBody", t("flowScanBody"));
@@ -621,7 +601,6 @@ function renderFlowStage() {
 function setOwnerName(ownerName) {
   const cleanName = cleanOwnerName(ownerName) || defaultOwnerName;
   currentOwnerName = cleanName;
-  ownerNameInput.value = cleanName === defaultOwnerName ? "" : cleanName;
   setText("#profileTitle", cleanName === defaultOwnerName ? t("titleFallback") : t("title", cleanName));
 }
 

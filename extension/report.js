@@ -8,6 +8,7 @@ const copy = {
     emptyEyebrow: "No local profile yet",
     emptyHeading: "Open the side panel and scan bookmarks",
     emptyBody: "After scanning, this page becomes a full local report. No server is required.",
+    settings: "Settings",
     export: "Export snapshot",
     clear: "Clear data",
     bookmarks: "Bookmarks",
@@ -38,7 +39,8 @@ const copy = {
     noReview: "No obvious review candidates.",
     exported: "Snapshot export started.",
     cleared: "Local extension data cleared.",
-    loaded: "Report loaded from local extension storage."
+    loaded: "Report loaded from local extension storage.",
+    optionsUnavailable: "Could not open settings in this context."
   },
   zh: {
     eyebrow: "Memory Mirror 报告",
@@ -47,6 +49,7 @@ const copy = {
     emptyEyebrow: "还没有本地画像",
     emptyHeading: "打开侧边栏并扫描书签",
     emptyBody: "扫描后，这里会变成完整的本地报告。不需要服务器。",
+    settings: "设置",
     export: "导出快照",
     clear: "清除数据",
     bookmarks: "书签",
@@ -77,7 +80,8 @@ const copy = {
     noReview: "暂无明显待确认项目。",
     exported: "快照导出已开始。",
     cleared: "扩展本地数据已清除。",
-    loaded: "已从扩展本地存储载入报告。"
+    loaded: "已从扩展本地存储载入报告。",
+    optionsUnavailable: "当前环境无法打开设置。"
   }
 };
 
@@ -85,6 +89,7 @@ const nodes = {
   title: document.querySelector("#reportTitle"),
   summary: document.querySelector("#reportSummary"),
   emptyState: document.querySelector("#emptyState"),
+  settingsButton: document.querySelector("#settingsButton"),
   exportButton: document.querySelector("#exportButton"),
   clearButton: document.querySelector("#clearButton"),
   sourceLevel: document.querySelector("#sourceBalanceLevel"),
@@ -94,8 +99,10 @@ const nodes = {
 let currentSnapshot = null;
 let currentLanguage = defaultLanguage;
 
+nodes.settingsButton.addEventListener("click", openSettings);
 nodes.exportButton.addEventListener("click", exportSnapshot);
 nodes.clearButton.addEventListener("click", clearData);
+chrome.storage.onChanged.addListener(handleStorageChange);
 loadReport();
 
 async function loadReport() {
@@ -276,14 +283,47 @@ function exportSnapshot() {
   URL.revokeObjectURL(url);
 }
 
+async function openSettings() {
+  try {
+    if (chrome.runtime.openOptionsPage) {
+      await chrome.runtime.openOptionsPage();
+      return;
+    }
+
+    await chrome.tabs.create({ url: chrome.runtime.getURL("options.html") });
+  } catch {
+    console.warn(t("optionsUnavailable"));
+  }
+}
+
 async function clearData() {
   await chrome.storage.local.remove(["profileSnapshot", "reportHandoffState"]);
   renderEmpty();
 }
 
+function handleStorageChange(changes, areaName) {
+  if (areaName !== "local") return;
+
+  if (changes.preferredLanguage) {
+    currentLanguage = getSupportedLanguage(changes.preferredLanguage.newValue);
+    applyStaticCopy();
+    if (currentSnapshot) renderSnapshot(currentSnapshot);
+  }
+
+  if (changes.profileSnapshot) {
+    currentSnapshot = changes.profileSnapshot.newValue || null;
+    if (currentSnapshot) {
+      renderSnapshot(currentSnapshot);
+    } else {
+      renderEmpty();
+    }
+  }
+}
+
 function applyStaticCopy() {
   document.documentElement.lang = currentLanguage === "zh" ? "zh-CN" : "en";
   setText("#reportEyebrow", t("eyebrow"));
+  setText("#settingsButton", t("settings"));
   setText("#exportButton", t("export"));
   setText("#clearButton", t("clear"));
   setText("#bookmarkLabel", t("bookmarks"));

@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Chrome Memory Mirror Settings</title>
+    <link rel="stylesheet" href="options.css">
+  </head>
+  <body>
+    <main class="options-shell">
+      <header class="options-hero">
+        <div>
+          <p id="optionsEyebrow" class="eyebrow">Memory Mirror Settings</p>
+          <h1 id="optionsTitle">Keep the mirror local and understandable.</h1>
+          <p id="optionsSummary">Manage display name, language, export, reset, and the privacy boundary for this extension.</p>
+        </div>
+        <span id="saveStatus" class="status-pill">Local only</span>
+      </header>
+
+      <section class="settings-grid">
+        <article class="settings-card">
+          <p id="identityEyebrow" class="eyebrow">Identity</p>
+          <h2 id="identityTitle">Display name</h2>
+          <p id="identityBody">Used only to label the side panel and report.</p>
+          <form id="ownerForm" class="field-form">
+            <label id="ownerNameLabel" for="ownerNameInput">Name</label>
+            <div class="inline-field">
+              <input id="ownerNameInput" name="ownerName" type="text" autocomplete="name" maxlength="32" placeholder="NEO">
+              <button id="saveNameButton" type="submit">Save</button>
+            </div>
+          </form>
+        </article>
+
+        <article class="settings-card">
+          <p id="languageEyebrow" class="eyebrow">Language</p>
+          <h2 id="languageTitle">Interface language</h2>
+          <p id="languageBody">Applies to the side panel, report, and settings page.</p>
+          <label id="languageLabel" for="languageSelect">Language</label>
+          <select id="languageSelect" name="language">
+            <option value="en">English</option>
+            <option value="zh">中文</option>
+          </select>
+        </article>
+      </section>
+
+      <section class="settings-card data-card">
+        <div>
+          <p id="dataEyebrow" class="eyebrow">Local data</p>
+          <h2 id="dataTitle">Snapshot controls</h2>
+          <p id="dataBody">Bookmark profile data stays in Chrome extension storage unless you export it.</p>
+        </div>
+        <div class="data-status">
+          <span id="snapshotState">No snapshot</span>
+          <p id="snapshotDetail">Scan bookmarks from the side panel first.</p>
+        </div>
+        <div class="action-row">
+          <button id="exportButton" class="primary-action" type="button" disabled>Export private snapshot</button>
+          <button id="clearButton" class="danger-action" type="button" disabled>Clear local profile data</button>
+        </div>
+      </section>
+
+      <section class="privacy-card">
+        <p id="privacyEyebrow" class="eyebrow">Privacy boundary</p>
+        <h2 id="privacyTitle">What this MVP does and does not read</h2>
+        <div id="privacyList" class="privacy-list"></div>
+      </section>
+    </main>
+    <script type="module" src="options.js"></script>
+  </body>
+</html>
