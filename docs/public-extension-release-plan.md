@@ -25,6 +25,7 @@ Completed in the public-style prototype:
 - The local `Full report URL` setting is removed from the side panel.
 - `extension/options.html` provides display name, language, privacy notes, export, and data reset.
 - `extension/report.html` collects minimal topic, dimension, and collection feedback into `chrome.storage.local` as `profileFeedback`.
+- `extension/report.html` turns feedback into local rule suggestions and stores approved rules as `approvedRules`.
 - The manifest no longer declares localhost content-script matches.
 
 Remaining productization work:
@@ -72,7 +73,7 @@ Can a new user trust the extension, understand the portrait, correct obvious mis
 
 P0:
 
-- Add rule approval inside extension pages.
+- Apply approved local rules during the next bookmark scan.
 - Make first-run, no-data, scan-success, scan-error, and clear-data states explicit.
 - Verify every user-visible extension string supports English and Chinese.
 
@@ -158,8 +159,9 @@ Public extension data should remain local by default:
 - `profileSnapshot`
 - `preferredLanguage`
 - `ownerName`
-- `feedback`
+- `profileFeedback`
 - `approvedRules`
+- `ignoredRuleSuggestions`
 - `taxonomyOverrides`
 - `reportHandoffState`
 

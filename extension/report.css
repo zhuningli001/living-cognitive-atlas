@@ -393,6 +393,123 @@ h2 {
   background: rgba(156, 168, 143, 0.2);
 }
 
+.rule-heading {
+  display: grid;
+  gap: 16px;
+  align-items: start;
+}
+
+@media (min-width: 760px) {
+  .rule-heading {
+    grid-template-columns: 1fr auto;
+  }
+}
+
+.rule-heading p:not(.eyebrow) {
+  margin-top: 10px;
+  max-width: 740px;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.rule-counts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.rule-counts span {
+  border: 1px solid rgba(63, 90, 75, 0.2);
+  border-radius: 999px;
+  padding: 7px 10px;
+  color: var(--pine);
+  background: rgba(156, 168, 143, 0.13);
+  font-size: 12px;
+}
+
+.rule-list {
+  display: grid;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.rule-item {
+  display: grid;
+  gap: 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 14px;
+  background: rgba(245, 241, 232, 0.65);
+}
+
+@media (min-width: 760px) {
+  .rule-item {
+    grid-template-columns: 1fr auto;
+    align-items: center;
+  }
+}
+
+.rule-item span {
+  display: inline-flex;
+  width: fit-content;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 4px 8px;
+  color: var(--muted);
+  background: rgba(255, 253, 248, 0.74);
+  font-size: 11px;
+}
+
+.rule-item[data-state="approved"] span {
+  border-color: rgba(63, 90, 75, 0.28);
+  color: var(--pine);
+  background: rgba(156, 168, 143, 0.18);
+}
+
+.rule-item strong {
+  display: block;
+  margin-top: 9px;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.rule-item p {
+  margin-top: 6px;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.rule-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.rule-actions button {
+  min-height: 34px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 0 12px;
+  color: var(--muted);
+  background: rgba(255, 253, 248, 0.78);
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.rule-actions button:first-child {
+  border-color: rgba(63, 90, 75, 0.35);
+  color: var(--pine);
+  background: rgba(156, 168, 143, 0.16);
+}
+
+.rule-actions button:disabled {
+  cursor: not-allowed;
+  opacity: 0.52;
+}
+
 .record-row {
   display: grid;
   gap: 6px;

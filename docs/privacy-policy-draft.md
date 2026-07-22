@@ -46,7 +46,7 @@ Exports are user-initiated. Exported JSON files may contain private bookmark URL
 
 ## Data deletion
 
-Users can clear extension snapshot data from the side panel.
+Users can clear extension snapshot data from the side panel, report page, or options page.
 
 Users can reset report data from the report page, which clears:
 
@@ -55,7 +55,7 @@ Users can reset report data from the report page, which clears:
 - approved rules
 - applied overrides
 
-Future public builds should include the same controls in an extension options page.
+The extension options page includes the same local reset boundary for the MVP.
 
 ## Permissions
 

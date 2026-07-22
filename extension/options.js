@@ -22,7 +22,7 @@ const copy = {
     noSnapshot: "No snapshot",
     noSnapshotDetail: "Scan bookmarks from the side panel first.",
     snapshotReady: "Snapshot ready",
-    snapshotDetail: (bookmarks, domains, feedback) => `${bookmarks} bookmarks, ${domains} domains, and ${feedback} feedback items stored locally.`,
+    snapshotDetail: (bookmarks, domains, feedback, rules) => `${bookmarks} bookmarks, ${domains} domains, ${feedback} feedback items, and ${rules} approved rules stored locally.`,
     export: "Export private snapshot",
     clear: "Clear local profile data",
     privacyEyebrow: "Privacy boundary",
@@ -72,7 +72,7 @@ const copy = {
     noSnapshot: "没有快照",
     noSnapshotDetail: "请先从侧边栏扫描书签。",
     snapshotReady: "快照已准备",
-    snapshotDetail: (bookmarks, domains, feedback) => `本地已保存 ${bookmarks} 个书签、${domains} 个来源、${feedback} 条反馈。`,
+    snapshotDetail: (bookmarks, domains, feedback, rules) => `本地已保存 ${bookmarks} 个书签、${domains} 个来源、${feedback} 条反馈、${rules} 条已批准规则。`,
     export: "导出私有快照",
     clear: "清除本地画像数据",
     privacyEyebrow: "隐私边界",
@@ -119,6 +119,7 @@ const nodes = {
 let currentLanguage = defaultLanguage;
 let currentSnapshot = null;
 let currentFeedback = createEmptyFeedback();
+let currentApprovedRules = createEmptyRuleStore("approved-rules/v1");
 
 nodes.ownerForm.addEventListener("submit", saveOwnerName);
 nodes.languageSelect.addEventListener("change", saveLanguage);
@@ -129,10 +130,11 @@ loadOptions();
 
 async function loadOptions() {
   try {
-    const cached = await chrome.storage.local.get(["ownerName", "preferredLanguage", "profileSnapshot", "profileFeedback"]);
+    const cached = await chrome.storage.local.get(["ownerName", "preferredLanguage", "profileSnapshot", "profileFeedback", "approvedRules"]);
     currentLanguage = getSupportedLanguage(cached.preferredLanguage);
     currentSnapshot = cached.profileSnapshot || null;
     currentFeedback = normalizeFeedback(cached.profileFeedback);
+    currentApprovedRules = normalizeRuleStore(cached.approvedRules, "approved-rules/v1");
     nodes.ownerNameInput.value = cleanOwnerName(cached.ownerName) === defaultOwnerName ? "" : cleanOwnerName(cached.ownerName);
     nodes.languageSelect.value = currentLanguage;
     applyCopy();
@@ -192,9 +194,16 @@ function exportSnapshot() {
 
 async function clearLocalProfileData() {
   try {
-    await chrome.storage.local.remove(["profileSnapshot", "reportHandoffState", "profileFeedback"]);
+    await chrome.storage.local.remove([
+      "profileSnapshot",
+      "reportHandoffState",
+      "profileFeedback",
+      "approvedRules",
+      "ignoredRuleSuggestions"
+    ]);
     currentSnapshot = null;
     currentFeedback = createEmptyFeedback();
+    currentApprovedRules = createEmptyRuleStore("approved-rules/v1");
     renderSnapshotState();
     setStatus(t("cleared"));
   } catch {
@@ -212,6 +221,11 @@ function handleStorageChange(changes, areaName) {
 
   if (changes.profileFeedback) {
     currentFeedback = normalizeFeedback(changes.profileFeedback.newValue);
+    renderSnapshotState();
+  }
+
+  if (changes.approvedRules) {
+    currentApprovedRules = normalizeRuleStore(changes.approvedRules.newValue, "approved-rules/v1");
     renderSnapshotState();
   }
 
@@ -238,7 +252,8 @@ function renderSnapshotState() {
         "snapshotDetail",
         formatNumber(currentSnapshot.metrics?.bookmarks),
         formatNumber(currentSnapshot.metrics?.domains),
-        formatNumber(Object.keys(currentFeedback.items).length)
+        formatNumber(Object.keys(currentFeedback.items).length),
+        formatNumber(Object.keys(currentApprovedRules.items).length)
       )
     : t("noSnapshotDetail");
 }
@@ -324,6 +339,26 @@ function normalizeFeedback(feedback) {
     schemaVersion: feedback.schemaVersion || "profile-feedback/v1",
     updatedAt: feedback.updatedAt || null,
     items: feedback.items
+  };
+}
+
+function createEmptyRuleStore(schemaVersion) {
+  return {
+    schemaVersion,
+    updatedAt: null,
+    items: {}
+  };
+}
+
+function normalizeRuleStore(store, schemaVersion) {
+  if (!store || typeof store !== "object" || !store.items || typeof store.items !== "object") {
+    return createEmptyRuleStore(schemaVersion);
+  }
+
+  return {
+    schemaVersion: store.schemaVersion || schemaVersion,
+    updatedAt: store.updatedAt || null,
+    items: store.items
   };
 }
 

@@ -43,6 +43,25 @@ const copy = {
     feedbackBroad: "Too broad",
     feedbackUseful: "Useful",
     feedbackNotUseful: "Not useful",
+    rulesEyebrow: "Rule approval",
+    rulesTitle: "Approve what the system should remember",
+    rulesSummary: "Feedback becomes suggestions first. Approved rules stay local and can shape later scans.",
+    rulesEmpty: "No rule suggestions yet. Add feedback above first.",
+    pendingRules: (count) => `${count} pending`,
+    approvedRules: (count) => `${count} approved`,
+    approveRule: "Approve",
+    ignoreRule: "Ignore",
+    approvedState: "Approved",
+    pendingState: "Pending",
+    ruleApproved: "Rule approved locally.",
+    ruleIgnored: "Rule ignored locally.",
+    ruleTopicAccurate: (label) => `Keep "${label}" as a trusted recurring topic.`,
+    ruleTopicBroad: (label) => `Treat "${label}" as too broad and ask for more specific subtopics later.`,
+    ruleTopicWrong: (label) => `Send "${label}" into review instead of trusting it automatically.`,
+    ruleDimensionAccurate: (label) => `Keep "${label}" as a trusted profile dimension.`,
+    ruleDimensionWrong: (label) => `Lower confidence for "${label}" when building the profile mix.`,
+    ruleCollectionUseful: (label) => `Keep "${label}" as a useful smart return path.`,
+    ruleCollectionNotUseful: (label) => `Demote "${label}" when suggesting smart return paths.`,
     linkUnit: "links",
     noSignals: "No signals yet.",
     noReview: "No obvious review candidates.",
@@ -93,6 +112,25 @@ const copy = {
     feedbackBroad: "太宽泛",
     feedbackUseful: "有用",
     feedbackNotUseful: "没用",
+    rulesEyebrow: "规则批准",
+    rulesTitle: "确认系统应该记住什么",
+    rulesSummary: "反馈会先变成建议。只有你批准后，规则才会保存在本地，并用于之后的分析。",
+    rulesEmpty: "还没有规则建议。请先在上方做几个反馈。",
+    pendingRules: (count) => `${count} 条待确认`,
+    approvedRules: (count) => `${count} 条已批准`,
+    approveRule: "批准",
+    ignoreRule: "忽略",
+    approvedState: "已批准",
+    pendingState: "待确认",
+    ruleApproved: "规则已保存在本地。",
+    ruleIgnored: "规则已在本地忽略。",
+    ruleTopicAccurate: (label) => `将「${label}」保留为可信的重复主题。`,
+    ruleTopicBroad: (label) => `将「${label}」视为太宽泛，之后提示拆成更具体的子主题。`,
+    ruleTopicWrong: (label) => `将「${label}」放入复核，而不是自动信任。`,
+    ruleDimensionAccurate: (label) => `将「${label}」保留为可信画像维度。`,
+    ruleDimensionWrong: (label) => `生成画像组合时降低「${label}」的置信度。`,
+    ruleCollectionUseful: (label) => `将「${label}」保留为有用的智能返回路径。`,
+    ruleCollectionNotUseful: (label) => `推荐智能返回路径时降低「${label}」优先级。`,
     linkUnit: "条链接",
     noSignals: "还没有信号。",
     noReview: "暂无明显待确认项目。",
@@ -113,25 +151,39 @@ const nodes = {
   sourceLevel: document.querySelector("#sourceBalanceLevel"),
   sourceText: document.querySelector("#sourceBalanceText"),
   feedbackSummary: document.querySelector("#feedbackSummary"),
-  feedbackCount: document.querySelector("#feedbackCount")
+  feedbackCount: document.querySelector("#feedbackCount"),
+  ruleList: document.querySelector("#ruleList"),
+  pendingRuleCount: document.querySelector("#pendingRuleCount"),
+  approvedRuleCount: document.querySelector("#approvedRuleCount")
 };
 
 let currentSnapshot = null;
 let currentLanguage = defaultLanguage;
 let currentFeedback = createEmptyFeedback();
+let currentApprovedRules = createEmptyRuleStore("approved-rules/v1");
+let currentIgnoredRuleSuggestions = createEmptyRuleStore("ignored-rule-suggestions/v1");
 
 nodes.settingsButton.addEventListener("click", openSettings);
 nodes.exportButton.addEventListener("click", exportSnapshot);
 nodes.clearButton.addEventListener("click", clearData);
 document.addEventListener("click", handleFeedbackClick);
+document.addEventListener("click", handleRuleClick);
 chrome.storage.onChanged.addListener(handleStorageChange);
 loadReport();
 
 async function loadReport() {
   try {
-    const cached = await chrome.storage.local.get(["profileSnapshot", "preferredLanguage", "profileFeedback"]);
+    const cached = await chrome.storage.local.get([
+      "profileSnapshot",
+      "preferredLanguage",
+      "profileFeedback",
+      "approvedRules",
+      "ignoredRuleSuggestions"
+    ]);
     currentLanguage = getSupportedLanguage(cached.preferredLanguage);
     currentFeedback = normalizeFeedback(cached.profileFeedback);
+    currentApprovedRules = normalizeRuleStore(cached.approvedRules, "approved-rules/v1");
+    currentIgnoredRuleSuggestions = normalizeRuleStore(cached.ignoredRuleSuggestions, "ignored-rule-suggestions/v1");
     applyStaticCopy();
 
     if (!cached.profileSnapshot) {
@@ -170,6 +222,7 @@ function renderSnapshot(snapshot) {
 
   renderSourceBalance(snapshot.sourceBalance);
   renderFeedbackStatus();
+  renderRuleSuggestions();
   renderTopics(snapshot.topics);
   renderDimensions(snapshot.dimensions);
   renderPhases(snapshot.phases);
@@ -349,6 +402,60 @@ async function handleFeedbackClick(event) {
   renderSnapshot(currentSnapshot);
 }
 
+async function handleRuleClick(event) {
+  const button = event.target.closest("[data-rule-action]");
+  if (!button || !currentSnapshot) return;
+
+  const { ruleAction, ruleId } = button.dataset;
+  const suggestion = getRuleSuggestions().find((item) => item.id === ruleId);
+  if (!suggestion) return;
+
+  if (ruleAction === "approve") {
+    currentApprovedRules = {
+      schemaVersion: "approved-rules/v1",
+      updatedAt: new Date().toISOString(),
+      items: {
+        ...currentApprovedRules.items,
+        [ruleId]: {
+          ...suggestion,
+          status: "approved",
+          approvedAt: new Date().toISOString()
+        }
+      }
+    };
+
+    currentIgnoredRuleSuggestions = removeRuleFromStore(currentIgnoredRuleSuggestions, ruleId, "ignored-rule-suggestions/v1");
+    await chrome.storage.local.set({
+      approvedRules: currentApprovedRules,
+      ignoredRuleSuggestions: currentIgnoredRuleSuggestions
+    });
+    renderRuleSuggestions();
+    return;
+  }
+
+  if (ruleAction === "ignore") {
+    currentIgnoredRuleSuggestions = {
+      schemaVersion: "ignored-rule-suggestions/v1",
+      updatedAt: new Date().toISOString(),
+      items: {
+        ...currentIgnoredRuleSuggestions.items,
+        [ruleId]: {
+          ...suggestion,
+          status: "ignored",
+          ignoredAt: new Date().toISOString()
+        }
+      }
+    };
+
+    currentApprovedRules = removeRuleFromStore(currentApprovedRules, ruleId, "approved-rules/v1");
+    await chrome.storage.local.set({
+      approvedRules: currentApprovedRules,
+      ignoredRuleSuggestions: currentIgnoredRuleSuggestions
+    });
+    renderRuleSuggestions();
+  }
+}
+
 async function openSettings() {
   try {
     if (chrome.runtime.openOptionsPage) {
@@ -363,8 +470,16 @@ async function openSettings() {
 }
 
 async function clearData() {
-  await chrome.storage.local.remove(["profileSnapshot", "reportHandoffState", "profileFeedback"]);
+  await chrome.storage.local.remove([
+    "profileSnapshot",
+    "reportHandoffState",
+    "profileFeedback",
+    "approvedRules",
+    "ignoredRuleSuggestions"
+  ]);
   currentFeedback = createEmptyFeedback();
+  currentApprovedRules = createEmptyRuleStore("approved-rules/v1");
+  currentIgnoredRuleSuggestions = createEmptyRuleStore("ignored-rule-suggestions/v1");
   renderEmpty();
 }
 
@@ -390,6 +505,16 @@ function handleStorageChange(changes, areaName) {
     currentFeedback = normalizeFeedback(changes.profileFeedback.newValue);
     renderFeedbackStatus();
     if (currentSnapshot) renderSnapshot(currentSnapshot);
+  }
+
+  if (changes.approvedRules) {
+    currentApprovedRules = normalizeRuleStore(changes.approvedRules.newValue, "approved-rules/v1");
+    renderRuleSuggestions();
+  }
+
+  if (changes.ignoredRuleSuggestions) {
+    currentIgnoredRuleSuggestions = normalizeRuleStore(changes.ignoredRuleSuggestions.newValue, "ignored-rule-suggestions/v1");
+    renderRuleSuggestions();
   }
 }
 
@@ -418,6 +543,9 @@ function applyStaticCopy() {
   setText("#recordsTitle", t("recordsTitle"));
   setText("#feedbackEyebrow", t("feedbackEyebrow"));
   setText("#feedbackTitle", t("feedbackTitle"));
+  setText("#rulesEyebrow", t("rulesEyebrow"));
+  setText("#rulesTitle", t("rulesTitle"));
+  setText("#rulesSummary", t("rulesSummary"));
   document.querySelector("#emptyState .eyebrow").textContent = t("emptyEyebrow");
   document.querySelector("#emptyState h2").textContent = t("emptyHeading");
   document.querySelector("#emptyState p:last-child").textContent = t("emptyBody");
@@ -459,6 +587,101 @@ function renderFeedbackStatus() {
   nodes.feedbackSummary.textContent = count ? t("feedbackCount", count) : t("feedbackEmpty");
 }
 
+function renderRuleSuggestions() {
+  const suggestions = getRuleSuggestions();
+  const visibleSuggestions = suggestions.filter((suggestion) => !currentIgnoredRuleSuggestions.items[suggestion.id]);
+  const approvedCount = Object.keys(currentApprovedRules.items).length;
+  const pendingCount = visibleSuggestions.filter((suggestion) => !currentApprovedRules.items[suggestion.id]).length;
+
+  nodes.pendingRuleCount.textContent = t("pendingRules", pendingCount);
+  nodes.approvedRuleCount.textContent = t("approvedRules", approvedCount);
+  nodes.ruleList.textContent = "";
+
+  if (!visibleSuggestions.length) {
+    nodes.ruleList.append(createEmpty(t("rulesEmpty")));
+    return;
+  }
+
+  for (const suggestion of visibleSuggestions) {
+    const isApproved = Boolean(currentApprovedRules.items[suggestion.id]);
+    const item = document.createElement("div");
+    item.className = "rule-item";
+    item.dataset.state = isApproved ? "approved" : "pending";
+    item.innerHTML = `
+      <div>
+        <span>${escapeHtml(isApproved ? t("approvedState") : t("pendingState"))}</span>
+        <strong>${escapeHtml(localizeAnalysisLabel(suggestion.label))}</strong>
+        <p>${escapeHtml(suggestion.body)}</p>
+      </div>
+      <div class="rule-actions">
+        <button
+          type="button"
+          data-rule-action="approve"
+          data-rule-id="${escapeAttribute(suggestion.id)}"
+          ${isApproved ? "disabled" : ""}
+        >${escapeHtml(t("approveRule"))}</button>
+        <button
+          type="button"
+          data-rule-action="ignore"
+          data-rule-id="${escapeAttribute(suggestion.id)}"
+        >${escapeHtml(t("ignoreRule"))}</button>
+      </div>
+    `;
+    nodes.ruleList.append(item);
+  }
+}
+
+function getRuleSuggestions() {
+  return Object.values(currentFeedback.items)
+    .filter((item) => item?.targetType && item?.label && item?.value)
+    .map((item) => createRuleSuggestion(item))
+    .filter(Boolean)
+    .sort((a, b) => `${a.targetType}:${a.label}`.localeCompare(`${b.targetType}:${b.label}`));
+}
+
+function createRuleSuggestion(feedbackItem) {
+  const id = `rule:${feedbackItem.targetType}:${feedbackItem.label}:${feedbackItem.value}`;
+  const localizedLabel = localizeAnalysisLabel(feedbackItem.label);
+  const base = {
+    id,
+    targetType: feedbackItem.targetType,
+    label: feedbackItem.label,
+    feedbackValue: feedbackItem.value,
+    snapshotGeneratedAt: feedbackItem.snapshotGeneratedAt,
+    createdFromFeedbackAt: feedbackItem.updatedAt || feedbackItem.createdAt || null
+  };
+
+  if (feedbackItem.targetType === "topic" && feedbackItem.value === "accurate") {
+    return { ...base, ruleType: "trust_topic", body: t("ruleTopicAccurate", localizedLabel) };
+  }
+
+  if (feedbackItem.targetType === "topic" && feedbackItem.value === "too_broad") {
+    return { ...base, ruleType: "refine_topic", body: t("ruleTopicBroad", localizedLabel) };
+  }
+
+  if (feedbackItem.targetType === "topic" && feedbackItem.value === "wrong") {
+    return { ...base, ruleType: "review_topic", body: t("ruleTopicWrong", localizedLabel) };
+  }
+
+  if (feedbackItem.targetType === "dimension" && feedbackItem.value === "accurate") {
+    return { ...base, ruleType: "trust_dimension", body: t("ruleDimensionAccurate", localizedLabel) };
+  }
+
+  if (feedbackItem.targetType === "dimension" && feedbackItem.value === "wrong") {
+    return { ...base, ruleType: "lower_dimension_confidence", body: t("ruleDimensionWrong", localizedLabel) };
+  }
+
+  if (feedbackItem.targetType === "collection" && feedbackItem.value === "useful") {
+    return { ...base, ruleType: "keep_collection", body: t("ruleCollectionUseful", localizedLabel) };
+  }
+
+  if (feedbackItem.targetType === "collection" && feedbackItem.value === "not_useful") {
+    return { ...base, ruleType: "demote_collection", body: t("ruleCollectionNotUseful", localizedLabel) };
+  }
+
+  return null;
+}
+
 function getFeedbackTargetId(type, label) {
   return `${type}:${label}`;
 }
@@ -482,6 +705,38 @@ function createEmptyFeedback() {
     updatedAt: null,
     items: {}
   };
+}
+
+function createEmptyRuleStore(schemaVersion) {
+  return {
+    schemaVersion,
+    updatedAt: null,
+    items: {}
+  };
+}
+
+function normalizeRuleStore(store, schemaVersion) {
+  if (!store || typeof store !== "object" || !store.items || typeof store.items !== "object") {
+    return createEmptyRuleStore(schemaVersion);
+  }
+
+  return {
+    schemaVersion: store.schemaVersion || schemaVersion,
+    updatedAt: store.updatedAt || null,
+    items: store.items
+  };
+}
+
+function removeRuleFromStore(store, ruleId, schemaVersion) {
+  const nextStore = {
+    schemaVersion,
+    updatedAt: new Date().toISOString(),
+    items: {
+      ...store.items
+    }
+  };
+  delete nextStore.items[ruleId];
+  return nextStore;
 }
 
 function normalizeFeedback(feedback) {

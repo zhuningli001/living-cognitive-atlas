@@ -272,7 +272,13 @@ async function openSettings() {
 
 async function clearExtensionData() {
   try {
-    await chrome.storage.local.remove(["profileSnapshot", "reportHandoffState", "profileFeedback"]);
+    await chrome.storage.local.remove([
+      "profileSnapshot",
+      "reportHandoffState",
+      "profileFeedback",
+      "approvedRules",
+      "ignoredRuleSuggestions"
+    ]);
     currentSnapshot = null;
     currentReportHandoffState = null;
     setExportReady(false);

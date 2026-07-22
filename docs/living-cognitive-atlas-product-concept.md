@@ -114,7 +114,7 @@ The current MVP already supports:
 - feedback export
 - rule suggestion generation
 
-The next milestone is rule approval: turning suggestions into explicit local taxonomy overrides.
+The next milestone is applying approved local rules during future extension scans.
 
 ## Rule approval layer
 
@@ -124,8 +124,8 @@ Current rule approval behavior:
 
 - suggestions are generated from feedback
 - the user can approve or revoke a suggestion
-- approved rules are stored locally as `approved-rule/v1`
-- approved rules can be exported
+- approved rules are stored locally as `approved-rules/v1`
+- approved rules can be inspected in local extension storage
 - approved rules do not mutate taxonomy automatically
 
 This keeps the system organic without making it autonomous in a way the user cannot inspect.

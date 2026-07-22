@@ -96,7 +96,10 @@ This avoids implying that the system has already inferred a person before the us
 12. Settings page manages display name, language, privacy notes, snapshot export, and local data reset.
 13. Report page lets the user mark topics, dimensions, and return paths as accurate, wrong, too broad, useful, or not useful.
 14. Feedback is stored locally as `profileFeedback`.
-15. Panel renders:
+15. Report page turns feedback into local rule suggestions.
+16. User can approve or ignore suggested rules.
+17. Approved rules are stored locally as `approvedRules`.
+18. Panel renders:
    - profile headline
    - bookmark/domain/signal/review counts
    - source balance
@@ -147,6 +150,33 @@ Each feedback item contains:
 - `updatedAt`
 
 This does not change bookmarks or taxonomy rules yet. It is the evidence layer for the next rule-approval step.
+
+## Rule approval schema
+
+MVP 1.2 stores user-approved local rules in `chrome.storage.local` as `approvedRules`.
+
+The JSON contains:
+
+- `schemaVersion`: `approved-rules/v1`
+- `updatedAt`: latest rule approval timestamp
+- `items`: approved rules keyed by suggestion id
+
+Each approved rule contains:
+
+- `id`
+- `targetType`: `topic`, `dimension`, or `collection`
+- `label`: original analysis label
+- `feedbackValue`: source feedback action
+- `ruleType`: local rule category
+- `body`: human-readable explanation
+- `snapshotGeneratedAt`
+- `createdFromFeedbackAt`
+- `status`: `approved`
+- `approvedAt`
+
+Ignored suggestions are stored separately as `ignoredRuleSuggestions` with `schemaVersion: ignored-rule-suggestions/v1`.
+
+Approved rules do not affect scan results yet. They become inputs for the next loop: applying approved rules during local analysis.
 
 ## Extension-local report
 

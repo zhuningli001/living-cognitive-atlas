@@ -267,7 +267,7 @@ This keeps the first version editable and easy to tune before introducing LLM su
 
 ## Next upgrades
 
-- move the deepest feedback and rule-approval flows into extension pages
+- apply approved local rules during extension bookmark scans
 - improve the compact side-panel dashboard for narrow browser panels
 - add production extension icons, privacy policy URL, support URL, store screenshots, and release notes
 - improve taxonomy quality with user-approved rules before adding AI-assisted summaries or embeddings
