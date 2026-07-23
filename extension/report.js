@@ -39,9 +39,16 @@ const copy = {
     recordsEyebrow: "Evidence sample",
     recordsTitle: "Recent normalized records",
     feedbackEyebrow: "Human feedback",
-    feedbackTitle: "Teach the mirror with small corrections",
-    feedbackEmpty: "No feedback yet. Mark what feels accurate, wrong, too broad, useful, or not useful.",
+    feedbackTitle: "Confirm the profile in plain words",
+    feedbackEmpty: "No feedback yet. Start with the key profile check below.",
     feedbackCount: (count) => `${count} local corrections saved.`,
+    calibrationEyebrow: "Key profile check",
+    calibrationTitle: "Are these words accurate?",
+    calibrationSummary: "Start by confirming the strongest keywords. Each answer becomes a local rule suggestion.",
+    calibrationKeywords: "Core keywords",
+    calibrationDimensions: "Profile dimensions",
+    calibrationKeywordPrompt: (label, count) => `"${label}" appears as a recurring saved-attention keyword across ${count} links.`,
+    calibrationDimensionPrompt: (label, share) => `"${label}" appears as a dominant profile dimension at ${share}%.`,
     feedbackAccurate: "Accurate",
     feedbackWrong: "Wrong",
     feedbackBroad: "Too broad",
@@ -112,9 +119,16 @@ const copy = {
     recordsEyebrow: "证据样本",
     recordsTitle: "最近标准化记录",
     feedbackEyebrow: "人工反馈",
-    feedbackTitle: "用很小的修正教会这面镜子",
-    feedbackEmpty: "还没有反馈。你可以标记准确、错误、太宽泛、有用或没用。",
+    feedbackTitle: "用直白关键词确认画像",
+    feedbackEmpty: "还没有反馈。先从下面的关键画像校准开始。",
     feedbackCount: (count) => `已保存 ${count} 条本地修正。`,
+    calibrationEyebrow: "关键画像校准",
+    calibrationTitle: "这些词准不准？",
+    calibrationSummary: "先确认最强关键词。每一次回答都会变成本地规则建议。",
+    calibrationKeywords: "核心关键词",
+    calibrationDimensions: "画像维度",
+    calibrationKeywordPrompt: (label, count) => `系统认为「${label}」是你反复保存的关键注意力之一，覆盖 ${count} 条链接。`,
+    calibrationDimensionPrompt: (label, share) => `系统认为「${label}」是你的主导画像维度之一，占 ${share}%。`,
     feedbackAccurate: "准确",
     feedbackWrong: "错误",
     feedbackBroad: "太宽泛",
@@ -162,6 +176,7 @@ const nodes = {
   appliedRuleList: document.querySelector("#appliedRuleList"),
   feedbackSummary: document.querySelector("#feedbackSummary"),
   feedbackCount: document.querySelector("#feedbackCount"),
+  calibrationList: document.querySelector("#calibrationList"),
   ruleList: document.querySelector("#ruleList"),
   pendingRuleCount: document.querySelector("#pendingRuleCount"),
   approvedRuleCount: document.querySelector("#approvedRuleCount")
@@ -233,6 +248,7 @@ function renderSnapshot(snapshot) {
   renderSourceBalance(snapshot.sourceBalance);
   renderAppliedRules(snapshot.appliedRules);
   renderFeedbackStatus();
+  renderProfileCalibration(snapshot);
   renderRuleSuggestions();
   renderTopics(snapshot.topics);
   renderDimensions(snapshot.dimensions);
@@ -280,6 +296,52 @@ function renderAppliedRules(appliedRules) {
     `;
     nodes.appliedRuleList.append(row);
   }
+}
+
+function renderProfileCalibration(snapshot) {
+  nodes.calibrationList.textContent = "";
+  const keywordItems = (snapshot.topics || []).slice(0, 5).map((topic) => ({
+    type: "topic",
+    label: topic.label,
+    body: t("calibrationKeywordPrompt", localizeAnalysisLabel(topic.label), formatNumber(topic.count)),
+    actions: ["accurate", "too_broad", "wrong"]
+  }));
+  const dimensionItems = (snapshot.dimensions || []).slice(0, 3).map((dimension) => ({
+    type: "dimension",
+    label: dimension.label,
+    body: t("calibrationDimensionPrompt", localizeAnalysisLabel(dimension.label), dimension.share),
+    actions: ["accurate", "wrong"]
+  }));
+
+  if (keywordItems.length) {
+    nodes.calibrationList.append(createCalibrationGroup(t("calibrationKeywords"), keywordItems));
+  }
+
+  if (dimensionItems.length) {
+    nodes.calibrationList.append(createCalibrationGroup(t("calibrationDimensions"), dimensionItems));
+  }
+}
+
+function createCalibrationGroup(title, items) {
+  const group = document.createElement("div");
+  group.className = "calibration-group";
+  group.innerHTML = `<h3>${escapeHtml(title)}</h3>`;
+
+  for (const item of items) {
+    const selected = getFeedbackValue(getFeedbackTargetId(item.type, item.label));
+    const row = document.createElement("div");
+    row.className = "calibration-item";
+    row.innerHTML = `
+      <div>
+        <strong>${escapeHtml(localizeAnalysisLabel(item.label))}</strong>
+        <p>${escapeHtml(item.body)}</p>
+      </div>
+      ${renderFeedbackButtons(item.type, item.label, item.actions, selected)}
+    `;
+    group.append(row);
+  }
+
+  return group;
 }
 
 function renderTopics(topics) {
@@ -577,6 +639,9 @@ function applyStaticCopy() {
   setText("#recordsTitle", t("recordsTitle"));
   setText("#feedbackEyebrow", t("feedbackEyebrow"));
   setText("#feedbackTitle", t("feedbackTitle"));
+  setText("#calibrationEyebrow", t("calibrationEyebrow"));
+  setText("#calibrationTitle", t("calibrationTitle"));
+  setText("#calibrationSummary", t("calibrationSummary"));
   setText("#rulesEyebrow", t("rulesEyebrow"));
   setText("#rulesTitle", t("rulesTitle"));
   setText("#rulesSummary", t("rulesSummary"));

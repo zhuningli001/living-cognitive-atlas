@@ -98,8 +98,8 @@ const copy = {
     testerTitle: "Can the local profile loop complete?",
     testerStepScan: "Scan bookmarks",
     testerStepReport: "Open report",
-    testerStepFeedback: "Mark feedback",
-    testerStepRules: "Approve a rule",
+    testerStepFeedback: "Confirm keywords",
+    testerStepRules: "Approve memory rule",
     testerStepReset: "Know reset path"
   },
   zh: {
@@ -176,8 +176,8 @@ const copy = {
     testerTitle: "本地画像流程是否已走通？",
     testerStepScan: "扫描书签",
     testerStepReport: "打开报告",
-    testerStepFeedback: "标记反馈",
-    testerStepRules: "批准规则",
+    testerStepFeedback: "确认关键词",
+    testerStepRules: "批准记忆规则",
     testerStepReset: "知道如何重置"
   }
 };
