@@ -17,6 +17,229 @@ const extensionSnapshotRequestMessage = "living-cognitive-atlas:request-extensio
 const extensionSnapshotMessage = "living-cognitive-atlas:extension-snapshot";
 const extensionSnapshotImportedMessage = "living-cognitive-atlas:extension-snapshot-imported";
 
+const importReportFallbackCss = `
+  body[data-surface="import-report"] {
+    margin: 0;
+    color: #1d1c1a;
+    background: #f8f4ec;
+    font-family: Avenir Next, Segoe UI, Helvetica Neue, Arial, sans-serif;
+  }
+
+  body[data-surface="import-report"] > div > header {
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    border-bottom: 1px solid rgba(29, 28, 26, 0.08);
+    background: rgba(248, 244, 236, 0.9);
+    backdrop-filter: blur(14px);
+  }
+
+  body[data-surface="import-report"] > div > header > div,
+  body[data-surface="import-report"] > div > main {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+
+  body[data-surface="import-report"] > div > header > div {
+    display: flex;
+    min-height: 72px;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+  }
+
+  body[data-surface="import-report"] > div > header p,
+  .import-eyebrow {
+    margin: 0;
+    color: #8e5f4d;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+  }
+
+  body[data-surface="import-report"] > div > header h1 {
+    margin: 4px 0 0;
+    font-family: Georgia, Times New Roman, serif;
+    font-size: 22px;
+    font-weight: 500;
+  }
+
+  body[data-surface="import-report"] > div > header nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  body[data-surface="import-report"] > div > header a {
+    border: 1px solid rgba(29, 28, 26, 0.08);
+    border-radius: 999px;
+    padding: 8px 15px;
+    color: #1d1c1a;
+    text-decoration: none;
+    background: rgba(255, 253, 248, 0.55);
+  }
+
+  body[data-surface="import-report"] > div > main {
+    padding-top: 32px;
+    padding-bottom: 56px;
+  }
+
+  .import-page {
+    background: #f8f4ec;
+  }
+
+  .import-stack {
+    display: grid;
+    gap: 24px;
+  }
+
+  .import-hero,
+  .handoff-card,
+  .import-profile-card,
+  .import-report-block,
+  .import-empty,
+  .import-panel {
+    border: 1px solid rgba(29, 28, 26, 0.1);
+    border-radius: 8px;
+    background: rgba(255, 253, 248, 0.82);
+    box-shadow: 0 10px 30px rgba(40, 35, 28, 0.06);
+  }
+
+  .import-hero,
+  .import-profile-card,
+  .import-report-block,
+  .import-empty,
+  .import-panel {
+    padding: 24px;
+  }
+
+  .handoff-card {
+    padding: 18px;
+    background: rgba(156, 168, 143, 0.12);
+  }
+
+  .import-title,
+  .import-heading,
+  .import-profile-title {
+    margin: 8px 0 0;
+    font-family: Georgia, Times New Roman, serif;
+    font-weight: 500;
+    line-height: 1.05;
+  }
+
+  .import-title {
+    max-width: 820px;
+    font-size: clamp(34px, 5vw, 58px);
+  }
+
+  .import-heading,
+  .import-profile-title {
+    font-size: clamp(28px, 3vw, 38px);
+  }
+
+  .import-body,
+  .import-muted {
+    margin-top: 14px;
+    max-width: 760px;
+    color: rgba(29, 28, 26, 0.62);
+    font-size: 15px;
+    line-height: 1.7;
+  }
+
+  .import-hero-grid,
+  .import-control-grid,
+  .handoff-layout {
+    display: grid;
+    gap: 16px;
+  }
+
+  .import-boundary {
+    border: 1px solid rgba(63, 90, 75, 0.14);
+    border-radius: 8px;
+    padding: 16px;
+    background: rgba(156, 168, 143, 0.12);
+    color: rgba(29, 28, 26, 0.64);
+    line-height: 1.55;
+  }
+
+  .import-control-grid {
+    margin-top: 24px;
+  }
+
+  .import-file-control,
+  .import-language-control,
+  .import-soft-button,
+  .import-danger-button,
+  .import-primary-button {
+    min-height: 46px;
+    border: 1px solid rgba(29, 28, 26, 0.1);
+    border-radius: 999px;
+    padding: 11px 18px;
+    font: inherit;
+  }
+
+  .import-file-control,
+  .import-language-control,
+  .import-soft-button {
+    background: rgba(255, 253, 248, 0.72);
+    color: rgba(29, 28, 26, 0.68);
+  }
+
+  .import-primary-button {
+    border-color: #3f5a4b;
+    color: #fff;
+    background: #3f5a4b;
+    cursor: pointer;
+  }
+
+  .import-danger-button {
+    color: #8e5f4d;
+    background: rgba(142, 95, 77, 0.08);
+  }
+
+  .import-status {
+    margin-top: 14px;
+    color: rgba(29, 28, 26, 0.55);
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  .import-metric-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 12px;
+  }
+
+  .import-metric-card {
+    display: block;
+    border: 1px solid rgba(29, 28, 26, 0.08);
+    border-radius: 8px;
+    padding: 16px;
+    text-decoration: none;
+    background: rgba(245, 241, 232, 0.7);
+  }
+
+  @media (min-width: 780px) {
+    .import-hero-grid {
+      grid-template-columns: 1fr 320px;
+      align-items: end;
+    }
+
+    .import-control-grid {
+      grid-template-columns: 1fr auto auto;
+      align-items: center;
+    }
+
+    .handoff-layout {
+      grid-template-columns: 1fr auto;
+      align-items: center;
+    }
+  }
+`;
+
 const copy = {
   en: {
     importEyebrow: "Snapshot import",
@@ -703,29 +926,29 @@ export default function ImportProfileSnapshotPage() {
   const isPendingSnapshotImported = pendingSnapshotState === "imported";
 
   return (
-    <div className="-mx-6 -my-8 bg-[#f8f4ec] px-6 py-8 lg:-mx-10 lg:-my-10 lg:px-10 lg:py-10">
-    <div className="space-y-7">
-      <section className="rounded-[2rem] border border-black/5 bg-white/75 p-7 shadow-atlas">
-        <p className="text-xs uppercase tracking-[0.28em] text-rust/60">{t("importEyebrow")}</p>
-        <div className="mt-3 grid gap-5 lg:grid-cols-[1fr_320px] lg:items-end">
+    <div className="import-page -mx-6 -my-8 bg-[#f8f4ec] px-6 py-8 lg:-mx-10 lg:-my-10 lg:px-10 lg:py-10">
+    <div className="import-stack space-y-7">
+      <section className="import-hero rounded-[2rem] border border-black/5 bg-white/75 p-7 shadow-atlas">
+        <p className="import-eyebrow text-xs uppercase tracking-[0.28em] text-rust/60">{t("importEyebrow")}</p>
+        <div className="import-hero-grid mt-3 grid gap-5 lg:grid-cols-[1fr_320px] lg:items-end">
           <div>
-            <h2 className="max-w-4xl font-serif text-5xl leading-none text-ink">{t("importTitle")}</h2>
-            <p className="mt-5 max-w-3xl text-base leading-8 text-ink/68">
+            <h2 className="import-title max-w-4xl font-serif text-5xl leading-none text-ink">{t("importTitle")}</h2>
+            <p className="import-body mt-5 max-w-3xl text-base leading-8 text-ink/68">
               {t("importBody")}
             </p>
           </div>
-          <div className="rounded-[1.25rem] border border-pine/10 bg-sage/10 p-4 text-sm leading-6 text-ink/62">
+          <div className="import-boundary rounded-[1.25rem] border border-pine/10 bg-sage/10 p-4 text-sm leading-6 text-ink/62">
             <p className="font-medium text-pine">{t("localBoundaryTitle")}</p>
             <p className="mt-2">{t("localBoundaryBody")}</p>
           </div>
         </div>
 
-        <div className="mt-7 grid gap-3 md:grid-cols-[1fr_auto_auto] md:items-center">
-          <label className="flex min-h-14 cursor-pointer items-center justify-between gap-3 rounded-full border border-black/5 bg-paper/80 px-5 py-3 text-sm text-ink/70 transition hover:bg-white">
+        <div className="import-control-grid mt-7 grid gap-3 md:grid-cols-[1fr_auto_auto] md:items-center">
+          <label className="import-file-control flex min-h-14 cursor-pointer items-center justify-between gap-3 rounded-full border border-black/5 bg-paper/80 px-5 py-3 text-sm text-ink/70 transition hover:bg-white">
             <span>{isReading ? t("readingSnapshot") : t("chooseJson")}</span>
             <input type="file" accept="application/json,.json" className="sr-only" disabled={isReading} onChange={handleFileChange} />
           </label>
-          <label className="flex min-h-14 items-center gap-2 rounded-full border border-black/5 bg-paper/80 px-4 py-3 text-sm text-ink/58">
+          <label className="import-language-control flex min-h-14 items-center gap-2 rounded-full border border-black/5 bg-paper/80 px-4 py-3 text-sm text-ink/58">
             <span>{t("language")}</span>
             <select value={language} onChange={setPreferredLanguage} className="bg-transparent text-sm text-ink outline-none">
               <option value="en">{t("english")}</option>
@@ -737,7 +960,7 @@ export default function ImportProfileSnapshotPage() {
             <button
               type="button"
               onClick={clearSnapshot}
-              className="min-h-14 rounded-full border border-black/5 bg-white/70 px-5 py-3 text-sm text-ink/62 transition hover:bg-white"
+              className="import-soft-button min-h-14 rounded-full border border-black/5 bg-white/70 px-5 py-3 text-sm text-ink/62 transition hover:bg-white"
             >
               {t("clearSnapshot")}
             </button>
@@ -746,7 +969,7 @@ export default function ImportProfileSnapshotPage() {
             <button
               type="button"
               onClick={resetReportData}
-              className="min-h-14 rounded-full border border-rust/15 bg-rust/5 px-5 py-3 text-sm text-rust transition hover:bg-rust/10"
+              className="import-danger-button min-h-14 rounded-full border border-rust/15 bg-rust/5 px-5 py-3 text-sm text-rust transition hover:bg-rust/10"
             >
               {t("resetReportData")}
             </button>
@@ -754,17 +977,17 @@ export default function ImportProfileSnapshotPage() {
           </div>
         </div>
 
-        <p className="mt-4 text-sm leading-6 text-ink/55">{status}</p>
+        <p className="import-status mt-4 text-sm leading-6 text-ink/55">{status}</p>
         {error ? <p className="mt-2 text-sm leading-6 text-rust">{error}</p> : null}
       </section>
 
       {pendingExtensionSnapshot ? (
-        <section className="rounded-[2rem] border border-pine/10 bg-sage/10 p-5 shadow-atlas">
-          <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+        <section className="handoff-card rounded-[2rem] border border-pine/10 bg-sage/10 p-5 shadow-atlas">
+          <div className="handoff-layout flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
             <div>
-              <p className="text-xs uppercase tracking-[0.22em] text-pine/70">{t("handoffEyebrow")}</p>
-              <h3 className="mt-2 font-serif text-2xl leading-tight text-ink">{handoffTitle}</h3>
-              <p className="mt-2 text-sm leading-6 text-ink/58">
+              <p className="import-eyebrow text-xs uppercase tracking-[0.22em] text-pine/70">{t("handoffEyebrow")}</p>
+              <h3 className="import-heading mt-2 font-serif text-2xl leading-tight text-ink">{handoffTitle}</h3>
+              <p className="import-muted mt-2 text-sm leading-6 text-ink/58">
                 {pendingExtensionSnapshot.metrics.bookmarks.toLocaleString()} {t("metrics.bookmarks").toLowerCase()} · {pendingExtensionSnapshot.metrics.domains.toLocaleString()} {t("metrics.domains").toLowerCase()} · {t("generated")} {formatDate(pendingExtensionSnapshot.generatedAt, language)}
               </p>
               <p className="mt-1 text-xs leading-5 text-ink/48">{handoffBody}</p>
@@ -773,7 +996,7 @@ export default function ImportProfileSnapshotPage() {
               type="button"
               disabled={isPendingSnapshotImported}
               onClick={importPendingExtensionSnapshot}
-              className="min-h-12 rounded-full bg-pine px-5 py-3 text-sm text-white shadow-atlas transition hover:bg-pine/90 disabled:cursor-not-allowed disabled:bg-pine/45"
+              className="import-primary-button min-h-12 rounded-full bg-pine px-5 py-3 text-sm text-white shadow-atlas transition hover:bg-pine/90 disabled:cursor-not-allowed disabled:bg-pine/45"
             >
               {handoffButtonLabel}
             </button>
@@ -783,12 +1006,12 @@ export default function ImportProfileSnapshotPage() {
 
       {snapshot ? (
         <>
-          <section className="rounded-[2rem] border border-black/5 bg-white/70 p-6 shadow-atlas">
+          <section className="import-profile-card rounded-[2rem] border border-black/5 bg-white/70 p-6 shadow-atlas">
             <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
               <div>
-                <p className="text-xs uppercase tracking-[0.22em] text-rust/60">{t("importedProfile")}</p>
-                <h3 className="mt-2 font-serif text-4xl leading-tight text-ink">{report.profile.headline}</h3>
-                <p className="mt-4 max-w-4xl text-base leading-8 text-ink/66">{report.profile.summary}</p>
+                <p className="import-eyebrow text-xs uppercase tracking-[0.22em] text-rust/60">{t("importedProfile")}</p>
+                <h3 className="import-profile-title mt-2 font-serif text-4xl leading-tight text-ink">{report.profile.headline}</h3>
+                <p className="import-body mt-4 max-w-4xl text-base leading-8 text-ink/66">{report.profile.summary}</p>
                 <p className="mt-3 max-w-4xl text-sm leading-6 text-ink/45">
                   {t("sourceSnapshotSaid")} {report.source.originalHeadline}. {t("recalculates")}
                 </p>
@@ -797,7 +1020,7 @@ export default function ImportProfileSnapshotPage() {
                 {formatDate(report.source.generatedAt, language)}
               </div>
             </div>
-            <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="import-metric-grid mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
               <MetricCard label={t("metrics.bookmarks")} value={report.dashboard.totals.total} />
               <MetricCard label={t("metrics.domains")} value={report.dashboard.totals.uniqueDomains} />
               <MetricCard label={t("metrics.interestPhases")} value={report.dashboard.totals.interestPhases} />
@@ -1113,10 +1336,10 @@ export default function ImportProfileSnapshotPage() {
           </section>
         </>
       ) : (
-        <section className="rounded-[2rem] border border-dashed border-black/10 bg-white/45 p-8 text-center">
-          <p className="text-xs uppercase tracking-[0.22em] text-rust/60">{t("noDataEyebrow")}</p>
-          <h3 className="mt-2 font-serif text-3xl text-ink">{t("noDataTitle")}</h3>
-          <p className="mx-auto mt-4 max-w-2xl text-sm leading-7 text-ink/58">
+        <section className="import-empty rounded-[2rem] border border-dashed border-black/10 bg-white/45 p-8 text-center">
+          <p className="import-eyebrow text-xs uppercase tracking-[0.22em] text-rust/60">{t("noDataEyebrow")}</p>
+          <h3 className="import-heading mt-2 font-serif text-3xl text-ink">{t("noDataTitle")}</h3>
+          <p className="import-muted mx-auto mt-4 max-w-2xl text-sm leading-7 text-ink/58">
             {t("noDataBody")}
           </p>
           <p className="mt-3 text-xs text-ink/42">{t("noDataHint")}</p>
@@ -1207,14 +1430,14 @@ function MetricCard({ label, value, href }) {
 
   if (href) {
     return (
-      <a href={href} className="rounded-[1.25rem] border border-black/5 bg-paper/70 p-4 transition hover:border-pine/20 hover:bg-white">
+      <a href={href} className="import-metric-card rounded-[1.25rem] border border-black/5 bg-paper/70 p-4 transition hover:border-pine/20 hover:bg-white">
         {content}
       </a>
     );
   }
 
   return (
-    <div className="rounded-[1.25rem] border border-black/5 bg-paper/70 p-4">
+    <div className="import-metric-card rounded-[1.25rem] border border-black/5 bg-paper/70 p-4">
       {content}
     </div>
   );
@@ -1247,9 +1470,9 @@ function getHandoffButtonLabel(state, uiCopy) {
 
 function ReportBlock({ eyebrow, title, children }) {
   return (
-    <section className="rounded-[2rem] border border-black/5 bg-white/70 p-6 shadow-atlas">
-      <p className="text-xs uppercase tracking-[0.22em] text-rust/60">{eyebrow}</p>
-      <h3 className="mt-2 font-serif text-3xl leading-tight text-ink">{title}</h3>
+    <section className="import-report-block rounded-[2rem] border border-black/5 bg-white/70 p-6 shadow-atlas">
+      <p className="import-eyebrow text-xs uppercase tracking-[0.22em] text-rust/60">{eyebrow}</p>
+      <h3 className="import-heading mt-2 font-serif text-3xl leading-tight text-ink">{title}</h3>
       <div className="mt-5">{children}</div>
     </section>
   );
