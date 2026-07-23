@@ -174,7 +174,8 @@ h2 {
   padding: 16px 18px;
 }
 
-.feedback-status {
+.feedback-status,
+.applied-rules-card {
   display: grid;
   gap: 16px;
   align-items: center;
@@ -185,17 +186,48 @@ h2 {
 }
 
 @media (min-width: 760px) {
-  .feedback-status {
+  .feedback-status,
+  .applied-rules-card {
     grid-template-columns: 1fr auto;
   }
 }
 
-.feedback-status p:not(.eyebrow) {
+.feedback-status p:not(.eyebrow),
+.applied-rules-card p:not(.eyebrow) {
   margin-top: 10px;
   max-width: 740px;
   color: var(--muted);
   font-size: 14px;
   line-height: 1.6;
+}
+
+.applied-rule-list {
+  display: grid;
+  gap: 8px;
+  min-width: min(360px, 100%);
+}
+
+.applied-rule-item {
+  border: 1px solid rgba(63, 90, 75, 0.18);
+  border-radius: 8px;
+  padding: 10px 12px;
+  background: rgba(156, 168, 143, 0.12);
+}
+
+.applied-rule-item strong {
+  display: block;
+  color: var(--pine);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.applied-rule-item span {
+  display: block;
+  margin-top: 5px;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.45;
 }
 
 .feedback-status span {

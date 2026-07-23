@@ -99,7 +99,9 @@ This avoids implying that the system has already inferred a person before the us
 15. Report page turns feedback into local rule suggestions.
 16. User can approve or ignore suggested rules.
 17. Approved rules are stored locally as `approvedRules`.
-18. Panel renders:
+18. During the next scan, approved rules are passed into the local analysis engine.
+19. The new snapshot records applied rules under `appliedRules`.
+20. Panel renders:
    - profile headline
    - bookmark/domain/signal/review counts
    - source balance
@@ -176,7 +178,30 @@ Each approved rule contains:
 
 Ignored suggestions are stored separately as `ignoredRuleSuggestions` with `schemaVersion: ignored-rule-suggestions/v1`.
 
-Approved rules do not affect scan results yet. They become inputs for the next loop: applying approved rules during local analysis.
+Approved rules now affect extension-local scan results when they match the current snapshot. They still do not edit bookmarks, upload data, or write into shared taxonomy source files.
+
+## Applied rules schema
+
+MVP 1.2 records rules used during a scan inside each snapshot as `appliedRules`.
+
+The JSON contains:
+
+- `schemaVersion`: `applied-rules/v1`
+- `sourceRuleCount`: approved rules available at scan time
+- `appliedCount`: approved rules that matched and affected the snapshot
+- `items`: applied rule audit entries
+
+Each applied rule item contains:
+
+- `id`
+- `ruleType`
+- `targetType`
+- `label`
+- `feedbackValue`
+- `effect`
+- `note`
+
+This is an audit layer. It shows how approved local rules shaped the current snapshot without editing bookmarks or uploading data.
 
 ## Extension-local report
 

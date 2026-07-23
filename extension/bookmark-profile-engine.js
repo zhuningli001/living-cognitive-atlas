@@ -84,19 +84,33 @@ export function flattenBookmarkTree(nodes, path = []) {
 }
 
 export function buildProfileSnapshot(records, options = {}) {
+  const approvedRules = normalizeApprovedRules(options.approvedRules);
   const enriched = records.map((record) => ({
     ...record,
     topics: inferTopics(record),
     resourceType: inferResourceType(record)
   }));
 
-  const topics = topCounts(enriched.flatMap((record) => record.topics), 8);
-  const dimensions = buildDimensions(enriched);
-  const reviewQueue = buildReviewQueue(enriched);
+  let topics = topCounts(enriched.flatMap((record) => record.topics), 8);
+  let dimensions = buildDimensions(enriched);
+  let reviewQueue = buildReviewQueue(enriched);
   const phases = buildDevelopmentLine(enriched);
-  const collections = buildCollections(enriched);
+  let collections = buildCollections(enriched);
   const domainCounts = countItems(enriched.map((record) => record.domain).filter(Boolean));
   const domains = new Set(enriched.map((record) => record.domain).filter(Boolean));
+  const appliedRules = applyApprovedRules({
+    approvedRules,
+    records: enriched,
+    topics,
+    dimensions,
+    collections,
+    reviewQueue
+  });
+
+  topics = appliedRules.topics;
+  dimensions = appliedRules.dimensions;
+  collections = appliedRules.collections;
+  reviewQueue = appliedRules.reviewQueue;
 
   return {
     schemaVersion: SNAPSHOT_SCHEMA_VERSION,
@@ -115,8 +129,113 @@ export function buildProfileSnapshot(records, options = {}) {
     phases,
     collections,
     sourceBalance: buildSourceBalance(enriched, domainCounts),
+    appliedRules: {
+      schemaVersion: "applied-rules/v1",
+      sourceRuleCount: approvedRules.length,
+      appliedCount: appliedRules.items.length,
+      items: appliedRules.items
+    },
     reviewQueue,
     records: enriched
+  };
+}
+
+function normalizeApprovedRules(approvedRules) {
+  if (!approvedRules || typeof approvedRules !== "object" || !approvedRules.items || typeof approvedRules.items !== "object") {
+    return [];
+  }
+
+  return Object.values(approvedRules.items).filter((rule) => rule?.status === "approved" && rule?.ruleType && rule?.label);
+}
+
+function applyApprovedRules({ approvedRules, records, topics, dimensions, collections, reviewQueue }) {
+  const nextTopics = topics.map((topic) => ({ ...topic }));
+  const nextDimensions = dimensions.map((dimension) => ({ ...dimension }));
+  const nextCollections = collections.map((collection) => ({ ...collection }));
+  const nextReviewQueue = reviewQueue.map((item) => ({ ...item }));
+  const applications = [];
+
+  for (const rule of approvedRules) {
+    if (rule.ruleType === "trust_topic") {
+      const topic = nextTopics.find((item) => item.label === rule.label);
+      if (!topic) continue;
+      topic.count += 1;
+      applications.push(createRuleApplication(rule, "boosted_topic_signal", `Boosted recurring topic: ${rule.label}.`));
+    }
+
+    if (rule.ruleType === "refine_topic") {
+      const topic = nextTopics.find((item) => item.label === rule.label);
+      if (!topic) continue;
+      topic.needsRefinement = true;
+      applications.push(createRuleApplication(rule, "marked_topic_for_refinement", `Marked broad topic for later refinement: ${rule.label}.`));
+    }
+
+    if (rule.ruleType === "review_topic") {
+      const matchingRecords = records.filter((record) => record.topics.includes(rule.label)).slice(0, 3);
+      if (!matchingRecords.length) continue;
+
+      for (const record of matchingRecords) {
+        if (nextReviewQueue.some((item) => item.id === record.id)) continue;
+        nextReviewQueue.unshift({
+          id: record.id,
+          title: record.title,
+          url: record.url,
+          domain: record.domain,
+          reason: `Approved rule review: ${rule.label}`
+        });
+      }
+
+      applications.push(createRuleApplication(rule, "added_topic_review_candidates", `Sent matching links into review for topic: ${rule.label}.`));
+    }
+
+    if (rule.ruleType === "trust_dimension") {
+      const dimension = nextDimensions.find((item) => item.label === rule.label);
+      if (!dimension) continue;
+      dimension.share = Math.min(100, dimension.share + 5);
+      applications.push(createRuleApplication(rule, "boosted_dimension_signal", `Boosted trusted dimension: ${rule.label}.`));
+    }
+
+    if (rule.ruleType === "lower_dimension_confidence") {
+      const dimension = nextDimensions.find((item) => item.label === rule.label);
+      if (!dimension) continue;
+      dimension.share = Math.max(0, dimension.share - 10);
+      applications.push(createRuleApplication(rule, "lowered_dimension_confidence", `Lowered confidence for dimension: ${rule.label}.`));
+    }
+
+    if (rule.ruleType === "keep_collection") {
+      const collection = nextCollections.find((item) => item.label === rule.label);
+      if (!collection) continue;
+      collection.count += 1;
+      collection.pinnedByRule = true;
+      applications.push(createRuleApplication(rule, "boosted_return_path", `Kept useful return path: ${rule.label}.`));
+    }
+
+    if (rule.ruleType === "demote_collection") {
+      const collection = nextCollections.find((item) => item.label === rule.label);
+      if (!collection) continue;
+      collection.count = Math.max(0, collection.count - 1);
+      applications.push(createRuleApplication(rule, "demoted_return_path", `Demoted return path: ${rule.label}.`));
+    }
+  }
+
+  return {
+    topics: nextTopics.sort((a, b) => b.count - a.count || a.label.localeCompare(b.label)).slice(0, 8),
+    dimensions: nextDimensions.sort((a, b) => b.share - a.share || a.label.localeCompare(b.label)).filter((item) => item.share > 0).slice(0, 5),
+    collections: nextCollections.sort((a, b) => Number(Boolean(b.pinnedByRule)) - Number(Boolean(a.pinnedByRule)) || b.count - a.count || a.label.localeCompare(b.label)).filter((item) => item.count > 0).slice(0, 4),
+    reviewQueue: nextReviewQueue,
+    items: applications
+  };
+}
+
+function createRuleApplication(rule, effect, note) {
+  return {
+    id: rule.id,
+    ruleType: rule.ruleType,
+    targetType: rule.targetType,
+    label: rule.label,
+    feedbackValue: rule.feedbackValue,
+    effect,
+    note
   };
 }
 

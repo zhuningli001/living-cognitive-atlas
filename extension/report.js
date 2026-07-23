@@ -22,6 +22,10 @@ const copy = {
     sourceTop: "Top 5",
     sourceBreadth: "Breadth",
     sourceNoPattern: "No source pattern yet.",
+    appliedRulesEyebrow: "Applied local rules",
+    appliedRulesTitle: "What shaped this scan",
+    appliedRulesEmpty: "No approved local rules were applied to this snapshot.",
+    appliedRulesCount: (count) => `${count} approved local rules shaped this snapshot.`,
     topicsEyebrow: "Current attention",
     topicsTitle: "What the archive keeps returning to",
     dimensionsEyebrow: "Dominant dimensions",
@@ -91,6 +95,10 @@ const copy = {
     sourceTop: "前 5 来源",
     sourceBreadth: "广度",
     sourceNoPattern: "还没有来源模式。",
+    appliedRulesEyebrow: "已应用本地规则",
+    appliedRulesTitle: "这次扫描被什么规则影响",
+    appliedRulesEmpty: "这次快照还没有应用已批准的本地规则。",
+    appliedRulesCount: (count) => `${count} 条已批准本地规则影响了这次快照。`,
     topicsEyebrow: "当前注意力",
     topicsTitle: "档案反复回到什么",
     dimensionsEyebrow: "主导维度",
@@ -150,6 +158,8 @@ const nodes = {
   clearButton: document.querySelector("#clearButton"),
   sourceLevel: document.querySelector("#sourceBalanceLevel"),
   sourceText: document.querySelector("#sourceBalanceText"),
+  appliedRulesSummary: document.querySelector("#appliedRulesSummary"),
+  appliedRuleList: document.querySelector("#appliedRuleList"),
   feedbackSummary: document.querySelector("#feedbackSummary"),
   feedbackCount: document.querySelector("#feedbackCount"),
   ruleList: document.querySelector("#ruleList"),
@@ -221,6 +231,7 @@ function renderSnapshot(snapshot) {
   setText("#reviewCount", formatNumber(snapshot.metrics.review));
 
   renderSourceBalance(snapshot.sourceBalance);
+  renderAppliedRules(snapshot.appliedRules);
   renderFeedbackStatus();
   renderRuleSuggestions();
   renderTopics(snapshot.topics);
@@ -248,6 +259,27 @@ function renderSourceBalance(sourceBalance) {
   nodes.sourceLevel.textContent = getSourceLevelLabel(note.level);
   nodes.sourceLevel.dataset.level = note.level;
   nodes.sourceText.textContent = `${formatSourceBalanceNote(note)} ${t("sourceTop")}: ${note.topFiveShare || 0}%. ${t("sourceBreadth")}: ${note.breadthShare || 0}%.`;
+}
+
+function renderAppliedRules(appliedRules) {
+  const items = Array.isArray(appliedRules?.items) ? appliedRules.items : [];
+  nodes.appliedRuleList.textContent = "";
+  nodes.appliedRulesSummary.textContent = items.length ? t("appliedRulesCount", items.length) : t("appliedRulesEmpty");
+
+  if (!items.length) {
+    nodes.appliedRuleList.append(createEmpty(t("appliedRulesEmpty")));
+    return;
+  }
+
+  for (const item of items) {
+    const row = document.createElement("div");
+    row.className = "applied-rule-item";
+    row.innerHTML = `
+      <strong>${escapeHtml(localizeAnalysisLabel(item.label))}</strong>
+      <span>${escapeHtml(localizeAnalysisLabel(item.note || item.effect || item.ruleType))}</span>
+    `;
+    nodes.appliedRuleList.append(row);
+  }
 }
 
 function renderTopics(topics) {
@@ -529,6 +561,8 @@ function applyStaticCopy() {
   setText("#signalLabel", t("signals"));
   setText("#reviewLabel", t("review"));
   setText("#sourceBalanceLevel", t("sourceBalance"));
+  setText("#appliedRulesEyebrow", t("appliedRulesEyebrow"));
+  setText("#appliedRulesTitle", t("appliedRulesTitle"));
   setText("#topicsEyebrow", t("topicsEyebrow"));
   setText("#topicsTitle", t("topicsTitle"));
   setText("#dimensionsEyebrow", t("dimensionsEyebrow"));

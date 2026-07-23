@@ -65,7 +65,9 @@ const copy = {
     storageUnavailable: "Storage unavailable in this context.",
     optionsUnavailable: "Could not open settings in this context.",
     readingBookmarks: "Reading Chrome bookmarks...",
-    scanComplete: "Scan complete. Snapshot saved locally.",
+    scanComplete: (count) => count
+      ? `Scan complete. Snapshot saved locally with ${count} applied local rules.`
+      : "Scan complete. Snapshot saved locally.",
     readFailed: "Could not read bookmarks. Check extension permissions.",
     exportFirst: "Scan bookmarks before exporting.",
     exportStarted: "Snapshot export started. Keep the file local if it contains private bookmarks.",
@@ -75,7 +77,9 @@ const copy = {
     clearData: "Clear data",
     localData: "Local data",
     noLocalData: "No bookmark snapshot stored yet.",
-    storedLocalData: (count, domains) => `${count} bookmarks and ${domains} domains stored locally.`,
+    storedLocalData: (count, domains, rules) => Number(rules) > 0
+      ? `${count} bookmarks, ${domains} domains, and ${rules} applied local rules stored locally.`
+      : `${count} bookmarks and ${domains} domains stored locally.`,
     clearedData: "Extension snapshot cleared. Name and language settings were kept.",
     reportStorageUnavailable: "Could not open the extension report in this context."
   },
@@ -129,7 +133,9 @@ const copy = {
     storageUnavailable: "当前环境无法使用本地存储。",
     optionsUnavailable: "当前环境无法打开设置。",
     readingBookmarks: "正在读取 Chrome 书签...",
-    scanComplete: "扫描完成。快照已保存在本地。",
+    scanComplete: (count) => count
+      ? `扫描完成。快照已保存在本地，并应用了 ${count} 条本地规则。`
+      : "扫描完成。快照已保存在本地。",
     readFailed: "无法读取书签，请检查扩展权限。",
     exportFirst: "请先扫描书签再导出。",
     exportStarted: "快照导出已开始。文件包含私人书签时请保存在本地。",
@@ -139,7 +145,9 @@ const copy = {
     clearData: "清除数据",
     localData: "本地数据",
     noLocalData: "还没有保存书签快照。",
-    storedLocalData: (count, domains) => `本地已保存 ${count} 个书签、${domains} 个来源。`,
+    storedLocalData: (count, domains, rules) => Number(rules) > 0
+      ? `本地已保存 ${count} 个书签、${domains} 个来源，并应用了 ${rules} 条本地规则。`
+      : `本地已保存 ${count} 个书签、${domains} 个来源。`,
     clearedData: "扩展快照已清除。显示名和语言设置已保留。",
     reportStorageUnavailable: "当前环境无法打开扩展报告。"
   }
@@ -192,8 +200,12 @@ async function scanBookmarks() {
 
   try {
     const tree = await chrome.bookmarks.getTree();
+    const cached = await chrome.storage.local.get(["approvedRules"]);
     const records = flattenBookmarkTree(tree);
-    const snapshot = buildProfileSnapshot(records, { source: "chrome-extension-sidepanel" });
+    const snapshot = buildProfileSnapshot(records, {
+      source: "chrome-extension-sidepanel",
+      approvedRules: cached.approvedRules
+    });
 
     await chrome.storage.local.set({
       profileSnapshot: snapshot,
@@ -213,7 +225,7 @@ async function scanBookmarks() {
     setReportReady(true);
     setFlowStage("snapshotReady");
     updateLocalDataStatus();
-    setStatus(t("scanComplete"));
+    setStatus(t("scanComplete", getAppliedRuleCount(snapshot)));
   } catch (error) {
     console.error(error);
     setStatus(t("readFailed"));
@@ -544,7 +556,12 @@ function updateLocalDataStatus() {
   setText(
     "#localDataText",
     hasSnapshot
-      ? t("storedLocalData", formatNumber(currentSnapshot.metrics?.bookmarks), formatNumber(currentSnapshot.metrics?.domains))
+      ? t(
+          "storedLocalData",
+          formatNumber(currentSnapshot.metrics?.bookmarks),
+          formatNumber(currentSnapshot.metrics?.domains),
+          getAppliedRuleCount(currentSnapshot)
+        )
       : t("noLocalData")
   );
 }
@@ -621,6 +638,10 @@ function t(key, ...args) {
 
 function getSupportedLanguage(language) {
   return copy[language] ? language : defaultLanguage;
+}
+
+function getAppliedRuleCount(snapshot) {
+  return snapshot?.appliedRules?.appliedCount || 0;
 }
 
 function localizeAnalysisLabel(label) {

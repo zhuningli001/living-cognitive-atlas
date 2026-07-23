@@ -22,7 +22,7 @@ const copy = {
     noSnapshot: "No snapshot",
     noSnapshotDetail: "Scan bookmarks from the side panel first.",
     snapshotReady: "Snapshot ready",
-    snapshotDetail: (bookmarks, domains, feedback, rules) => `${bookmarks} bookmarks, ${domains} domains, ${feedback} feedback items, and ${rules} approved rules stored locally.`,
+    snapshotDetail: (bookmarks, domains, feedback, rules, applied) => `${bookmarks} bookmarks, ${domains} domains, ${feedback} feedback items, ${rules} approved rules, and ${applied} applied in the latest snapshot.`,
     export: "Export private snapshot",
     clear: "Clear local profile data",
     privacyEyebrow: "Privacy boundary",
@@ -72,7 +72,7 @@ const copy = {
     noSnapshot: "没有快照",
     noSnapshotDetail: "请先从侧边栏扫描书签。",
     snapshotReady: "快照已准备",
-    snapshotDetail: (bookmarks, domains, feedback, rules) => `本地已保存 ${bookmarks} 个书签、${domains} 个来源、${feedback} 条反馈、${rules} 条已批准规则。`,
+    snapshotDetail: (bookmarks, domains, feedback, rules, applied) => `本地已保存 ${bookmarks} 个书签、${domains} 个来源、${feedback} 条反馈、${rules} 条已批准规则，最新快照应用了 ${applied} 条。`,
     export: "导出私有快照",
     clear: "清除本地画像数据",
     privacyEyebrow: "隐私边界",
@@ -253,7 +253,8 @@ function renderSnapshotState() {
         formatNumber(currentSnapshot.metrics?.bookmarks),
         formatNumber(currentSnapshot.metrics?.domains),
         formatNumber(Object.keys(currentFeedback.items).length),
-        formatNumber(Object.keys(currentApprovedRules.items).length)
+        formatNumber(Object.keys(currentApprovedRules.items).length),
+        formatNumber(currentSnapshot.appliedRules?.appliedCount)
       )
     : t("noSnapshotDetail");
 }

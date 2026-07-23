@@ -71,7 +71,8 @@ Current progress:
 - Step 1 is implemented as `extension/options.html`.
 - Step 2 is implemented as minimal report feedback stored in `chrome.storage.local` under `profileFeedback`.
 - Step 3 is implemented as local rule approval stored under `approvedRules` and `ignoredRuleSuggestions`.
-- Step 4 is the next P0 loop.
+- Step 4 is implemented by applying matching approved rules during extension scans and recording `snapshot.appliedRules`.
+- Step 5 is the next P0 loop.
 
 ### Step 1: Stabilize settings
 
