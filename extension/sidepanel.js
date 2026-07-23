@@ -14,13 +14,6 @@ const flowSteps = {
   report: document.querySelector("#flowStepReport"),
   import: document.querySelector("#flowStepImport")
 };
-const testerSteps = {
-  scan: document.querySelector("#testerStepScan"),
-  report: document.querySelector("#testerStepReport"),
-  feedback: document.querySelector("#testerStepFeedback"),
-  rules: document.querySelector("#testerStepRules"),
-  reset: document.querySelector("#testerStepReset")
-};
 const staleSnapshotDays = 7;
 
 const copy = {
@@ -29,24 +22,24 @@ const copy = {
     title: (ownerName) => `${ownerName}'s Bookmark`,
     localBoundary: "Read-only, local-first. No network calls.",
     settings: "Settings",
-    flowEyebrow: "Local setup",
-    flowTitleEmpty: "Start with a read-only scan",
-    flowTitleReady: "Snapshot ready for the report",
-    flowTitleOpened: "Report opened",
-    flowTitleImported: "Report opened",
+    flowEyebrow: "What this does",
+    flowTitleEmpty: "Turn bookmarks into a personal portrait",
+    flowTitleReady: "Your portrait is ready to explore",
+    flowTitleOpened: "Keep refining what feels true",
+    flowTitleImported: "Keep refining what feels true",
     flowScanTitle: "Scan",
-    flowScanBody: "Read bookmark titles, URLs, folders, and dates.",
-    flowReportTitle: "Report",
-    flowReportBody: "Open the full extension report when ready.",
-    flowImportTitle: "Review",
-    flowImportBody: "Use the report without leaving local storage.",
+    flowScanBody: "Read your bookmark titles, URLs, folders, and saved dates.",
+    flowReportTitle: "See portrait",
+    flowReportBody: "Get your profile line, keywords, growth path, and dimensions.",
+    flowImportTitle: "Refine",
+    flowImportBody: "Confirm what fits, remove what feels wrong, then open the larger board.",
     scan: "Scan bookmarks",
     scanning: "Scanning...",
     export: "Export snapshot",
     fullReport: "Open full report",
     profile: "Profile",
-    waiting: "Waiting for first scan",
-    waitingSummary: "Open the side panel and scan Chrome bookmarks to build a compact personal dashboard.",
+    waiting: "See what your saved attention says about you",
+    waitingSummary: "Scan your Chrome bookmarks to reveal a compact portrait: profile line, keywords, growth path, and information dimensions.",
     bookmarks: "Bookmarks",
     domains: "Domains",
     signals: "Signals",
@@ -93,38 +86,31 @@ const copy = {
     clearedData: "Extension snapshot cleared. Name and language settings were kept.",
     reportStorageUnavailable: "Could not open the extension report in this context.",
     staleWarningTitle: "Refresh recommended",
-    staleWarningBody: "This snapshot is older than 7 days. Scan again before sharing test feedback.",
-    testerLabel: "Tester loop",
-    testerTitle: "Can the local profile loop complete?",
-    testerStepScan: "Scan bookmarks",
-    testerStepReport: "Open report",
-    testerStepFeedback: "Confirm keywords",
-    testerStepRules: "Approve memory rule",
-    testerStepReset: "Know reset path"
+    staleWarningBody: "This snapshot is older than 7 days. Scan again for a fresher portrait."
   },
   zh: {
     titleFallback: "你的书签",
     title: (ownerName) => `${ownerName} 的书签`,
     localBoundary: "只读、本地优先，不发送网络请求。",
     settings: "设置",
-    flowEyebrow: "本地设置",
-    flowTitleEmpty: "先进行只读扫描",
-    flowTitleReady: "快照已准备好进入报告",
-    flowTitleOpened: "报告已打开",
-    flowTitleImported: "报告已打开",
+    flowEyebrow: "它能帮你做什么",
+    flowTitleEmpty: "把书签变成你的个人认知画像",
+    flowTitleReady: "你的画像已经生成，可以开始浏览",
+    flowTitleOpened: "继续校准，让画像更贴近你",
+    flowTitleImported: "继续校准，让画像更贴近你",
     flowScanTitle: "扫描",
-    flowScanBody: "读取书签标题、URL、文件夹和保存日期。",
-    flowReportTitle: "报告",
-    flowReportBody: "准备好后打开扩展内完整报告。",
-    flowImportTitle: "查看",
-    flowImportBody: "不离开本地存储即可使用报告。",
+    flowScanBody: "只读读取书签标题、URL、文件夹和保存日期。",
+    flowReportTitle: "看画像",
+    flowReportBody: "看到一句定位、关键词、成长路径和信息维度。",
+    flowImportTitle: "校准",
+    flowImportBody: "确认符合的部分，去掉不准确的，再打开完整看板。",
     scan: "扫描书签",
     scanning: "扫描中...",
     export: "导出快照",
     fullReport: "打开完整报告",
     profile: "画像",
-    waiting: "等待首次扫描",
-    waitingSummary: "打开侧边栏并扫描 Chrome 书签，生成一个轻量个人看板。",
+    waiting: "看看你保存的注意力正在描绘什么",
+    waitingSummary: "扫描 Chrome 书签后，这里会生成一句画像定位、关键词、成长路径和信息维度。",
     bookmarks: "书签",
     domains: "来源",
     signals: "信号",
@@ -171,14 +157,7 @@ const copy = {
     clearedData: "扩展快照已清除。显示名和语言设置已保留。",
     reportStorageUnavailable: "当前环境无法打开扩展报告。",
     staleWarningTitle: "建议刷新",
-    staleWarningBody: "这个快照已超过 7 天。分享测试反馈前建议重新扫描。",
-    testerLabel: "测试闭环",
-    testerTitle: "本地画像流程是否已走通？",
-    testerStepScan: "扫描书签",
-    testerStepReport: "打开报告",
-    testerStepFeedback: "确认关键词",
-    testerStepRules: "批准记忆规则",
-    testerStepReset: "知道如何重置"
+    staleWarningBody: "这个快照已超过 7 天。建议重新扫描，获得更新的画像。"
   }
 };
 
@@ -187,9 +166,6 @@ let currentLanguage = defaultLanguage;
 let currentOwnerName = "";
 let currentFlowStage = "empty";
 let currentReportHandoffState = null;
-let currentProfileFeedback = null;
-let currentApprovedRules = null;
-let currentLastLocalClearAt = null;
 
 scanButton.addEventListener("click", scanBookmarks);
 exportButton.addEventListener("click", exportSnapshot);
@@ -205,17 +181,11 @@ async function loadCachedSnapshot() {
       "profileSnapshot",
       "ownerName",
       "preferredLanguage",
-      "reportHandoffState",
-      "profileFeedback",
-      "approvedRules",
-      "lastLocalClearAt"
+      "reportHandoffState"
     ]);
     setLanguage(cached.preferredLanguage || defaultLanguage);
     setOwnerName(cached.ownerName || defaultOwnerName);
     currentReportHandoffState = cached.reportHandoffState || null;
-    currentProfileFeedback = cached.profileFeedback || null;
-    currentApprovedRules = cached.approvedRules || null;
-    currentLastLocalClearAt = cached.lastLocalClearAt || null;
     applyStaticCopy();
 
     if (cached.profileSnapshot) {
@@ -231,12 +201,10 @@ async function loadCachedSnapshot() {
 
     updateLocalDataStatus();
     updateStaleWarning();
-    updateTesterChecklist();
   } catch {
     applyStaticCopy();
     updateLocalDataStatus();
     updateStaleWarning();
-    updateTesterChecklist();
     setStatus(t("storageUnavailable"), "error");
   }
 }
@@ -248,7 +216,6 @@ async function scanBookmarks() {
   try {
     const tree = await chrome.bookmarks.getTree();
     const cached = await chrome.storage.local.get(["approvedRules"]);
-    currentApprovedRules = cached.approvedRules || null;
     const records = flattenBookmarkTree(tree);
     const snapshot = buildProfileSnapshot(records, {
       source: "chrome-extension-sidepanel",
@@ -274,7 +241,6 @@ async function scanBookmarks() {
     setFlowStage("snapshotReady");
     updateLocalDataStatus();
     updateStaleWarning();
-    updateTesterChecklist();
     setStatus(t("scanComplete", getAppliedRuleCount(snapshot)), "success");
   } catch (error) {
     console.error(error);
@@ -348,9 +314,6 @@ async function clearExtensionData() {
     await chrome.storage.local.set({ lastLocalClearAt: clearedAt });
     currentSnapshot = null;
     currentReportHandoffState = null;
-    currentProfileFeedback = null;
-    currentApprovedRules = null;
-    currentLastLocalClearAt = clearedAt;
     setExportReady(false);
     setReportReady(false);
     setFlowStage("empty");
@@ -358,7 +321,6 @@ async function clearExtensionData() {
     resetSnapshotUi();
     updateLocalDataStatus();
     updateStaleWarning();
-    updateTesterChecklist();
     setStatus(t("clearedData"), "success");
   } catch {
     setStatus(t("storageUnavailable"), "error");
@@ -378,7 +340,6 @@ function handleStorageChange(changes, areaName) {
       resetSnapshotUi();
       updateLocalDataStatus();
       updateStaleWarning();
-      updateTesterChecklist();
       return;
     }
 
@@ -387,7 +348,6 @@ function handleStorageChange(changes, areaName) {
     setReportReady(true);
     updateLocalDataStatus();
     updateStaleWarning();
-    updateTesterChecklist();
   }
 
   if (changes.reportHandoffState) {
@@ -396,7 +356,6 @@ function handleStorageChange(changes, areaName) {
       setFlowStage(getSnapshotFlowStage(currentSnapshot));
       if (currentReportHandoffState?.status === "imported") setStatus(t("reportImported"), "success");
     }
-    updateTesterChecklist();
   }
 
   if (changes.ownerName) {
@@ -408,22 +367,6 @@ function handleStorageChange(changes, areaName) {
     applyStaticCopy();
     if (currentSnapshot) renderSnapshot(currentSnapshot);
     updateStaleWarning();
-    updateTesterChecklist();
-  }
-
-  if (changes.profileFeedback) {
-    currentProfileFeedback = changes.profileFeedback.newValue || null;
-    updateTesterChecklist();
-  }
-
-  if (changes.approvedRules) {
-    currentApprovedRules = changes.approvedRules.newValue || null;
-    updateTesterChecklist();
-  }
-
-  if (changes.lastLocalClearAt) {
-    currentLastLocalClearAt = changes.lastLocalClearAt.newValue || null;
-    updateTesterChecklist();
   }
 }
 
@@ -468,7 +411,6 @@ function renderSnapshot(snapshot) {
   renderCollections(snapshot.collections);
   renderReviewQueue(snapshot.reviewQueue.slice(0, 5));
   updateStaleWarning();
-  updateTesterChecklist();
 }
 
 function renderSourceBalance(sourceBalance) {
@@ -660,26 +602,6 @@ function updateStaleWarning() {
   setText("#staleWarningBody", t("staleWarningBody"));
 }
 
-function updateTesterChecklist() {
-  setText("#testerLabel", t("testerLabel"));
-  setText("#testerTitle", t("testerTitle"));
-  setText("#testerStepScanText", t("testerStepScan"));
-  setText("#testerStepReportText", t("testerStepReport"));
-  setText("#testerStepFeedbackText", t("testerStepFeedback"));
-  setText("#testerStepRulesText", t("testerStepRules"));
-  setText("#testerStepResetText", t("testerStepReset"));
-
-  setTesterStepState("scan", currentSnapshot ? "done" : "active");
-  setTesterStepState("report", currentReportHandoffState?.status === "imported" ? "done" : currentSnapshot ? "active" : "idle");
-  setTesterStepState("feedback", getFeedbackCount(currentProfileFeedback) > 0 ? "done" : currentSnapshot ? "active" : "idle");
-  setTesterStepState("rules", getApprovedRuleCount(currentApprovedRules) > 0 ? "done" : getFeedbackCount(currentProfileFeedback) > 0 ? "active" : "idle");
-  setTesterStepState("reset", currentLastLocalClearAt ? "done" : currentSnapshot ? "active" : "idle");
-}
-
-function setTesterStepState(key, state) {
-  if (testerSteps[key]) testerSteps[key].dataset.state = state;
-}
-
 function applyStaticCopy() {
   document.documentElement.lang = currentLanguage === "zh" ? "zh-CN" : "en";
   setStatus(t("localBoundary"), "info");
@@ -712,7 +634,6 @@ function applyStaticCopy() {
   setText("#reviewQueueLabel", t("reviewQueue"));
   updateLocalDataStatus();
   updateStaleWarning();
-  updateTesterChecklist();
   renderFlowStage();
   setBusy(false);
   setOwnerName(currentOwnerName || defaultOwnerName);
@@ -758,18 +679,6 @@ function getSupportedLanguage(language) {
 
 function getAppliedRuleCount(snapshot) {
   return snapshot?.appliedRules?.appliedCount || 0;
-}
-
-function getApprovedRuleCount(rules) {
-  if (Array.isArray(rules?.items)) return rules.items.length;
-  if (rules?.items && typeof rules.items === "object") return Object.keys(rules.items).length;
-  return 0;
-}
-
-function getFeedbackCount(feedback) {
-  if (Array.isArray(feedback?.items)) return feedback.items.length;
-  if (feedback?.items && typeof feedback.items === "object") return Object.keys(feedback.items).length;
-  return 0;
 }
 
 function isSnapshotStale(snapshot) {
