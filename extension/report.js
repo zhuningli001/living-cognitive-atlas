@@ -38,19 +38,19 @@ const copy = {
     reviewTitle: "Items that need human confirmation",
     recordsEyebrow: "Evidence sample",
     recordsTitle: "Recent normalized records",
-    feedbackEyebrow: "Human feedback",
-    feedbackTitle: "Confirm the profile in plain words",
-    feedbackEmpty: "No feedback yet. Start with the key profile check below.",
-    feedbackCount: (count) => `${count} local corrections saved.`,
-    calibrationEyebrow: "Key profile check",
-    calibrationTitle: "Are these words accurate?",
-    calibrationSummary: "Start by confirming the strongest keywords. Each answer becomes a local rule suggestion.",
+    feedbackEyebrow: "Profile calibration",
+    feedbackTitle: "Your keyword choices",
+    feedbackEmpty: "No choices yet. Select the words that fit, feel too broad, or do not fit you.",
+    feedbackCount: (count) => `${count} keyword choices saved locally.`,
+    calibrationEyebrow: "Keyword portrait",
+    calibrationTitle: "Which words feel like you?",
+    calibrationSummary: "Based on your bookmark library, I generated a first keyword portrait. Choose what fits, what feels too broad, and what does not fit. It is okay if you are unsure.",
     calibrationKeywords: "Core keywords",
     calibrationDimensions: "Profile dimensions",
-    calibrationKeywordPrompt: (label, count) => `"${label}" appears as a recurring saved-attention keyword across ${count} links.`,
-    calibrationDimensionPrompt: (label, share) => `"${label}" appears as a dominant profile dimension at ${share}%.`,
-    feedbackAccurate: "Accurate",
-    feedbackWrong: "Wrong",
+    calibrationKeywordPrompt: (label, count) => `I see "${label}" as one recurring keyword in your saved links, across ${count} links.`,
+    calibrationDimensionPrompt: (label, share) => `I see "${label}" as one possible profile dimension, at ${share}%.`,
+    feedbackAccurate: "Fits",
+    feedbackWrong: "Not me",
     feedbackBroad: "Too broad",
     feedbackUseful: "Useful",
     feedbackNotUseful: "Not useful",
@@ -118,19 +118,19 @@ const copy = {
     reviewTitle: "需要人工确认的内容",
     recordsEyebrow: "证据样本",
     recordsTitle: "最近标准化记录",
-    feedbackEyebrow: "人工反馈",
-    feedbackTitle: "用直白关键词确认画像",
-    feedbackEmpty: "还没有反馈。先从下面的关键画像校准开始。",
-    feedbackCount: (count) => `已保存 ${count} 条本地修正。`,
-    calibrationEyebrow: "关键画像校准",
-    calibrationTitle: "这些词准不准？",
-    calibrationSummary: "先确认最强关键词。每一次回答都会变成本地规则建议。",
+    feedbackEyebrow: "画像校准",
+    feedbackTitle: "你的关键词选择",
+    feedbackEmpty: "还没有选择。请从下面选出符合你、太宽泛、或不符合你的词。",
+    feedbackCount: (count) => `已在本地保存 ${count} 个关键词选择。`,
+    calibrationEyebrow: "关键词画像",
+    calibrationTitle: "哪些词像你？",
+    calibrationSummary: "根据你的书签库，我先生成了一组关键词画像。请选择你觉得符合的、太宽泛的，或者完全不符合的。不确定也没关系，这本来就是一层校准。",
     calibrationKeywords: "核心关键词",
     calibrationDimensions: "画像维度",
-    calibrationKeywordPrompt: (label, count) => `系统认为「${label}」是你反复保存的关键注意力之一，覆盖 ${count} 条链接。`,
-    calibrationDimensionPrompt: (label, share) => `系统认为「${label}」是你的主导画像维度之一，占 ${share}%。`,
-    feedbackAccurate: "准确",
-    feedbackWrong: "错误",
+    calibrationKeywordPrompt: (label, count) => `我把「${label}」理解为你书签里反复出现的关键词之一，覆盖 ${count} 条链接。`,
+    calibrationDimensionPrompt: (label, share) => `我把「${label}」理解为一个可能的画像维度，占 ${share}%。`,
+    feedbackAccurate: "符合",
+    feedbackWrong: "不符合",
     feedbackBroad: "太宽泛",
     feedbackUseful: "有用",
     feedbackNotUseful: "没用",
@@ -353,14 +353,7 @@ function renderTopics(topics) {
   }
 
   for (const topic of topics) {
-    node.append(
-      createFeedbackItem({
-        type: "topic",
-        label: topic.label,
-        meta: `${topic.count} ${t("linkUnit")}`,
-        actions: ["accurate", "too_broad", "wrong"]
-      })
-    );
+    node.append(createSignalItem(topic.label, `${topic.count} ${t("linkUnit")}`));
   }
 }
 
@@ -370,14 +363,12 @@ function renderDimensions(dimensions) {
   for (const dimension of dimensions) {
     const row = document.createElement("div");
     row.className = "bar-row";
-    const selected = getFeedbackValue(getFeedbackTargetId("dimension", dimension.label));
     row.innerHTML = `
       <div>
         <span>${escapeHtml(localizeAnalysisLabel(dimension.label))}</span>
         <strong>${dimension.share}%</strong>
       </div>
       <div class="bar-track"><span style="width: ${dimension.share}%"></span></div>
-      ${renderFeedbackButtons("dimension", dimension.label, ["accurate", "wrong"], selected)}
     `;
     node.append(row);
   }
@@ -404,14 +395,7 @@ function renderCollections(collections) {
   const node = document.querySelector("#collectionList");
   node.textContent = "";
   for (const collection of collections) {
-    node.append(
-      createFeedbackItem({
-        type: "collection",
-        label: collection.label,
-        meta: `${collection.count} ${t("linkUnit")}`,
-        actions: ["useful", "not_useful"]
-      })
-    );
+    node.append(createSignalItem(collection.label, `${collection.count} ${t("linkUnit")}`));
   }
 }
 
@@ -650,8 +634,7 @@ function applyStaticCopy() {
   document.querySelector("#emptyState p:last-child").textContent = t("emptyBody");
 }
 
-function createFeedbackItem({ type, label, meta, actions }) {
-  const selected = getFeedbackValue(getFeedbackTargetId(type, label));
+function createSignalItem(label, meta) {
   const item = document.createElement("div");
   item.className = "feedback-item";
   item.innerHTML = `
@@ -659,7 +642,6 @@ function createFeedbackItem({ type, label, meta, actions }) {
       <strong>${escapeHtml(localizeAnalysisLabel(label))}</strong>
       <span>${escapeHtml(meta)}</span>
     </div>
-    ${renderFeedbackButtons(type, label, actions, selected)}
   `;
   return item;
 }

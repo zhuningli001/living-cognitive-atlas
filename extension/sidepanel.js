@@ -761,11 +761,15 @@ function getAppliedRuleCount(snapshot) {
 }
 
 function getApprovedRuleCount(rules) {
-  return Array.isArray(rules?.items) ? rules.items.length : 0;
+  if (Array.isArray(rules?.items)) return rules.items.length;
+  if (rules?.items && typeof rules.items === "object") return Object.keys(rules.items).length;
+  return 0;
 }
 
 function getFeedbackCount(feedback) {
-  return Array.isArray(feedback?.items) ? feedback.items.length : 0;
+  if (Array.isArray(feedback?.items)) return feedback.items.length;
+  if (feedback?.items && typeof feedback.items === "object") return Object.keys(feedback.items).length;
+  return 0;
 }
 
 function isSnapshotStale(snapshot) {
