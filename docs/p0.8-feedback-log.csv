@@ -1,0 +1,4 @@
+tester_id,completed_at,installed,scanned,opened_report,marked_feedback,approved_rule,rescanned,cleared_data,privacy_clear,storage_clear,side_panel_rating,profile_quality_rating,learning_loop_rating,score,blocker,next_action,notes
+T1,,no,no,no,no,no,no,no,unknown,unknown,,,,0,,,
+T2,,no,no,no,no,no,no,no,unknown,unknown,,,,0,,,
+T3,,no,no,no,no,no,no,no,unknown,unknown,,,,0,,,

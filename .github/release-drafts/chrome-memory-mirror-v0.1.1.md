@@ -7,6 +7,7 @@ Chrome Memory Mirror is still an unpacked Chrome extension MVP. It is not a Chro
 ## Assets to attach
 
 - `chrome-memory-mirror-v0.1.1-unpacked.zip`
+- `chrome-memory-mirror-v0.1.1-unpacked-operator-kit.zip`
 - `chrome-memory-mirror-v0.1.1-unpacked-manifest-summary.json`
 - `chrome-memory-mirror-v0.1.1-unpacked-checksums.txt`
 
@@ -63,4 +64,4 @@ Useful feedback:
 
 ## Pass condition
 
-This release is successful if 3-5 testers can install, scan, inspect, correct, approve a rule, clear local data, and submit structured feedback without developer help.
+This release is successful if at least 3 testers complete the loop with score `2`, or if blockers are specific enough to define the next P0 fix.

@@ -99,6 +99,6 @@ Choose one:
 - Privacy risk:
 - Files or surfaces likely affected:
 
-## P0.7 pass condition
+## P0.8 pass condition
 
-P0.7 passes when the team can invite testers, ship a package, collect structured feedback, and decide the next loop from evidence rather than taste.
+P0.8 passes when at least 3 testers complete the loop with score `2`, or when the blockers are specific enough to define the next P0 fix.

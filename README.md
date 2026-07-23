@@ -45,6 +45,7 @@ See:
 - `docs/tester-invitation.md`
 - `docs/external-feedback-form-schema.md`
 - `docs/test-cohort-retrospective.md`
+- `docs/p0.8-test-execution-runbook.md`
 - `docs/privacy-policy-draft.md`
 - `docs/taxonomy-v2.md`
 
@@ -150,12 +151,21 @@ Use different platforms for different validation stages:
 - Discord, Slack, or Circle: a small recurring tester group that can share screenshots and weekly feedback.
 - Product Hunt, Reddit, or Hacker News: broader positioning validation only after the extension-only loop is stable.
 
-P0.7 testing materials:
+P0.8 testing materials:
 
 - Release draft: `.github/release-drafts/chrome-memory-mirror-v0.1.1.md`
 - Invitation copy: `docs/tester-invitation.md`
 - Feedback form schema: `docs/external-feedback-form-schema.md`
 - Cohort retrospective: `docs/test-cohort-retrospective.md`
+- Execution runbook: `docs/p0.8-test-execution-runbook.md`
+- Cohort tracker: `docs/p0.8-cohort-tracker.csv`
+- Feedback log: `docs/p0.8-feedback-log.csv`
+
+After filling the feedback log, summarize the cohort:
+
+```bash
+npm run summarize-cohort
+```
 
 ## Generated data
 

@@ -1,8 +1,8 @@
 # External Test Release Notes
 
-## 0.1.1 - P0.7 small cohort release readiness
+## 0.1.1 - P0.8 small cohort execution
 
-This release is for the first 3-5 person external testing round. It is still an unpacked Chrome extension MVP, not a Chrome Web Store release.
+This release is for executing the first 3-5 person external testing round. It is still an unpacked Chrome extension MVP, not a Chrome Web Store release.
 
 ### What to test
 
@@ -25,6 +25,9 @@ This release is for the first 3-5 person external testing round. It is still an 
 - Added tester invitation copy for a small external cohort.
 - Added a feedback form schema for Tally, Google Forms, or Notion Forms.
 - Added a cohort retrospective template for deciding the next loop from evidence.
+- Added `docs/p0.8-test-execution-runbook.md`, cohort tracker CSV, and feedback log CSV.
+- Added `npm run summarize-cohort` to turn the feedback log into a decision summary.
+- The package command now creates an operator kit for the person running the cohort.
 
 ### Privacy boundary
 
@@ -42,4 +45,4 @@ This release is for the first 3-5 person external testing round. It is still an 
 
 ### Pass condition
 
-P0.7 passes when 3-5 testers can receive the package, complete the scan-to-report-to-feedback loop, submit structured feedback, and leave enough evidence to decide whether the next loop should keep, simplify, deepen, fix, or remove.
+P0.8 passes when 3-5 testers complete the loop or reveal specific blockers, and the team can use the cohort summary to decide whether the next loop should keep, simplify, deepen, fix, or remove.

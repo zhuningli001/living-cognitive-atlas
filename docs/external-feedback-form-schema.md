@@ -110,4 +110,4 @@ Use a simple 0-2 score per tester:
 - 1: completed scan/report but did not understand correction or trust boundary
 - 2: completed scan/report/feedback/rule/reset and could explain the local privacy boundary
 
-P0.7 passes if at least 3 testers score 2, or if blockers are specific enough to define the next P0 fix.
+P0.8 passes if at least 3 testers score 2, or if blockers are specific enough to define the next P0 fix.

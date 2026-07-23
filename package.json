@@ -9,7 +9,8 @@
     "start": "next start",
     "audit-taxonomy": "node scripts/audit-taxonomy.js",
     "package-extension": "node scripts/package-extension.js",
-    "parse-bookmarks": "node scripts/parse-bookmarks.js"
+    "parse-bookmarks": "node scripts/parse-bookmarks.js",
+    "summarize-cohort": "node scripts/summarize-cohort-feedback.js"
   },
   "dependencies": {
     "motion": "^12.42.2",

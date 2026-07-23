@@ -66,4 +66,4 @@ Use the `Extension test feedback` issue template. Do not paste private bookmark 
 
 ## Pass condition
 
-P0.6 passes when a tester can install the packaged unpacked extension, scan, inspect, correct, approve a rule, and clear local data without developer help or a local web server.
+P0.8 passes when testers can install the packaged unpacked extension, scan, inspect, correct, approve a rule, clear local data, and submit enough feedback for the next loop decision.

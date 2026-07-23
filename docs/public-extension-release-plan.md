@@ -34,6 +34,8 @@ Completed in the public-style prototype:
 - GitHub Issues includes an `Extension test feedback` template for structured tester reports.
 - `.github/release-drafts/chrome-memory-mirror-v0.1.1.md` provides the first small-cohort GitHub Release draft.
 - `docs/tester-invitation.md`, `docs/external-feedback-form-schema.md`, and `docs/test-cohort-retrospective.md` define invite, feedback, and review materials for the first 3-5 testers.
+- `docs/p0.8-test-execution-runbook.md`, `docs/p0.8-cohort-tracker.csv`, and `docs/p0.8-feedback-log.csv` define the first live cohort execution loop.
+- `npm run summarize-cohort` turns the P0.8 feedback log into a decision summary.
 - The manifest no longer declares localhost content-script matches.
 
 Remaining productization work:
@@ -82,8 +84,8 @@ Can a new user trust the extension, understand the portrait, correct obvious mis
 P0:
 
 - Verify every user-visible extension string supports English and Chinese after each release candidate.
-- Run the P0.7 small-cohort test with 3-5 invited testers.
-- Use `docs/test-cohort-retrospective.md` to decide the next loop from evidence.
+- Run the P0.8 small-cohort test with 3-5 invited testers.
+- Use `npm run summarize-cohort` and `docs/test-cohort-retrospective.md` to decide the next loop from evidence.
 
 P1:
 
@@ -154,6 +156,8 @@ The command creates:
 - `dist/chrome-memory-mirror-v0.1.1-unpacked.zip` when the system `zip` command is available
 - `dist/chrome-memory-mirror-v0.1.1-unpacked-manifest-summary.json`
 - `dist/chrome-memory-mirror-v0.1.1-unpacked-checksums.txt`
+- `dist/chrome-memory-mirror-v0.1.1-unpacked-operator-kit/`
+- `dist/chrome-memory-mirror-v0.1.1-unpacked-operator-kit.zip` when the system `zip` command is available
 
 ## Permissions
 

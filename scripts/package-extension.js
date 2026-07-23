@@ -12,6 +12,15 @@ const manifestPath = path.join(extensionDir, "manifest.json");
 const packageJsonPath = path.join(repoRoot, "package.json");
 const releaseNotesPath = path.join(repoRoot, "docs", "external-test-release-notes.md");
 const checklistPath = path.join(repoRoot, "docs", "external-tester-checklist.md");
+const operatorFiles = [
+  ["docs/p0.8-test-execution-runbook.md", "P0.8_RUNBOOK.md"],
+  ["docs/p0.8-cohort-tracker.csv", "p0.8-cohort-tracker.csv"],
+  ["docs/p0.8-feedback-log.csv", "p0.8-feedback-log.csv"],
+  ["docs/tester-invitation.md", "TESTER_INVITATION.md"],
+  ["docs/external-feedback-form-schema.md", "FEEDBACK_FORM_SCHEMA.md"],
+  ["docs/test-cohort-retrospective.md", "COHORT_RETROSPECTIVE.md"],
+  [".github/release-drafts/chrome-memory-mirror-v0.1.1.md", "GITHUB_RELEASE_DRAFT.md"]
+];
 const allowedExtensionFiles = [
   "manifest.json",
   "background.js",
@@ -50,11 +59,17 @@ async function main() {
   }
 
   const bundleName = `chrome-memory-mirror-v${version}-unpacked`;
+  const operatorKitName = `${bundleName}-operator-kit`;
   const bundleDir = path.join(distDir, bundleName);
+  const operatorKitDir = path.join(distDir, operatorKitName);
   const zipPath = path.join(distDir, `${bundleName}.zip`);
+  const operatorZipPath = path.join(distDir, `${operatorKitName}.zip`);
+  const manifestSummaryPath = path.join(distDir, `${bundleName}-manifest-summary.json`);
 
   await fs.rm(bundleDir, { recursive: true, force: true });
+  await fs.rm(operatorKitDir, { recursive: true, force: true });
   await fs.mkdir(bundleDir, { recursive: true });
+  await fs.mkdir(operatorKitDir, { recursive: true });
 
   for (const fileName of allowedExtensionFiles) {
     await fs.copyFile(path.join(extensionDir, fileName), path.join(bundleDir, fileName));
@@ -64,21 +79,30 @@ async function main() {
   await fs.copyFile(releaseNotesPath, path.join(bundleDir, "RELEASE_NOTES.md"));
   await fs.copyFile(checklistPath, path.join(bundleDir, "TESTER_CHECKLIST.md"));
   await fs.writeFile(
-    path.join(distDir, `${bundleName}-manifest-summary.json`),
+    manifestSummaryPath,
     `${JSON.stringify(createManifestSummary(manifest), null, 2)}\n`,
     "utf8"
   );
+  await createOperatorKit(operatorKitDir);
 
   const zipResult = await createZip(bundleName, zipPath);
-  const checksumFiles = zipResult.created ? [zipPath] : [];
+  const operatorZipResult = await createZip(operatorKitName, operatorZipPath);
+  const checksumFiles = [manifestSummaryPath];
+  if (zipResult.created) checksumFiles.push(zipPath);
+  if (operatorZipResult.created) checksumFiles.push(operatorZipPath);
   checksumFiles.push(...await listFiles(bundleDir));
+  checksumFiles.push(...await listFiles(operatorKitDir));
   await fs.writeFile(path.join(distDir, `${bundleName}-checksums.txt`), await createChecksums(checksumFiles), "utf8");
 
   console.log(`Extension test package created: ${path.relative(repoRoot, bundleDir)}`);
+  console.log(`Operator kit created: ${path.relative(repoRoot, operatorKitDir)}`);
   if (zipResult.created) {
     console.log(`Zip archive created: ${path.relative(repoRoot, zipPath)}`);
   } else {
     console.log("Zip archive skipped: system zip command is unavailable.");
+  }
+  if (operatorZipResult.created) {
+    console.log(`Operator kit zip created: ${path.relative(repoRoot, operatorZipPath)}`);
   }
 }
 
@@ -129,6 +153,29 @@ async function listFiles(directory) {
     return entry.isDirectory() ? listFiles(entryPath) : [entryPath];
   }));
   return files.flat();
+}
+
+async function createOperatorKit(operatorKitDir) {
+  for (const [source, target] of operatorFiles) {
+    await fs.copyFile(path.join(repoRoot, source), path.join(operatorKitDir, target));
+  }
+
+  await fs.writeFile(
+    path.join(operatorKitDir, "README.md"),
+    `# Chrome Memory Mirror P0.8 Operator Kit
+
+Use this folder to run the first 3-5 person external test.
+
+Start with \`P0.8_RUNBOOK.md\`, track invitations in \`p0.8-cohort-tracker.csv\`, record results in \`p0.8-feedback-log.csv\`, then run:
+
+\`\`\`bash
+npm run summarize-cohort -- dist/chrome-memory-mirror-v0.1.1-unpacked-operator-kit/p0.8-feedback-log.csv
+\`\`\`
+
+Do not collect private bookmark URLs, exported snapshots, personal folder names, or screenshots with sensitive bookmarks.
+`,
+    "utf8"
+  );
 }
 
 async function createChecksums(filePaths) {

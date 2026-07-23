@@ -165,6 +165,14 @@ Implemented P0.7:
 - `docs/external-feedback-form-schema.md` provides a structured external feedback form schema.
 - `docs/test-cohort-retrospective.md` provides the post-test review template and next-loop decision frame.
 
+Implemented P0.8:
+
+- `docs/p0.8-test-execution-runbook.md` defines the live 3-5 tester execution schedule.
+- `docs/p0.8-cohort-tracker.csv` tracks invitations and completion channels.
+- `docs/p0.8-feedback-log.csv` captures structured tester outcomes without private bookmark data.
+- `npm run summarize-cohort` turns the feedback log into a P0.8 decision summary.
+- `npm run package-extension` now also creates a P0.8 operator kit under `dist/`.
+
 ## Review method
 
 After each step, record:

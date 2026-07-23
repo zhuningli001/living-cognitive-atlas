@@ -1,0 +1,6 @@
+tester_id,status,invited_at,package_sent_at,reminder_sent_at,completed_at,feedback_channel,notes
+T1,not_invited,,,,,github_issue,
+T2,not_invited,,,,,github_issue,
+T3,not_invited,,,,,github_issue,
+T4,optional,,,,,form,
+T5,optional,,,,,form,
