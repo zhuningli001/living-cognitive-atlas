@@ -158,6 +158,13 @@ Implemented P0.6:
 - `docs/external-test-release-notes.md` records the current external test scope, known limits, and pass condition.
 - `.github/ISSUE_TEMPLATE/extension-test-feedback.yml` collects structured tester feedback without asking for private bookmark data.
 
+Implemented P0.7:
+
+- `.github/release-drafts/chrome-memory-mirror-v0.1.1.md` provides the GitHub Release draft for the first external cohort.
+- `docs/tester-invitation.md` provides tester invitation and follow-up copy.
+- `docs/external-feedback-form-schema.md` provides a structured external feedback form schema.
+- `docs/test-cohort-retrospective.md` provides the post-test review template and next-loop decision frame.
+
 ## Review method
 
 After each step, record:

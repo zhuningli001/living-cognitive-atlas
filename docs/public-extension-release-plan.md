@@ -32,6 +32,8 @@ Completed in the public-style prototype:
 - `Clear data` now asks for confirmation before removing local snapshot, feedback, and approved rules.
 - `npm run package-extension` creates a local external tester package under `dist/` after validating the permission boundary.
 - GitHub Issues includes an `Extension test feedback` template for structured tester reports.
+- `.github/release-drafts/chrome-memory-mirror-v0.1.1.md` provides the first small-cohort GitHub Release draft.
+- `docs/tester-invitation.md`, `docs/external-feedback-form-schema.md`, and `docs/test-cohort-retrospective.md` define invite, feedback, and review materials for the first 3-5 testers.
 - The manifest no longer declares localhost content-script matches.
 
 Remaining productization work:
@@ -80,7 +82,8 @@ Can a new user trust the extension, understand the portrait, correct obvious mis
 P0:
 
 - Verify every user-visible extension string supports English and Chinese after each release candidate.
-- Test the P0.6 packaged external-tester flow with at least one fresh Chrome profile.
+- Run the P0.7 small-cohort test with 3-5 invited testers.
+- Use `docs/test-cohort-retrospective.md` to decide the next loop from evidence.
 
 P1:
 
@@ -150,6 +153,7 @@ The command creates:
 - `dist/chrome-memory-mirror-v0.1.1-unpacked/`
 - `dist/chrome-memory-mirror-v0.1.1-unpacked.zip` when the system `zip` command is available
 - `dist/chrome-memory-mirror-v0.1.1-unpacked-manifest-summary.json`
+- `dist/chrome-memory-mirror-v0.1.1-unpacked-checksums.txt`
 
 ## Permissions
 

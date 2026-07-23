@@ -42,6 +42,9 @@ See:
 - `docs/public-extension-release-plan.md`
 - `docs/external-test-release-notes.md`
 - `docs/external-tester-checklist.md`
+- `docs/tester-invitation.md`
+- `docs/external-feedback-form-schema.md`
+- `docs/test-cohort-retrospective.md`
 - `docs/privacy-policy-draft.md`
 - `docs/taxonomy-v2.md`
 
@@ -146,6 +149,13 @@ Use different platforms for different validation stages:
 - Notion public page: readable product story, tester handbook, changelog, and known limitations.
 - Discord, Slack, or Circle: a small recurring tester group that can share screenshots and weekly feedback.
 - Product Hunt, Reddit, or Hacker News: broader positioning validation only after the extension-only loop is stable.
+
+P0.7 testing materials:
+
+- Release draft: `.github/release-drafts/chrome-memory-mirror-v0.1.1.md`
+- Invitation copy: `docs/tester-invitation.md`
+- Feedback form schema: `docs/external-feedback-form-schema.md`
+- Cohort retrospective: `docs/test-cohort-retrospective.md`
 
 ## Generated data
 

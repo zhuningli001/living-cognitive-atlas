@@ -1,4 +1,5 @@
 import { execFileSync } from "node:child_process";
+import { createHash } from "node:crypto";
 import { constants as fsConstants } from "node:fs";
 import fs from "node:fs/promises";
 import path from "node:path";
@@ -9,6 +10,8 @@ const extensionDir = path.join(repoRoot, "extension");
 const distDir = path.join(repoRoot, "dist");
 const manifestPath = path.join(extensionDir, "manifest.json");
 const packageJsonPath = path.join(repoRoot, "package.json");
+const releaseNotesPath = path.join(repoRoot, "docs", "external-test-release-notes.md");
+const checklistPath = path.join(repoRoot, "docs", "external-tester-checklist.md");
 const allowedExtensionFiles = [
   "manifest.json",
   "background.js",
@@ -58,6 +61,8 @@ async function main() {
   }
 
   await fs.writeFile(path.join(bundleDir, "TESTER_README.md"), createTesterReadme(manifest), "utf8");
+  await fs.copyFile(releaseNotesPath, path.join(bundleDir, "RELEASE_NOTES.md"));
+  await fs.copyFile(checklistPath, path.join(bundleDir, "TESTER_CHECKLIST.md"));
   await fs.writeFile(
     path.join(distDir, `${bundleName}-manifest-summary.json`),
     `${JSON.stringify(createManifestSummary(manifest), null, 2)}\n`,
@@ -65,6 +70,9 @@ async function main() {
   );
 
   const zipResult = await createZip(bundleName, zipPath);
+  const checksumFiles = zipResult.created ? [zipPath] : [];
+  checksumFiles.push(...await listFiles(bundleDir));
+  await fs.writeFile(path.join(distDir, `${bundleName}-checksums.txt`), await createChecksums(checksumFiles), "utf8");
 
   console.log(`Extension test package created: ${path.relative(repoRoot, bundleDir)}`);
   if (zipResult.created) {
@@ -112,6 +120,25 @@ async function createZip(bundleName, zipPath) {
   } catch {
     return { created: false };
   }
+}
+
+async function listFiles(directory) {
+  const entries = await fs.readdir(directory, { withFileTypes: true });
+  const files = await Promise.all(entries.map(async (entry) => {
+    const entryPath = path.join(directory, entry.name);
+    return entry.isDirectory() ? listFiles(entryPath) : [entryPath];
+  }));
+  return files.flat();
+}
+
+async function createChecksums(filePaths) {
+  const rows = [];
+  for (const filePath of filePaths) {
+    const content = await fs.readFile(filePath);
+    const hash = createHash("sha256").update(content).digest("hex");
+    rows.push(`${hash}  ${path.relative(distDir, filePath)}`);
+  }
+  return `${rows.sort().join("\n")}\n`;
 }
 
 function createManifestSummary(manifest) {
