@@ -151,6 +151,13 @@ Implemented P0.5:
 - The side panel warns when a stored snapshot is older than 7 days.
 - Clear-data in the side panel now requires confirmation and states that Chrome bookmarks are not changed.
 
+Implemented P0.6:
+
+- `npm run package-extension` creates a versioned unpacked extension package under `dist/`.
+- The package script validates the extension permission boundary before copying files.
+- `docs/external-test-release-notes.md` records the current external test scope, known limits, and pass condition.
+- `.github/ISSUE_TEMPLATE/extension-test-feedback.yml` collects structured tester feedback without asking for private bookmark data.
+
 ## Review method
 
 After each step, record:

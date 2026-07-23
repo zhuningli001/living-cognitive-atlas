@@ -1,6 +1,6 @@
 # External Tester Checklist
 
-Use this checklist for the first unpacked-extension testing round.
+Use this checklist for the first packaged unpacked-extension testing round.
 
 ## Test goal
 
@@ -25,10 +25,16 @@ install extension
 
 ## Install
 
+If you are preparing the package from the repository:
+
+```bash
+npm run package-extension
+```
+
 1. Open `chrome://extensions`.
 2. Enable `Developer mode`.
 3. Click `Load unpacked`.
-4. Select the local `extension/` folder from this repository.
+4. Select `dist/chrome-memory-mirror-v0.1.1-unpacked/` or the unpacked tester package folder you received.
 5. Open the `Chrome Memory Mirror` side panel.
 
 ## Test path
@@ -54,6 +60,10 @@ install extension
 - Could you explain where the data is stored?
 - Would you open the extension again after the first scan?
 
+## GitHub feedback
+
+Use the `Extension test feedback` issue template. Do not paste private bookmark URLs, exported snapshots, personal folder names, or screenshots that reveal sensitive bookmarks.
+
 ## Pass condition
 
-P0.5 passes when a tester can install, scan, inspect, correct, approve a rule, and clear local data without developer help or a local web server.
+P0.6 passes when a tester can install the packaged unpacked extension, scan, inspect, correct, approve a rule, and clear local data without developer help or a local web server.

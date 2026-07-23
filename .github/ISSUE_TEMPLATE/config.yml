@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Privacy and release boundary
+    url: https://github.com/zhuningli001/living-cognitive-atlas/blob/codex/mvp-chrome-memory-mirror/docs/public-extension-release-plan.md
+    about: Read the current MVP privacy and release notes before sharing feedback.

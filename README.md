@@ -40,6 +40,8 @@ See:
 - `docs/mvp-product-plan.md`
 - `docs/mvp-iteration-loop.md`
 - `docs/public-extension-release-plan.md`
+- `docs/external-test-release-notes.md`
+- `docs/external-tester-checklist.md`
 - `docs/privacy-policy-draft.md`
 - `docs/taxonomy-v2.md`
 
@@ -83,15 +85,21 @@ npm run dev
 
 ## Chrome extension local test
 
-1. Open `chrome://extensions`.
-2. Enable `Developer mode`.
-3. Click `Load unpacked`.
-4. Select the local `extension/` folder from this repository.
-5. Open the `Chrome Memory Mirror` side panel.
-6. Click `Scan bookmarks`.
-7. Click `Open full report`.
-8. Confirm the extension opens its built-in `report.html` page.
-9. Use the side-panel tester loop to confirm scan, report, feedback, rule, and reset progress.
+1. Package the extension:
+
+```bash
+npm run package-extension
+```
+
+2. Open `chrome://extensions`.
+3. Enable `Developer mode`.
+4. Click `Load unpacked`.
+5. Select the generated `dist/chrome-memory-mirror-v0.1.1-unpacked/` folder.
+6. Open the `Chrome Memory Mirror` side panel.
+7. Click `Scan bookmarks`.
+8. Click `Open full report`.
+9. Confirm the extension opens its built-in `report.html` page.
+10. Use the side-panel tester loop to confirm scan, report, feedback, rule, and reset progress.
 
 The extension MVP requests only:
 
@@ -112,7 +120,7 @@ Chrome Memory Mirror is a local-first prototype. Before using it with a real boo
 - The current taxonomy is an interpretable first-pass model, not a personality diagnosis.
 - The project is not yet a Chrome Web Store package; install it only as an unpacked local extension during MVP testing.
 
-For a fuller release checklist and privacy boundary, see `docs/public-extension-release-plan.md`, `docs/external-tester-checklist.md`, and `docs/privacy-policy-draft.md`.
+For a fuller release checklist and privacy boundary, see `docs/public-extension-release-plan.md`, `docs/external-test-release-notes.md`, `docs/external-tester-checklist.md`, and `docs/privacy-policy-draft.md`.
 
 ## MVP iteration method
 

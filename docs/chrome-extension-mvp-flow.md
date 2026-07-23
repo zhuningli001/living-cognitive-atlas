@@ -370,8 +370,10 @@ Stabilize the real Chrome extension experience before adding more profile comple
 
 P0 test checklist:
 
+- Run `npm run package-extension`.
+- Confirm the package script creates `dist/chrome-memory-mirror-v0.1.1-unpacked/`.
 - Open `chrome://extensions`.
-- Reload the unpacked `Chrome Memory Mirror` extension.
+- Load or reload the unpacked `Chrome Memory Mirror` extension from the generated package folder.
 - Open the extension side panel.
 - Confirm first-run state shows no profile metrics or analysis modules.
 - Confirm the setup tracker starts at `Scan`.

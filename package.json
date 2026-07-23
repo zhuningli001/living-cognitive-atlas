@@ -1,6 +1,6 @@
 {
   "name": "ningli-bookmark-living-cognitive-atlas",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "type": "module",
   "scripts": {
@@ -8,6 +8,7 @@
     "build": "next build",
     "start": "next start",
     "audit-taxonomy": "node scripts/audit-taxonomy.js",
+    "package-extension": "node scripts/package-extension.js",
     "parse-bookmarks": "node scripts/parse-bookmarks.js"
   },
   "dependencies": {

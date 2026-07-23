@@ -30,6 +30,8 @@ Completed in the public-style prototype:
 - The side panel now includes a small external-tester loop that reflects scan, report, feedback, rule, and reset progress.
 - The side panel warns when a stored snapshot is older than 7 days.
 - `Clear data` now asks for confirmation before removing local snapshot, feedback, and approved rules.
+- `npm run package-extension` creates a local external tester package under `dist/` after validating the permission boundary.
+- GitHub Issues includes an `Extension test feedback` template for structured tester reports.
 - The manifest no longer declares localhost content-script matches.
 
 Remaining productization work:
@@ -78,7 +80,7 @@ Can a new user trust the extension, understand the portrait, correct obvious mis
 P0:
 
 - Verify every user-visible extension string supports English and Chinese after each release candidate.
-- Test the P0.5 external-tester loop with at least one fresh Chrome profile.
+- Test the P0.6 packaged external-tester flow with at least one fresh Chrome profile.
 
 P1:
 
@@ -136,6 +138,18 @@ Before a public installable build:
 - Add versioned release notes.
 - Add a production manifest review checklist.
 - Verify no private bookmark data, local paths, or user-specific datasets are bundled.
+
+Current local package command:
+
+```bash
+npm run package-extension
+```
+
+The command creates:
+
+- `dist/chrome-memory-mirror-v0.1.1-unpacked/`
+- `dist/chrome-memory-mirror-v0.1.1-unpacked.zip` when the system `zip` command is available
+- `dist/chrome-memory-mirror-v0.1.1-unpacked-manifest-summary.json`
 
 ## Permissions
 

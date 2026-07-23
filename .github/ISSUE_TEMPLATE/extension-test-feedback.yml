@@ -1,0 +1,74 @@
+name: Extension test feedback
+description: Report first-run, scan, report, feedback, rule, or reset issues from the Chrome Memory Mirror MVP.
+title: "[Extension test]: "
+labels: ["extension-test", "mvp-feedback"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for testing Chrome Memory Mirror.
+
+        Please do not paste private bookmark URLs, exported snapshots, personal folder names, screenshots containing sensitive bookmarks, or other personal data.
+  - type: input
+    id: version
+    attributes:
+      label: Extension version
+      description: Find this in `extension/manifest.json` or the tester package name.
+      placeholder: "0.1.0"
+    validations:
+      required: true
+  - type: dropdown
+    id: browser
+    attributes:
+      label: Browser
+      options:
+        - Chrome stable
+        - Chrome beta/dev/canary
+        - Chromium-based browser
+    validations:
+      required: true
+  - type: checkboxes
+    id: completed-loop
+    attributes:
+      label: Completed steps
+      options:
+        - label: Installed the unpacked extension.
+        - label: Opened the side panel.
+        - label: Scanned bookmarks.
+        - label: Opened the built-in report.
+        - label: Marked feedback.
+        - label: Approved or ignored a suggested rule.
+        - label: Cleared local extension data.
+  - type: textarea
+    id: issue
+    attributes:
+      label: What happened?
+      description: Describe the moment of friction without including private bookmark data.
+      placeholder: "Example: After clicking Open full report, the report page opened but stayed in the empty state."
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What did you expect?
+      placeholder: "Example: I expected the report to show the latest side-panel snapshot."
+  - type: dropdown
+    id: privacy-boundary
+    attributes:
+      label: Did the privacy boundary feel clear?
+      options:
+        - Yes
+        - Partly
+        - No
+        - Not sure
+  - type: textarea
+    id: profile-quality
+    attributes:
+      label: Profile quality notes
+      description: Which signal felt accurate, wrong, too broad, or too confident? Avoid private URLs.
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment notes
+      description: Chrome version, OS, or extension loading detail if relevant.
+      placeholder: "macOS / Windows / Linux, Chrome version, fresh profile or daily profile"
