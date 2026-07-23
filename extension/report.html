@@ -17,6 +17,7 @@
         <div class="hero-actions">
           <button id="settingsButton" type="button">Settings</button>
           <button id="exportButton" type="button" disabled>Export snapshot</button>
+          <button id="dashboardButton" type="button" disabled>Open analysis dashboard</button>
           <button id="clearButton" type="button" disabled>Clear data</button>
         </div>
       </header>
@@ -49,6 +50,22 @@
       <section id="sourceBalance" class="source-card report-only" hidden>
         <span id="sourceBalanceLevel">Source balance</span>
         <p id="sourceBalanceText">No source pattern yet.</p>
+      </section>
+
+      <section id="dashboardBridge" class="dashboard-bridge report-only" hidden>
+        <div>
+          <p id="dashboardBridgeEyebrow" class="eyebrow">Full analysis dashboard</p>
+          <h2 id="dashboardBridgeTitle">Open the larger local board</h2>
+          <p id="dashboardBridgeSummary">The extension report is the lightweight plugin view. Export this snapshot, then import it into the local dashboard to see the larger analysis board.</p>
+        </div>
+        <ol class="dashboard-steps">
+          <li id="dashboardBridgeStepExport">Export current snapshot JSON.</li>
+          <li id="dashboardBridgeStepOpen">Open the local dashboard and choose that JSON file.</li>
+        </ol>
+        <div class="dashboard-actions">
+          <button id="dashboardExportButton" type="button">Export for dashboard</button>
+          <button id="dashboardOpenButton" type="button">Open local dashboard</button>
+        </div>
       </section>
 
       <section id="appliedRulesStatus" class="applied-rules-card report-only" hidden>

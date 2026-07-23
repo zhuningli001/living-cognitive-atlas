@@ -175,7 +175,8 @@ h2 {
 }
 
 .feedback-status,
-.applied-rules-card {
+.applied-rules-card,
+.dashboard-bridge {
   display: grid;
   gap: 16px;
   align-items: center;
@@ -193,12 +194,49 @@ h2 {
 }
 
 .feedback-status p:not(.eyebrow),
-.applied-rules-card p:not(.eyebrow) {
+.applied-rules-card p:not(.eyebrow),
+.dashboard-bridge p:not(.eyebrow) {
   margin-top: 10px;
   max-width: 740px;
   color: var(--muted);
   font-size: 14px;
   line-height: 1.6;
+}
+
+.dashboard-bridge {
+  background: rgba(156, 168, 143, 0.1);
+}
+
+.dashboard-steps {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding-left: 20px;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.dashboard-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.dashboard-actions button {
+  min-height: 38px;
+  border: 1px solid rgba(63, 90, 75, 0.25);
+  border-radius: 999px;
+  padding: 0 14px;
+  color: var(--pine);
+  background: rgba(255, 253, 248, 0.78);
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.dashboard-actions button:first-child {
+  color: #fff;
+  background: var(--pine);
 }
 
 .applied-rule-list {

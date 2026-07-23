@@ -10,6 +10,7 @@ const copy = {
     emptyBody: "After scanning, this page becomes a full local report. No server is required.",
     settings: "Settings",
     export: "Export snapshot",
+    dashboard: "Open analysis dashboard",
     clear: "Clear data",
     bookmarks: "Bookmarks",
     domains: "Domains",
@@ -22,6 +23,14 @@ const copy = {
     sourceTop: "Top 5",
     sourceBreadth: "Breadth",
     sourceNoPattern: "No source pattern yet.",
+    dashboardBridgeEyebrow: "Full analysis dashboard",
+    dashboardBridgeTitle: "Open the larger local board",
+    dashboardBridgeSummary: "The extension report is the lightweight plugin view. Export this snapshot, then import it into the local dashboard to see the larger analysis board.",
+    dashboardBridgeStepExport: "Export current snapshot JSON.",
+    dashboardBridgeStepOpen: "Open the local dashboard and choose that JSON file.",
+    dashboardExport: "Export for dashboard",
+    dashboardOpen: "Open local dashboard",
+    dashboardUrl: "http://localhost:3003/profile/import",
     appliedRulesEyebrow: "Applied local rules",
     appliedRulesTitle: "What shaped this scan",
     appliedRulesEmpty: "No approved local rules were applied to this snapshot.",
@@ -90,6 +99,7 @@ const copy = {
     emptyBody: "扫描后，这里会变成完整的本地报告。不需要服务器。",
     settings: "设置",
     export: "导出快照",
+    dashboard: "打开分析看板",
     clear: "清除数据",
     bookmarks: "书签",
     domains: "来源",
@@ -102,6 +112,14 @@ const copy = {
     sourceTop: "前 5 来源",
     sourceBreadth: "广度",
     sourceNoPattern: "还没有来源模式。",
+    dashboardBridgeEyebrow: "完整分析看板",
+    dashboardBridgeTitle: "打开更大的本地看板",
+    dashboardBridgeSummary: "插件报告是轻量视图。想看之前做的完整数据分析看板，请先导出当前快照，再在本地看板里导入这个 JSON。",
+    dashboardBridgeStepExport: "导出当前 snapshot JSON。",
+    dashboardBridgeStepOpen: "打开本地看板，并选择刚导出的 JSON 文件。",
+    dashboardExport: "导出给看板",
+    dashboardOpen: "打开本地看板",
+    dashboardUrl: "http://localhost:3003/profile/import",
     appliedRulesEyebrow: "已应用本地规则",
     appliedRulesTitle: "这次扫描被什么规则影响",
     appliedRulesEmpty: "这次快照还没有应用已批准的本地规则。",
@@ -169,6 +187,9 @@ const nodes = {
   emptyState: document.querySelector("#emptyState"),
   settingsButton: document.querySelector("#settingsButton"),
   exportButton: document.querySelector("#exportButton"),
+  dashboardButton: document.querySelector("#dashboardButton"),
+  dashboardExportButton: document.querySelector("#dashboardExportButton"),
+  dashboardOpenButton: document.querySelector("#dashboardOpenButton"),
   clearButton: document.querySelector("#clearButton"),
   sourceLevel: document.querySelector("#sourceBalanceLevel"),
   sourceText: document.querySelector("#sourceBalanceText"),
@@ -190,6 +211,9 @@ let currentIgnoredRuleSuggestions = createEmptyRuleStore("ignored-rule-suggestio
 
 nodes.settingsButton.addEventListener("click", openSettings);
 nodes.exportButton.addEventListener("click", exportSnapshot);
+nodes.dashboardButton.addEventListener("click", openLocalDashboard);
+nodes.dashboardExportButton.addEventListener("click", exportSnapshot);
+nodes.dashboardOpenButton.addEventListener("click", openLocalDashboard);
 nodes.clearButton.addEventListener("click", clearData);
 document.addEventListener("click", handleFeedbackClick);
 document.addEventListener("click", handleRuleClick);
@@ -236,6 +260,9 @@ function renderSnapshot(snapshot) {
   });
   nodes.emptyState.hidden = true;
   nodes.exportButton.disabled = false;
+  nodes.dashboardButton.disabled = false;
+  nodes.dashboardExportButton.disabled = false;
+  nodes.dashboardOpenButton.disabled = false;
   nodes.clearButton.disabled = false;
 
   nodes.title.textContent = snapshot.headline;
@@ -265,6 +292,9 @@ function renderEmpty() {
   });
   nodes.emptyState.hidden = false;
   nodes.exportButton.disabled = true;
+  nodes.dashboardButton.disabled = true;
+  nodes.dashboardExportButton.disabled = true;
+  nodes.dashboardOpenButton.disabled = true;
   nodes.clearButton.disabled = true;
   nodes.title.textContent = t("emptyTitle");
   nodes.summary.textContent = t("emptySummary");
@@ -445,6 +475,15 @@ function exportSnapshot() {
   URL.revokeObjectURL(url);
 }
 
+async function openLocalDashboard() {
+  const url = t("dashboardUrl");
+  try {
+    await chrome.tabs.create({ url });
+  } catch {
+    window.open(url, "_blank", "noopener,noreferrer");
+  }
+}
+
 async function handleFeedbackClick(event) {
   const button = event.target.closest("[data-feedback-action]");
   if (!button || !currentSnapshot) return;
@@ -601,12 +640,20 @@ function applyStaticCopy() {
   setText("#reportEyebrow", t("eyebrow"));
   setText("#settingsButton", t("settings"));
   setText("#exportButton", t("export"));
+  setText("#dashboardButton", t("dashboard"));
   setText("#clearButton", t("clear"));
   setText("#bookmarkLabel", t("bookmarks"));
   setText("#domainLabel", t("domains"));
   setText("#signalLabel", t("signals"));
   setText("#reviewLabel", t("review"));
   setText("#sourceBalanceLevel", t("sourceBalance"));
+  setText("#dashboardBridgeEyebrow", t("dashboardBridgeEyebrow"));
+  setText("#dashboardBridgeTitle", t("dashboardBridgeTitle"));
+  setText("#dashboardBridgeSummary", t("dashboardBridgeSummary"));
+  setText("#dashboardBridgeStepExport", t("dashboardBridgeStepExport"));
+  setText("#dashboardBridgeStepOpen", t("dashboardBridgeStepOpen"));
+  setText("#dashboardExportButton", t("dashboardExport"));
+  setText("#dashboardOpenButton", t("dashboardOpen"));
   setText("#appliedRulesEyebrow", t("appliedRulesEyebrow"));
   setText("#appliedRulesTitle", t("appliedRulesTitle"));
   setText("#topicsEyebrow", t("topicsEyebrow"));
