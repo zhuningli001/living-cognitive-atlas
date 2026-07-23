@@ -257,6 +257,9 @@ const copy = {
     noDataTitle: "Scan or import to create the dashboard",
     noDataBody: "First-time users should see a clean state here. The personal dashboard appears only after the extension hands off a snapshot or the user chooses a local JSON file.",
     noDataHint: "Extension flow: Scan bookmarks -> Open full report -> Import latest snapshot.",
+    reportErrorEyebrow: "Local report needs reset",
+    reportErrorTitle: "This saved snapshot could not render",
+    reportErrorBody: "The local browser cache may contain an older or incompatible snapshot. Reset report data, then import the latest extension snapshot again.",
     handoffEyebrow: "Extension handoff",
     handoffTitle: "Latest extension snapshot is ready",
     handoffTitleImported: "Current extension snapshot is imported",
@@ -398,6 +401,9 @@ const copy = {
     noDataTitle: "扫描或导入后生成看板",
     noDataBody: "首次进入应该是干净状态。只有扩展交接快照，或用户选择本地 JSON 文件后，个人看板才会出现。",
     noDataHint: "插件流程：扫描书签 -> 打开完整报告 -> 导入最新快照。",
+    reportErrorEyebrow: "本地报告需要重置",
+    reportErrorTitle: "这份已保存快照暂时无法渲染",
+    reportErrorBody: "当前浏览器缓存里可能有旧版或不兼容的 snapshot。请重置报告数据，然后重新导入插件里的最新快照。",
     handoffEyebrow: "扩展交接",
     handoffTitle: "最新扩展快照已准备好",
     handoffTitleImported: "当前扩展快照已导入",
@@ -903,10 +909,23 @@ export default function ImportProfileSnapshotPage() {
     () => filterTaxonomyOverrideConfig(taxonomyOverrideConfig, appliedOverrideIds),
     [taxonomyOverrideConfig, appliedOverrideIds]
   );
-  const report = useMemo(
-    () => snapshot ? buildImportedProfileReport(snapshot, { taxonomyOverrideConfig: appliedTaxonomyOverrideConfig }) : null,
-    [snapshot, appliedTaxonomyOverrideConfig]
-  );
+  const reportResult = useMemo(() => {
+    if (!snapshot) return { report: null, error: "" };
+
+    try {
+      return {
+        report: buildImportedProfileReport(snapshot, { taxonomyOverrideConfig: appliedTaxonomyOverrideConfig }),
+        error: ""
+      };
+    } catch (error) {
+      console.error(error);
+      return {
+        report: null,
+        error: error instanceof Error ? error.message : "Report generation failed."
+      };
+    }
+  }, [snapshot, appliedTaxonomyOverrideConfig]);
+  const report = reportResult.report;
   const topRecords = useMemo(() => {
     if (!report) return [];
     return report.items
@@ -1004,7 +1023,7 @@ export default function ImportProfileSnapshotPage() {
         </section>
       ) : null}
 
-      {snapshot ? (
+      {report ? (
         <>
           <section className="import-profile-card rounded-[2rem] border border-black/5 bg-white/70 p-6 shadow-atlas">
             <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
@@ -1335,6 +1354,22 @@ export default function ImportProfileSnapshotPage() {
             </div>
           </section>
         </>
+      ) : snapshot ? (
+        <section className="import-empty rounded-[2rem] border border-dashed border-rust/20 bg-white/55 p-8 text-center">
+          <p className="import-eyebrow text-xs uppercase tracking-[0.22em] text-rust/60">{t("reportErrorEyebrow")}</p>
+          <h3 className="import-heading mt-2 font-serif text-3xl text-ink">{t("reportErrorTitle")}</h3>
+          <p className="import-muted mx-auto mt-4 max-w-2xl text-sm leading-7 text-ink/58">
+            {t("reportErrorBody")}
+          </p>
+          {reportResult.error ? <p className="mx-auto mt-3 max-w-2xl text-xs leading-5 text-rust/70">{reportResult.error}</p> : null}
+          <button
+            type="button"
+            onClick={resetReportData}
+            className="import-danger-button mt-5 min-h-12 rounded-full border border-rust/15 bg-rust/5 px-5 py-3 text-sm text-rust transition hover:bg-rust/10"
+          >
+            {t("resetReportData")}
+          </button>
+        </section>
       ) : (
         <section className="import-empty rounded-[2rem] border border-dashed border-black/10 bg-white/45 p-8 text-center">
           <p className="import-eyebrow text-xs uppercase tracking-[0.22em] text-rust/60">{t("noDataEyebrow")}</p>
