@@ -27,6 +27,9 @@ Completed in the public-style prototype:
 - `extension/report.html` collects minimal topic, dimension, and collection feedback into `chrome.storage.local` as `profileFeedback`.
 - `extension/report.html` turns feedback into local rule suggestions and stores approved rules as `approvedRules`.
 - The extension scan applies matching approved local rules and records the audit trail as `snapshot.appliedRules`.
+- The side panel now includes a small external-tester loop that reflects scan, report, feedback, rule, and reset progress.
+- The side panel warns when a stored snapshot is older than 7 days.
+- `Clear data` now asks for confirmation before removing local snapshot, feedback, and approved rules.
 - The manifest no longer declares localhost content-script matches.
 
 Remaining productization work:
@@ -74,15 +77,13 @@ Can a new user trust the extension, understand the portrait, correct obvious mis
 
 P0:
 
-- Make first-run, no-data, scan-success, scan-error, and clear-data states explicit.
-- Verify every user-visible extension string supports English and Chinese.
+- Verify every user-visible extension string supports English and Chinese after each release candidate.
+- Test the P0.5 external-tester loop with at least one fresh Chrome profile.
 
 P1:
 
 - Improve compact side-panel information hierarchy for a browser-side panel width.
-- Add tester install notes and a manual QA checklist.
 - Add production icon assets and store screenshot plan.
-- Add stale snapshot warning when bookmarks have not been scanned recently.
 - Mark exported snapshot files as private in the file name and in UI copy.
 
 P2:

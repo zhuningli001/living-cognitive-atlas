@@ -91,6 +91,7 @@ npm run dev
 6. Click `Scan bookmarks`.
 7. Click `Open full report`.
 8. Confirm the extension opens its built-in `report.html` page.
+9. Use the side-panel tester loop to confirm scan, report, feedback, rule, and reset progress.
 
 The extension MVP requests only:
 
@@ -111,7 +112,7 @@ Chrome Memory Mirror is a local-first prototype. Before using it with a real boo
 - The current taxonomy is an interpretable first-pass model, not a personality diagnosis.
 - The project is not yet a Chrome Web Store package; install it only as an unpacked local extension during MVP testing.
 
-For a fuller release checklist and privacy boundary, see `docs/public-extension-release-plan.md` and `docs/privacy-policy-draft.md`.
+For a fuller release checklist and privacy boundary, see `docs/public-extension-release-plan.md`, `docs/external-tester-checklist.md`, and `docs/privacy-policy-draft.md`.
 
 ## MVP iteration method
 

@@ -8,11 +8,20 @@ const openReportButton = document.querySelector("#openReportButton");
 const settingsButton = document.querySelector("#settingsButton");
 const clearDataButton = document.querySelector("#clearDataButton");
 const statusText = document.querySelector("#statusText");
+const staleWarning = document.querySelector("#staleWarning");
 const flowSteps = {
   scan: document.querySelector("#flowStepScan"),
   report: document.querySelector("#flowStepReport"),
   import: document.querySelector("#flowStepImport")
 };
+const testerSteps = {
+  scan: document.querySelector("#testerStepScan"),
+  report: document.querySelector("#testerStepReport"),
+  feedback: document.querySelector("#testerStepFeedback"),
+  rules: document.querySelector("#testerStepRules"),
+  reset: document.querySelector("#testerStepReset")
+};
+const staleSnapshotDays = 7;
 
 const copy = {
   en: {
@@ -75,13 +84,23 @@ const copy = {
     reportOpened: "Full extension report opened.",
     reportImported: "Full extension report opened.",
     clearData: "Clear data",
+    clearConfirm: "Clear local snapshot, feedback, and approved rules? Chrome bookmarks will not be changed.",
     localData: "Local data",
     noLocalData: "No bookmark snapshot stored yet.",
     storedLocalData: (count, domains, rules) => Number(rules) > 0
       ? `${count} bookmarks, ${domains} domains, and ${rules} applied local rules stored locally.`
       : `${count} bookmarks and ${domains} domains stored locally.`,
     clearedData: "Extension snapshot cleared. Name and language settings were kept.",
-    reportStorageUnavailable: "Could not open the extension report in this context."
+    reportStorageUnavailable: "Could not open the extension report in this context.",
+    staleWarningTitle: "Refresh recommended",
+    staleWarningBody: "This snapshot is older than 7 days. Scan again before sharing test feedback.",
+    testerLabel: "Tester loop",
+    testerTitle: "Can the local profile loop complete?",
+    testerStepScan: "Scan bookmarks",
+    testerStepReport: "Open report",
+    testerStepFeedback: "Mark feedback",
+    testerStepRules: "Approve a rule",
+    testerStepReset: "Know reset path"
   },
   zh: {
     titleFallback: "你的书签",
@@ -143,13 +162,23 @@ const copy = {
     reportOpened: "扩展内完整报告已打开。",
     reportImported: "扩展内完整报告已打开。",
     clearData: "清除数据",
+    clearConfirm: "要清除本地快照、反馈和已批准规则吗？Chrome 书签不会被修改。",
     localData: "本地数据",
     noLocalData: "还没有保存书签快照。",
     storedLocalData: (count, domains, rules) => Number(rules) > 0
       ? `本地已保存 ${count} 个书签、${domains} 个来源，并应用了 ${rules} 条本地规则。`
       : `本地已保存 ${count} 个书签、${domains} 个来源。`,
     clearedData: "扩展快照已清除。显示名和语言设置已保留。",
-    reportStorageUnavailable: "当前环境无法打开扩展报告。"
+    reportStorageUnavailable: "当前环境无法打开扩展报告。",
+    staleWarningTitle: "建议刷新",
+    staleWarningBody: "这个快照已超过 7 天。分享测试反馈前建议重新扫描。",
+    testerLabel: "测试闭环",
+    testerTitle: "本地画像流程是否已走通？",
+    testerStepScan: "扫描书签",
+    testerStepReport: "打开报告",
+    testerStepFeedback: "标记反馈",
+    testerStepRules: "批准规则",
+    testerStepReset: "知道如何重置"
   }
 };
 
@@ -158,6 +187,9 @@ let currentLanguage = defaultLanguage;
 let currentOwnerName = "";
 let currentFlowStage = "empty";
 let currentReportHandoffState = null;
+let currentProfileFeedback = null;
+let currentApprovedRules = null;
+let currentLastLocalClearAt = null;
 
 scanButton.addEventListener("click", scanBookmarks);
 exportButton.addEventListener("click", exportSnapshot);
@@ -169,10 +201,21 @@ loadCachedSnapshot();
 
 async function loadCachedSnapshot() {
   try {
-    const cached = await chrome.storage.local.get(["profileSnapshot", "ownerName", "preferredLanguage", "reportHandoffState"]);
+    const cached = await chrome.storage.local.get([
+      "profileSnapshot",
+      "ownerName",
+      "preferredLanguage",
+      "reportHandoffState",
+      "profileFeedback",
+      "approvedRules",
+      "lastLocalClearAt"
+    ]);
     setLanguage(cached.preferredLanguage || defaultLanguage);
     setOwnerName(cached.ownerName || defaultOwnerName);
     currentReportHandoffState = cached.reportHandoffState || null;
+    currentProfileFeedback = cached.profileFeedback || null;
+    currentApprovedRules = cached.approvedRules || null;
+    currentLastLocalClearAt = cached.lastLocalClearAt || null;
     applyStaticCopy();
 
     if (cached.profileSnapshot) {
@@ -187,20 +230,25 @@ async function loadCachedSnapshot() {
     }
 
     updateLocalDataStatus();
+    updateStaleWarning();
+    updateTesterChecklist();
   } catch {
     applyStaticCopy();
     updateLocalDataStatus();
-    setStatus(t("storageUnavailable"));
+    updateStaleWarning();
+    updateTesterChecklist();
+    setStatus(t("storageUnavailable"), "error");
   }
 }
 
 async function scanBookmarks() {
   setBusy(true);
-  setStatus(t("readingBookmarks"));
+  setStatus(t("readingBookmarks"), "info");
 
   try {
     const tree = await chrome.bookmarks.getTree();
     const cached = await chrome.storage.local.get(["approvedRules"]);
+    currentApprovedRules = cached.approvedRules || null;
     const records = flattenBookmarkTree(tree);
     const snapshot = buildProfileSnapshot(records, {
       source: "chrome-extension-sidepanel",
@@ -225,10 +273,12 @@ async function scanBookmarks() {
     setReportReady(true);
     setFlowStage("snapshotReady");
     updateLocalDataStatus();
-    setStatus(t("scanComplete", getAppliedRuleCount(snapshot)));
+    updateStaleWarning();
+    updateTesterChecklist();
+    setStatus(t("scanComplete", getAppliedRuleCount(snapshot)), "success");
   } catch (error) {
     console.error(error);
-    setStatus(t("readFailed"));
+    setStatus(t("readFailed"), "error");
   } finally {
     setBusy(false);
   }
@@ -236,7 +286,7 @@ async function scanBookmarks() {
 
 function exportSnapshot() {
   if (!currentSnapshot) {
-    setStatus(t("exportFirst"));
+    setStatus(t("exportFirst"), "warning");
     return;
   }
 
@@ -250,12 +300,12 @@ function exportSnapshot() {
   anchor.download = `bookmark-profile-snapshot-${date}.json`;
   anchor.click();
   URL.revokeObjectURL(url);
-  setStatus(t("exportStarted"));
+  setStatus(t("exportStarted"), "success");
 }
 
 async function openFullReport() {
   if (!currentSnapshot) {
-    setStatus(t("scanBeforeReport"));
+    setStatus(t("scanBeforeReport"), "warning");
     return;
   }
 
@@ -263,9 +313,10 @@ async function openFullReport() {
     await markReportOpened();
     await chrome.tabs.create({ url: chrome.runtime.getURL("report.html") });
     setFlowStage("imported");
-    setStatus(t("reportOpened"));
+    updateTesterChecklist();
+    setStatus(t("reportOpened"), "success");
   } catch {
-    setStatus(t("reportStorageUnavailable"));
+    setStatus(t("reportStorageUnavailable"), "error");
   }
 }
 
@@ -278,12 +329,15 @@ async function openSettings() {
 
     await chrome.tabs.create({ url: chrome.runtime.getURL("options.html") });
   } catch {
-    setStatus(t("optionsUnavailable"));
+    setStatus(t("optionsUnavailable"), "error");
   }
 }
 
 async function clearExtensionData() {
+  if (!window.confirm(t("clearConfirm"))) return;
+
   try {
+    const clearedAt = new Date().toISOString();
     await chrome.storage.local.remove([
       "profileSnapshot",
       "reportHandoffState",
@@ -291,17 +345,23 @@ async function clearExtensionData() {
       "approvedRules",
       "ignoredRuleSuggestions"
     ]);
+    await chrome.storage.local.set({ lastLocalClearAt: clearedAt });
     currentSnapshot = null;
     currentReportHandoffState = null;
+    currentProfileFeedback = null;
+    currentApprovedRules = null;
+    currentLastLocalClearAt = clearedAt;
     setExportReady(false);
     setReportReady(false);
     setFlowStage("empty");
     setAnalysisVisible(false);
     resetSnapshotUi();
     updateLocalDataStatus();
-    setStatus(t("clearedData"));
+    updateStaleWarning();
+    updateTesterChecklist();
+    setStatus(t("clearedData"), "success");
   } catch {
-    setStatus(t("storageUnavailable"));
+    setStatus(t("storageUnavailable"), "error");
   }
 }
 
@@ -317,6 +377,8 @@ function handleStorageChange(changes, areaName) {
       setAnalysisVisible(false);
       resetSnapshotUi();
       updateLocalDataStatus();
+      updateStaleWarning();
+      updateTesterChecklist();
       return;
     }
 
@@ -324,14 +386,17 @@ function handleStorageChange(changes, areaName) {
     setExportReady(true);
     setReportReady(true);
     updateLocalDataStatus();
+    updateStaleWarning();
+    updateTesterChecklist();
   }
 
   if (changes.reportHandoffState) {
     currentReportHandoffState = changes.reportHandoffState.newValue || null;
     if (currentSnapshot) {
       setFlowStage(getSnapshotFlowStage(currentSnapshot));
-      if (currentReportHandoffState?.status === "imported") setStatus(t("reportImported"));
+      if (currentReportHandoffState?.status === "imported") setStatus(t("reportImported"), "success");
     }
+    updateTesterChecklist();
   }
 
   if (changes.ownerName) {
@@ -342,6 +407,23 @@ function handleStorageChange(changes, areaName) {
     setLanguage(changes.preferredLanguage.newValue || defaultLanguage);
     applyStaticCopy();
     if (currentSnapshot) renderSnapshot(currentSnapshot);
+    updateStaleWarning();
+    updateTesterChecklist();
+  }
+
+  if (changes.profileFeedback) {
+    currentProfileFeedback = changes.profileFeedback.newValue || null;
+    updateTesterChecklist();
+  }
+
+  if (changes.approvedRules) {
+    currentApprovedRules = changes.approvedRules.newValue || null;
+    updateTesterChecklist();
+  }
+
+  if (changes.lastLocalClearAt) {
+    currentLastLocalClearAt = changes.lastLocalClearAt.newValue || null;
+    updateTesterChecklist();
   }
 }
 
@@ -385,6 +467,8 @@ function renderSnapshot(snapshot) {
   renderDimensions(snapshot.dimensions);
   renderCollections(snapshot.collections);
   renderReviewQueue(snapshot.reviewQueue.slice(0, 5));
+  updateStaleWarning();
+  updateTesterChecklist();
 }
 
 function renderSourceBalance(sourceBalance) {
@@ -522,8 +606,9 @@ function setAnalysisVisible(isVisible) {
   });
 }
 
-function setStatus(message) {
+function setStatus(message, state = "info") {
   statusText.textContent = message;
+  statusText.dataset.state = state;
 }
 
 function setText(selector, value) {
@@ -566,9 +651,38 @@ function updateLocalDataStatus() {
   );
 }
 
+function updateStaleWarning() {
+  if (!staleWarning) return;
+
+  const isStale = isSnapshotStale(currentSnapshot);
+  staleWarning.hidden = !isStale;
+  setText("#staleWarningTitle", t("staleWarningTitle"));
+  setText("#staleWarningBody", t("staleWarningBody"));
+}
+
+function updateTesterChecklist() {
+  setText("#testerLabel", t("testerLabel"));
+  setText("#testerTitle", t("testerTitle"));
+  setText("#testerStepScanText", t("testerStepScan"));
+  setText("#testerStepReportText", t("testerStepReport"));
+  setText("#testerStepFeedbackText", t("testerStepFeedback"));
+  setText("#testerStepRulesText", t("testerStepRules"));
+  setText("#testerStepResetText", t("testerStepReset"));
+
+  setTesterStepState("scan", currentSnapshot ? "done" : "active");
+  setTesterStepState("report", currentReportHandoffState?.status === "imported" ? "done" : currentSnapshot ? "active" : "idle");
+  setTesterStepState("feedback", getFeedbackCount(currentProfileFeedback) > 0 ? "done" : currentSnapshot ? "active" : "idle");
+  setTesterStepState("rules", getApprovedRuleCount(currentApprovedRules) > 0 ? "done" : getFeedbackCount(currentProfileFeedback) > 0 ? "active" : "idle");
+  setTesterStepState("reset", currentLastLocalClearAt ? "done" : currentSnapshot ? "active" : "idle");
+}
+
+function setTesterStepState(key, state) {
+  if (testerSteps[key]) testerSteps[key].dataset.state = state;
+}
+
 function applyStaticCopy() {
   document.documentElement.lang = currentLanguage === "zh" ? "zh-CN" : "en";
-  setText("#statusText", t("localBoundary"));
+  setStatus(t("localBoundary"), "info");
   setText("#settingsButton", t("settings"));
   setText("#flowEyebrow", t("flowEyebrow"));
   setText("#flowStepScanTitle", t("flowScanTitle"));
@@ -597,6 +711,8 @@ function applyStaticCopy() {
   setText("#smartReturnPathsLabel", t("smartReturnPaths"));
   setText("#reviewQueueLabel", t("reviewQueue"));
   updateLocalDataStatus();
+  updateStaleWarning();
+  updateTesterChecklist();
   renderFlowStage();
   setBusy(false);
   setOwnerName(currentOwnerName || defaultOwnerName);
@@ -642,6 +758,21 @@ function getSupportedLanguage(language) {
 
 function getAppliedRuleCount(snapshot) {
   return snapshot?.appliedRules?.appliedCount || 0;
+}
+
+function getApprovedRuleCount(rules) {
+  return Array.isArray(rules?.items) ? rules.items.length : 0;
+}
+
+function getFeedbackCount(feedback) {
+  return Array.isArray(feedback?.items) ? feedback.items.length : 0;
+}
+
+function isSnapshotStale(snapshot) {
+  if (!snapshot?.generatedAt) return false;
+  const generatedAt = new Date(snapshot.generatedAt).getTime();
+  if (Number.isNaN(generatedAt)) return false;
+  return Date.now() - generatedAt > staleSnapshotDays * 24 * 60 * 60 * 1000;
 }
 
 function localizeAnalysisLabel(label) {

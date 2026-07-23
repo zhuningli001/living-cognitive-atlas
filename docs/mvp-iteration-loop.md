@@ -144,6 +144,13 @@ Expected result:
 
 - A non-developer can install the unpacked extension and complete the test flow.
 
+Implemented P0.5:
+
+- `docs/external-tester-checklist.md` defines install steps, test path, feedback questions, and pass condition.
+- The side panel includes a compact tester loop for scan, report, feedback, rule approval, and reset progress.
+- The side panel warns when a stored snapshot is older than 7 days.
+- Clear-data in the side panel now requires confirmation and states that Chrome bookmarks are not changed.
+
 ## Review method
 
 After each step, record:

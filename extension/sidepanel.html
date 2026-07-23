@@ -57,6 +57,40 @@
         <button id="clearDataButton" type="button" disabled>Clear data</button>
       </section>
 
+      <section id="staleWarning" class="warning-note" aria-label="Snapshot freshness" hidden>
+        <strong id="staleWarningTitle">Refresh recommended</strong>
+        <p id="staleWarningBody">This snapshot is older than 7 days. Scan again before sharing test feedback.</p>
+      </section>
+
+      <section class="tester-card" aria-label="External tester checklist">
+        <div class="tester-card-header">
+          <span id="testerLabel">Tester loop</span>
+          <strong id="testerTitle">Can the local profile loop complete?</strong>
+        </div>
+        <ol class="tester-list">
+          <li id="testerStepScan" data-state="active">
+            <span></span>
+            <p id="testerStepScanText">Scan bookmarks</p>
+          </li>
+          <li id="testerStepReport" data-state="idle">
+            <span></span>
+            <p id="testerStepReportText">Open report</p>
+          </li>
+          <li id="testerStepFeedback" data-state="idle">
+            <span></span>
+            <p id="testerStepFeedbackText">Mark feedback</p>
+          </li>
+          <li id="testerStepRules" data-state="idle">
+            <span></span>
+            <p id="testerStepRulesText">Approve a rule</p>
+          </li>
+          <li id="testerStepReset" data-state="idle">
+            <span></span>
+            <p id="testerStepResetText">Know reset path</p>
+          </li>
+        </ol>
+      </section>
+
       <section class="summary-block" aria-labelledby="headline">
         <p class="section-label">Profile</p>
         <h2 id="headline">Waiting for first scan</h2>

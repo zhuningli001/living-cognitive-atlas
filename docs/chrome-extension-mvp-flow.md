@@ -379,14 +379,18 @@ P0 test checklist:
 - Confirm local data changes from empty to stored bookmark/domain counts.
 - Confirm metrics, source balance, current attention, development line, dimensions, smart return paths, and review queue appear.
 - Confirm setup tracker moves to `Report`.
+- Confirm the tester loop marks the scan step as complete.
 - Click `Open full report`.
 - Confirm the built-in extension `report.html` opens.
 - Confirm the full report renders from the extension snapshot without localhost.
 - Confirm the extension side-panel setup tracker moves the `Review` step to done.
+- Mark feedback and approve or ignore one suggested rule in the report.
+- Confirm the side-panel tester loop reflects feedback and rule progress.
 - Confirm the handoff card changes to an imported state and does not keep asking for the same snapshot.
 - Switch language in the extension and report page.
 - Confirm system copy and visible taxonomy labels switch language.
 - Click `Clear data` in the extension.
+- Confirm the clear-data confirmation states that Chrome bookmarks are not changed.
 - Confirm the side panel returns to clean first-run state.
 - Click `Clear data` on the extension report page.
 - Confirm the report page returns to clean no-data state.
